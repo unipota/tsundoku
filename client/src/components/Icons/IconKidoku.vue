@@ -1,5 +1,11 @@
 <template functional>
-  <svg width="40" height="38" viewBox="0 0 40 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    width="40"
+    :height="props.height"
+    viewBox="0 0 40 38"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <rect
       y="38"
       width="38"
@@ -37,8 +43,10 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 })
 export default class IconKidoku extends Vue {
   @Prop({ type: String, default: 'var(--kidoku-blue)' })
-  public color!: string
-}
+  private color!: string
+
+  @Prop({ type: Number, default: 40 })
+  private height!: number}
 </script>
 
 <style lang="sass">

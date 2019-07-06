@@ -1,5 +1,11 @@
 <template functional>
-  <svg width="41" height="33" viewBox="0 0 41 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    width="41"
+    :height="props.height"
+    viewBox="0 0 41 33"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <rect x="1" y="25.2998" width="28" height="7" rx="1" :fill="props.color" />
     <rect
       x="32.0345"
@@ -21,7 +27,10 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 })
 export default class IconLogo extends Vue {
   @Prop({ type: String, default: 'var(--logo-gray)' })
-  public color!: string
+  private color!: string
+
+  @Prop({ type: Number, default: 33 })
+  private height!: number
 }
 </script>
 

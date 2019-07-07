@@ -65,12 +65,17 @@ export default class TabBar extends Vue {
   bottom: 0
   position: fixed
   z-index: 10
+  @media (min-width: 750px)
+    // desktop
+    bottom: auto
+    top: 0
 
   .tab-bar
     padding: 12px 18px
     display: flex
     width: auto
-    margin: 0
+    max-width: 375px - (18px * 2);
+    margin: auto;
 
     .tab
       display: flex

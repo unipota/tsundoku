@@ -7,7 +7,6 @@ import Kidoku from './views/Kidoku.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
 import Register from './views/Register.vue'
-import Share from './views/Share.vue'
 import Tsundoku from './views/Tsundoku.vue'
 import UserDetails from './views/UserDetails.vue'
 

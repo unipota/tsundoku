@@ -22,8 +22,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import IconKidoku from '@/components/Icons/IconKidoku.vue'
-import IconTsundoku from '@/components/Icons/IconTsundoku.vue'
+import IconKidoku from '@/components/assets/IconKidoku.vue'
+import IconTsundoku from '@/components/assets/IconTsundoku.vue'
 
 @Component({
   components: {

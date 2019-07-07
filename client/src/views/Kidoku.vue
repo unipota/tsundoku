@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import TabBar from '@/components/TabBar.vue'
+import TabBar from '@/components/atoms/TabBar.vue'
 
 @Component({
   components: {

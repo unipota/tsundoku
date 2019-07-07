@@ -23,12 +23,12 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/tsundoku/:view',
+      path: '/tsundoku',
       name: 'tsundoku',
       component: Tsundoku,
     },
     {
-      path: '/kidoku/:view',
+      path: '/kidoku',
       name: 'kidoku',
       component: Kidoku,
     },
@@ -46,11 +46,6 @@ const router = new Router({
       path: '/activity',
       name: 'activity',
       component: Activity,
-    },
-    {
-      path: '/share',
-      name: 'share',
-      component: Share,
     },
     {
       path: '/login',

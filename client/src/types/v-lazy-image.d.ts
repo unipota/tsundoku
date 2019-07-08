@@ -1,27 +1,35 @@
 declare module 'v-lazy-image' {
-  var VLazyImage: {
-    props: {
-      src: string,
-      srcset: string | undefined,
-      intersectionOptions: {} | undefined,
-      usePicture: boolean,
-    },
-    inheritAttrs: boolean,
-    data: () => {
-      observer: null,
-      intersected: false,
-      loaded: false
-    },
-    computed: {
-      srcImage: () => string,
-      srcsetImage: () => string | boolean,
-    },
-    methods: {
-      load: VoidFunction,
-    },
-    render: (h: object) => any,
-    mounted: VoidFunction,
-    destroyed: VoidFunction,
-  }
+  import { VueConstructor } from 'vue';
+
   export default VLazyImage
+  export const VLazyImage: VLazyImage
+
+  export interface VLazyImageProps {
+    src: string
+    srcset: string | undefined
+    intersectionOptions: {} | undefined
+    usePicture: boolean
+  }
+
+  export interface VLazyImageData {
+    observer: null
+    intersected: false
+    loaded: false
+  }
+
+  export interface VLazyImageMethods {
+    load: () => {}
+  }
+
+  export interface VLazyImageComputed {
+    srcImage: () => string
+    srcsetImage: () => string | boolean
+  }
+
+  export interface VLazyImage extends VueConstructor {
+    props: VLazyImageProps
+    data: () => VLazyImageData
+    methods: VLazyImageMethods
+    computed: VLazyImageComputed
+  }
 }

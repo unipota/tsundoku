@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 const store: ExStore = new Store<RootState>({
   ...general,
-  modules: {},
-} as any)
+  modules: {}
+} as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export default store

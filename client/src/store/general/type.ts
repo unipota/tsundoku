@@ -4,7 +4,7 @@
 //
 // state
 export interface S {
-  userId: string,
+  userId: string
 }
 // ______________________________________________________
 //
@@ -13,19 +13,19 @@ export interface G {
   getUserId: string
 }
 export interface RG {
-  getUserId: G[ 'getUserId' ]
+  getUserId: G['getUserId']
 }
 // ______________________________________________________
 //
 // mutations
 export interface M {
-  setUserId: string,
+  setUserId: string
 }
 export interface RM {
-  setUserId: M[ 'setUserId' ],
+  setUserId: M['setUserId']
 }
 // ______________________________________________________
 //
 // actions
-export interface A { }
-export interface RA { }
+export interface A {}
+export interface RA {}

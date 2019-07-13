@@ -20,7 +20,7 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: Home
     },
     {
       path: '/tsundoku',
@@ -59,29 +59,29 @@ const router = new Router({
     {
       path: '/user',
       name: 'userDetails',
-      component: UserDetails,
+      component: UserDetails
     },
     {
       path: '/activity',
       name: 'activity',
-      component: Activity,
+      component: Activity
     },
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: Login
     },
     {
       path: '/register',
       name: 'register',
-      component: Register,
+      component: Register
     },
     {
       path: '*',
       name: 'notfound',
-      component: NotFound,
-    },
-  ],
+      component: NotFound
+    }
+  ]
 })
 
 export default router

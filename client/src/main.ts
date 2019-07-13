@@ -8,5 +8,5 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  render: h => h(App) // eslint-disable-line @typescript-eslint/explicit-function-return-type
 }).$mount('#app')

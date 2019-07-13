@@ -3,24 +3,18 @@ version: '3'
 services:
   tsundoku:
     build: 
-      context: ..
-      dockerfile: development/Dockerfile
+      context: server/
+      dockerfile: server/Dockerfile
     environment:
       VIRTUAL_HOST: test.tsun-doku.app
       LETSENCRYPT_HOST: test.tsun-doku.app
       LETSENCRYPT_EMAIL: tohu.soy@gmail.com
-    ports:
-      - "3000:3000"
     expose:
       - 3000
-    command: fresh -c development/fresh.conf
-    network_mode: bridge
     depends_on:
       - nginx-proxy
-  
   nginx-proxy:
     image: jwilder/nginx-proxy
-    container_name: nginx-proxy
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=jwilder/nginx-proxy
     privileged: true
@@ -34,7 +28,6 @@ services:
       - proxy:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
-    network_mode: bridge
   
   letsencrypt-nginx:
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -48,7 +41,6 @@ services:
     restart: always
     depends_on:
       - nginx-proxy
-    network_mode: bridge
 
 volumes:
   proxy: 

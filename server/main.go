@@ -17,5 +17,5 @@ func main() {
 	if port == "" {
 		port = "3000"
 	}
-	e.Start(port)
+	e.Start(":" + port)
 }

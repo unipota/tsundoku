@@ -1,2 +1,4 @@
 tsundoku
 server
+docker-compose.d/
+development/docker-compose.d/

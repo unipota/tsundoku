@@ -1,6 +1,6 @@
 <template functional>
   <svg
-    width="41"
+    :width="props.width"
     :height="props.height"
     viewBox="0 0 41 33"
     fill="none"
@@ -29,8 +29,11 @@ export default class IconLogo extends Vue {
   @Prop({ type: String, default: 'var(--toukei-black)' })
   private color!: string
 
-  @Prop({ type: Number, default: 33 })
+  @Prop({ type: Number, default: 32.69 })
   private height!: number
+
+  @Prop({ type: Number, default: 39.69 })
+  private width!: number
 }
 </script>
 

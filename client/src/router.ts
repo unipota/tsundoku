@@ -7,7 +7,6 @@ import Kidoku from './views/Kidoku.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
 import Register from './views/Register.vue'
-import Share from './views/Share.vue'
 import Tsundoku from './views/Tsundoku.vue'
 import UserDetails from './views/UserDetails.vue'
 
@@ -20,49 +19,49 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: Home
     },
     {
       path: '/tsundoku',
       name: 'tsundoku',
-      component: Tsundoku,
+      component: Tsundoku
     },
     {
       path: '/kidoku',
       name: 'kidoku',
-      component: Kidoku,
+      component: Kidoku
     },
     {
       path: '/book/:id',
       name: 'bookDetails',
-      component: BookDetails,
+      component: BookDetails
     },
     {
       path: '/user',
       name: 'userDetails',
-      component: UserDetails,
+      component: UserDetails
     },
     {
       path: '/activity',
       name: 'activity',
-      component: Activity,
+      component: Activity
     },
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: Login
     },
     {
       path: '/register',
       name: 'register',
-      component: Register,
+      component: Register
     },
     {
       path: '*',
       name: 'notfound',
-      component: NotFound,
-    },
-  ],
+      component: NotFound
+    }
+  ]
 })
 
 export default router

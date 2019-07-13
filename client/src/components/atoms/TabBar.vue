@@ -28,8 +28,8 @@ import IconTsundoku from '@/components/assets/IconTsundoku.vue'
 @Component({
   components: {
     IconKidoku,
-    IconTsundoku,
-  },
+    IconTsundoku
+  }
 })
 export default class TabBar extends Vue {
   @Prop({ type: String, default: 'tsundoku' })
@@ -39,22 +39,21 @@ export default class TabBar extends Vue {
     tsundoku: {
       name: 'tsundoku',
       label: 'ツンドク',
-      to: 'tsundoku',
+      to: 'tsundoku'
     },
     kidoku: {
       name: 'kidoku',
       label: 'キドク',
-      to: 'kidoku',
-    },
+      to: 'kidoku'
+    }
   }
 
   private selectTab(routeName: string): void {
     this.$router.push({
       name: routeName,
-      params: { view: this.$route.params.view },
+      params: { view: this.$route.params.view }
     })
   }
-
 }
 </script>
 
@@ -100,7 +99,7 @@ export default class TabBar extends Vue {
 
       .icon
         display: flex
-        margin: 
+        margin:
           top: auto
           right: auto
           bottom: auto

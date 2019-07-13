@@ -1,6 +1,7 @@
 <template lang="pug">
   div
     TabBar(selectedTab="tsundoku")
+    router-view
 </template>
 
 <script lang="ts">

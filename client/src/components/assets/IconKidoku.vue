@@ -1,6 +1,6 @@
 <template functional>
   <svg
-    width="40"
+    :width="props.width"
     :height="props.height"
     viewBox="0 0 40 38"
     fill="none"
@@ -47,6 +47,9 @@ export default class IconKidoku extends Vue {
 
   @Prop({ type: Number, default: 40 })
   private height!: number
+
+  @Prop({ type: Number, default: 38 })
+  private width!: number
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template functional>
   <svg
-    width="46"
+    :width="props.width"
     :height="props.height"
     viewBox="0 0 46 40"
     fill="none"
@@ -36,8 +36,11 @@ export default class IconTsundoku extends Vue {
   @Prop({ type: String, default: 'var(--tsundoku-red)' })
   private color!: string
 
-  @Prop({ type: Number, default: 40 })
+  @Prop({ type: Number, default: 39.63 })
   private height!: number
+
+  @Prop({ type: Number, default: 46 })
+  private width!: number
 }
 </script>
 

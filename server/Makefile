@@ -1,6 +1,6 @@
 .PHONY: dev
 dev:
-	docker-compose -f development/docker-compose.yml up --build
+	docker-compose -f ../development/docker-compose.yml up --build
 
 .PHONY: setup
 setup:
@@ -8,4 +8,4 @@ setup:
 
 .PHONY: build
 build: 
-	go build .
+	go build . -o app

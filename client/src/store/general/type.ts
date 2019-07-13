@@ -1,5 +1,3 @@
-/* tslint:disable:no-empty-interface */
-
 // ______________________________________________________
 //
 // state
@@ -27,5 +25,7 @@ export interface RM {
 // ______________________________________________________
 //
 // actions
+// eslint-disable-next-line
 export interface A {}
+// eslint-disable-next-line
 export interface RA {}

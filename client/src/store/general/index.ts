@@ -10,14 +10,14 @@ export const state = (): S => ({
 // ______________________________________________________
 //
 export const getters: Getters<S, G> = {
-  getUserId(state) {
+  getUserId(state): string {
     return state.userId
   }
 }
 // ______________________________________________________
 //
 export const mutations: Mutations<S, M> = {
-  setUserId(state, userId) {
+  setUserId(state, userId): void {
     state.userId = userId
   }
 }

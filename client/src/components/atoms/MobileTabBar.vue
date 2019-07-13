@@ -42,7 +42,7 @@ import IconToukei from '@/components/assets/IconToukei.vue'
     IconToukei
   }
 })
-export default class TabBar extends Vue {
+export default class MobileTabBar extends Vue {
   get selectedTab(): string | undefined {
     return this.$route.name
   }

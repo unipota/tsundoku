@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  tsundoku:
+    build: 
+      context: ../server/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ../server:/tsundoku/server
+    ports:
+      - "3000:3000"

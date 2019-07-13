@@ -32,7 +32,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
   components: {}
 })
 export default class IconLogo extends Vue {
-  @Prop({ type: String, default: 'var(--logo-gray)' })
+  @Prop({ type: String, default: 'var(--toukei-black)' })
   private color!: string
 
   @Prop({ type: Number, default: 33 })

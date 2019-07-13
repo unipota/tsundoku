@@ -4,7 +4,7 @@ services:
   tsundoku:
     build: 
       context: ../server/
-      dockerfile: ./Dockerfile
+      dockerfile: /development/Dockerfile
     volumes:
       - ../server:/tsundoku/server
     ports:

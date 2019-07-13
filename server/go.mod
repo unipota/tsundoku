@@ -1,4 +1,4 @@
-module github.com/oribe1115/tsundoku
+module github.com/unipota/tsundoku/server
 
 go 1.12
 

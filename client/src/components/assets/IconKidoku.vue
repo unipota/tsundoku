@@ -39,15 +39,15 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class IconKidoku extends Vue {
   @Prop({ type: String, default: 'var(--kidoku-blue)' })
   private color!: string
 
   @Prop({ type: Number, default: 40 })
-  private height!: number}
+  private height!: number
+}
 </script>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>

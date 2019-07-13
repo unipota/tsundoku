@@ -6,7 +6,10 @@
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect x="1" y="25.2998" width="28" height="7" rx="1" :fill="props.color" />
+    <rect
+x="1" y="25.2998"
+width="28" height="7" rx="1" :fill="props.color"
+/>
     <rect
       x="32.0345"
       width="31.9759"
@@ -15,7 +18,10 @@
       transform="rotate(74.2986 32.0345 0)"
       :fill="props.color"
     />
-    <rect y="13.2998" width="25" height="7" rx="1" :fill="props.color" />
+    <rect
+y="13.2998" width="25"
+height="7" rx="1" :fill="props.color"
+/>
   </svg>
 </template>
 
@@ -23,7 +29,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class IconLogo extends Vue {
   @Prop({ type: String, default: 'var(--logo-gray)' })
@@ -34,5 +40,4 @@ export default class IconLogo extends Vue {
 }
 </script>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>

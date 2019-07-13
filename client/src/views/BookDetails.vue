@@ -3,14 +3,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 
 @Component({
-  components: {},
+  components: {}
 })
-export default class BookDetails extends Vue {
-}
+export default class BookDetails extends Vue {}
 </script>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>

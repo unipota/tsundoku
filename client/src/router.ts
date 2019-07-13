@@ -8,6 +8,7 @@ import Kidoku from './views/Kidoku.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
 import Register from './views/Register.vue'
+import Toukei from './views/Toukei.vue'
 import Tsundoku from './views/Tsundoku.vue'
 import UserDetails from './views/UserDetails.vue'
 
@@ -55,6 +56,11 @@ const router = new Router({
           component: BookDetails
         }
       ]
+    },
+    {
+      path: '/toukei',
+      name: 'toukei',
+      component: Toukei
     },
     {
       path: '/user',

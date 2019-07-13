@@ -1,7 +1,6 @@
 declare module 'v-lazy-image' {
-  import { VueConstructor } from 'vue';
+  import { VueConstructor } from 'vue'
 
-  export default VLazyImage
   export const VLazyImage: VLazyImage
 
   export interface VLazyImageProps {
@@ -32,4 +31,6 @@ declare module 'v-lazy-image' {
     methods: VLazyImageMethods
     computed: VLazyImageComputed
   }
+
+  export default VLazyImage
 }

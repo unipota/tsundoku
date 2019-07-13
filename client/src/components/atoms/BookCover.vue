@@ -9,8 +9,8 @@ import { BookRecord } from '../../types/Book'
 
 @Component({
   components: {
-    VLazyImage,
-  },
+    VLazyImage
+  }
 })
 export default class BookCover extends Vue {
   @Prop({ type: Object, required: true })

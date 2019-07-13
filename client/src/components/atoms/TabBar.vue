@@ -1,39 +1,51 @@
 <template lang="pug">
   div.wrapper
     div.tab-bar
-      span.tab.tsundoku(
+      router-link.tab.tsundoku(
         :class="{'selected': selectedTab === 'tsundoku'}"
-        @click="selectTab(tabs.tsundoku.to)"
+        :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconTsundoku(:color="selectedTab === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'")
+          IconTsundoku(:color="selectedTab === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
         span.label(v-if="selectedTab === 'tsundoku'")
           | {{ tabs.tsundoku.label }}
 
-      span.tab.kidoku(
+      router-link.tab.kidoku(
         :class="{'selected': selectedTab === 'kidoku'}"
-        @click="selectTab(tabs.kidoku.to)"
+        :to="{ name: tabs.kidoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconKidoku(:color="selectedTab==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'").icon.kidoku
+          IconKidoku(:color="selectedTab==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
         span.label(v-if="selectedTab === 'kidoku'")
           | {{ tabs.kidoku.label }}
+
+      router-link.tab.toukei(
+        :class="{'selected': selectedTab === 'toukei'}"
+        :to="{ name: tabs.toukei.to }"
+      )
+        span.icon.toukei
+          IconToukei(:color="selectedTab==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
+        span.label(v-if="selectedTab === 'toukei'")
+          | {{ tabs.toukei.label }}
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import IconKidoku from '@/components/assets/IconKidoku.vue'
 import IconTsundoku from '@/components/assets/IconTsundoku.vue'
+import IconToukei from '@/components/assets/IconToukei.vue'
 
 @Component({
   components: {
     IconKidoku,
-    IconTsundoku
+    IconTsundoku,
+    IconToukei
   }
 })
 export default class TabBar extends Vue {
-  @Prop({ type: String, default: 'tsundoku' })
-  private selectedTab!: string
+  get selectedTab(): string | undefined {
+    return this.$route.name
+  }
 
   private tabs = {
     tsundoku: {
@@ -45,14 +57,12 @@ export default class TabBar extends Vue {
       name: 'kidoku',
       label: 'キドク',
       to: 'kidoku'
+    },
+    toukei: {
+      name: 'toukei',
+      label: 'トウケイ',
+      to: 'toukei'
     }
-  }
-
-  private selectTab(routeName: string): void {
-    this.$router.push({
-      name: routeName,
-      params: { view: this.$route.params.view }
-    })
   }
 }
 </script>
@@ -70,7 +80,7 @@ export default class TabBar extends Vue {
     top: 0
 
   .tab-bar
-    padding: 12px 18px
+    padding: 20px 30px
     display: flex
     width: auto
     max-width: 375px - (18px * 2);
@@ -79,23 +89,33 @@ export default class TabBar extends Vue {
     .tab
       display: flex
       width: max-content
-      height: 72px
+      height: max-content
       border-radius: 44px
-      padding: 0 35px
       cursor: pointer
+      padding:
+        top: 12px
+        bottom: 12px
+
+      &:not(:last-child)
+        margin-right: auto
+
+      &.selected
+        padding:
+          left: 19px
+          right: 19px
 
       &.tsundoku
         color: $tsundoku-red
         &.selected
           background-color: $tsundoku-red-bg
-          margin:
-            right: auto
       &.kidoku
         color: $kidoku-blue
         &.selected
           background-color: $kidoku-blue-bg
-          margin:
-            left: auto
+      &.toukei
+        color: $toukei-black
+        &.selected
+          background-color: $toukei-black-bg
 
       .icon
         display: flex
@@ -110,7 +130,7 @@ export default class TabBar extends Vue {
           top: auto
           right: 0
           bottom: auto
-          left: 27px
+          left: 11px
         font:
           size: 20px
           weight: bold

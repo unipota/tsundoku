@@ -14,10 +14,7 @@
       rx="1"
       :fill="props.color"
     />
-    <rect
-y="1" width="35.3846"
-height="8.49231" rx="1" :fill="props.color"
-/>
+    <rect y="1" width="35.3846" height="8.49231" rx="1" :fill="props.color" />
     <rect
       x="14.1538"
       y="15.5693"

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Activity from './views/Activity.vue'
+import AddBooks from './views/AddBooks.vue'
 import BookDetails from './views/BookDetails.vue'
 import Home from './views/Home.vue'
 import Kidoku from './views/Kidoku.vue'
@@ -25,16 +26,35 @@ const router = new Router({
       path: '/tsundoku',
       name: 'tsundoku',
       component: Tsundoku,
+      children: [
+        {
+          path: 'add-books',
+          name: 'addBooksTsundoku',
+          component: AddBooks,
+        },
+        {
+          path: 'book/:id',
+          name: 'BookDetailsTsundoku',
+          component: BookDetails,
+        },
+      ],
     },
     {
       path: '/kidoku',
       name: 'kidoku',
       component: Kidoku,
-    },
-    {
-      path: '/book/:id',
-      name: 'bookDetails',
-      component: BookDetails,
+      children: [
+        {
+          path: 'add-books',
+          name: 'addBooksKidoku',
+          component: AddBooks,
+        },
+        {
+          path: 'book/:id',
+          name: 'bookDetailsKidoku',
+          component: BookDetails,
+        },
+      ],
     },
     {
       path: '/user',

@@ -1,20 +1,14 @@
 <template lang="pug">
   div
-    TabBar(selectedTab="tsundoku")
-    router-view
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import TabBar from '@/components/atoms/TabBar.vue'
-
 
 @Component({
-  components: {
-    TabBar,
-  },
+  components: {},
 })
-export default class Tsundoku extends Vue {
+export default class AddBooks extends Vue {
 }
 </script>
 

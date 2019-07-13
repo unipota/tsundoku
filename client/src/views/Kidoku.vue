@@ -1,6 +1,7 @@
 <template lang="pug">
   div
     TabBar(selectedTab="kidoku")
+    router-view
 </template>
 
 <script lang="ts">

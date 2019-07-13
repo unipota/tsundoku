@@ -4,14 +4,10 @@ export interface BookRecord {
   title: string
   author: string
   totalPages: number
-  regularPrice: number // 定価
+  price: number // 定価
   caption: string | null
   publisher: string
   coverImageUrl: string | null
-}
-
-export interface BookUserRecord extends BookRecord {
   readPages: number
   memo: string | null
-  purchacedPrice: number // 購入した価格
 }

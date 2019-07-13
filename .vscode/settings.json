@@ -8,13 +8,15 @@
   "[typescript]": {
       "editor.formatOnSave": false
   },
-  "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "prettier.eslintIntegration": true,
   "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.options": {
+      "extensions": [ ".html", ".js", ".vue" ]
+  },
   "eslint.validate": [
-      "javascript",
+      { "language": "html", "autoFix": true },
+      { "language": "javascript", "autoFix": true },
       { "language": "typescript", "autoFix": true },
       { "language": "vue", "autoFix": true },
       { "language": "vue-html", "autoFix": true }
@@ -26,9 +28,8 @@
   "vetur.format.defaultFormatter.postcss": "prettier",
   "vetur.format.defaultFormatter.scss": "prettier",
   "vetur.format.defaultFormatter.ts": "prettier",
+  "vetur.validation.script": false,
   "vetur.validation.style": true,
-  "vetur.validation.template": true,
-  "vsicons.dontShowNewVersionMessage": true,
-  "latex-workshop.message.update.show": false,
+  "vetur.validation.template": false,
   "typescript.updateImportsOnFileMove.enabled": "always"
 }

@@ -30,14 +30,14 @@ const router = new Router({
         {
           path: 'add-books',
           name: 'addBooksTsundoku',
-          component: AddBooks,
+          component: AddBooks
         },
         {
           path: 'book/:id',
           name: 'BookDetailsTsundoku',
-          component: BookDetails,
-        },
-      ],
+          component: BookDetails
+        }
+      ]
     },
     {
       path: '/kidoku',
@@ -47,14 +47,14 @@ const router = new Router({
         {
           path: 'add-books',
           name: 'addBooksKidoku',
-          component: AddBooks,
+          component: AddBooks
         },
         {
           path: 'book/:id',
           name: 'bookDetailsKidoku',
-          component: BookDetails,
-        },
-      ],
+          component: BookDetails
+        }
+      ]
     },
     {
       path: '/user',

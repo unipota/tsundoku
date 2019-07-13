@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  tsundoku:
+    build: 
+      context: server/
+      dockerfile: server/Dockerfile
+    environment:
+      VIRTUAL_HOST: test.tsun-doku.app
+      LETSENCRYPT_HOST: test.tsun-doku.app
+      LETSENCRYPT_EMAIL: tohu.soy@gmail.com
+    expose:
+      - 3000
+    depends_on:
+      - nginx-proxy
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=jwilder/nginx-proxy
+    privileged: true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker-compose.d/certs:/etc/nginx/certs:ro
+      - ./docker-compose.d/htpasswd:/etc/nginx/htpasswd
+      - proxy:/etc/nginx/vhost.d
+      - proxy:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    restart: always
+  
+  letsencrypt-nginx:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-nginx
+    privileged: true
+    volumes:
+      - proxy:/etc/nginx/vhost.d
+      - proxy:/usr/share/nginx/html
+      - ./docker-compose.d/certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
+    depends_on:
+      - nginx-proxy
+
+volumes:
+  proxy: 

@@ -1,4 +1,4 @@
-*.so
-/vendor
-/bin
-/tmp
+tsundoku
+server
+docker-compose.d/
+development/docker-compose.d/

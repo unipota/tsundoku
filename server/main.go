@@ -50,7 +50,7 @@ func main() {
 	api := e.Group("/api", session.Middleware(store), router.IdentifyMiddleware)
 	api.GET("/ping", router.Ping)
 
-	api.POST("/search/isbn", router.SearchWithISBN)
+	api.GET("/search/isbn", router.SearchWithISBN)
 
 	port := os.Getenv("PORT")
 	if port == "" {

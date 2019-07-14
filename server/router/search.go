@@ -18,11 +18,10 @@ type (
 )
 
 func SearchWithISBN(c echo.Context) error {
-	isbn := ISBN{}
-	c.Bind(&isbn)
+	isbn := c.QueryParam("isbn")
 
 	values := url.Values{}
-	values.Add("q", "isbn:"+isbn.ISBN)
+	values.Add("q", "isbn:"+isbn)
 	resp, err := http.Get("https://www.googleapis.com/books/v1/volumes" + "?" + values.Encode())
 
 	if err != nil {

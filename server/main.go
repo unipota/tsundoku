@@ -6,6 +6,8 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+
+	"github.com/unipota/tsundoku/server/handler"
 )
 
 func main() {
@@ -17,6 +19,8 @@ func main() {
 	e.GET("/hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "HelloWorld")
 	})
+
+	e.POST("/search/isbn", handler.SearchWithISBN)
 
 	e.GET("/*", func(c echo.Context) error {
 		return c.File("./dist/index.html")

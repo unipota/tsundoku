@@ -2,10 +2,17 @@ version: '3'
 
 services:
   tsundoku:
-    build: 
+    build:
       context: ../server/
-      dockerfile: /development/Dockerfile
+      dockerfile: ../development/Dockerfile
     volumes:
       - ../server:/tsundoku/server
     ports:
       - "3000:3000"
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: tsundoku
+    ports:
+      - "3306:3306"

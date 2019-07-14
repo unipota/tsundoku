@@ -20,7 +20,7 @@ func main() {
 		return c.String(http.StatusOK, "HelloWorld")
 	})
 
-	e.POST("/search/isbn", handler.SearchWithISBN)
+	e.GET("/search/isbn", handler.SearchWithISBN)
 
 	e.GET("/*", func(c echo.Context) error {
 		return c.File("./dist/index.html")

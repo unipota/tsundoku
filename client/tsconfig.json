@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "./types/vuex", "./types"],
+    "types": ["webpack", "webpack-env", "./types/vuex", "./types"],
     "paths": {
       "@/*": ["src/*"]
     },

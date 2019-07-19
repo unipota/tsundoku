@@ -2,16 +2,21 @@
 
 import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
+import i18n from '@/i18n'
 // ______________________________________________________
 //
 export const state = (): S => ({
-  userId: ''
+  userId: '',
+  locale: 'ja'
 })
 // ______________________________________________________
 //
 export const getters: Getters<S, G> = {
   getUserId(state): string {
     return state.userId
+  },
+  getLocale(state): string {
+    return state.locale
   }
 }
 // ______________________________________________________
@@ -19,6 +24,10 @@ export const getters: Getters<S, G> = {
 export const mutations: Mutations<S, M> = {
   setUserId(state, userId): void {
     state.userId = userId
+  },
+  setLocale(state, locale): void {
+    state.locale = locale
+    i18n.locale = locale
   }
 }
 // ______________________________________________________

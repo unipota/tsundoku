@@ -1,19 +1,32 @@
 <template lang="pug">
   section.main-nav
     .brand
-      Icon-Logo
-    desktop-tab(:selected-tab="$route.name")
+      icon-logo
+    .tab-wrap
+      desktop-tab(:selected-tab="$route.name")
+    .button-wrap
+      desktop-nav-button(:text="$t('add_by_searching')")
+        icon-search(color="white" height="24")
+    .button-wrap
+      desktop-nav-button(:text="$t('add_by_scanning')")
+        icon-scanner(color="white" height="24")
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import DesktopTab from '@/components/atoms/DesktopTab.vue'
+import DesktopNavButton from '@/components/atoms/DesktopNavButton.vue'
 import IconLogo from '@/components/assets/IconLogo.vue'
+import IconSearch from '@/components/assets/IconSearch.vue'
+import IconScanner from '@/components/assets/IconScanner.vue'
 
 @Component({
   components: {
     DesktopTab,
-    IconLogo
+    DesktopNavButton,
+    IconLogo,
+    IconSearch,
+    IconScanner
   }
 })
 export default class DesktopTabBar extends Vue {}
@@ -32,4 +45,11 @@ export default class DesktopTabBar extends Vue {}
   width: 100%
   margin-bottom: 24px
   padding: 0 32px
+.tab-wrap
+  margin:
+    top: 32px
+    bottom: 48px
+.button-wrap
+  padding: 0 24px
+  margin: 16px 0
 </style>

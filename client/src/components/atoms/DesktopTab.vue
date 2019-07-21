@@ -3,6 +3,7 @@
     router-link.tab(
       v-for="tab in Object.keys(tabs)"
       :key="tab"
+      :title="tab"
       :class="{ [tab]: true, 'active': isActive(tab) }"
       :to="{ name: tabs[tab].to, hash: $route.hash }"
     )
@@ -12,7 +13,12 @@
           :color="isActive(tab) ? undefined : tabs[tab].inactiveColor"
           :height="48"
         )
-      span.label
+      div.label.label-with-price(v-if="tab !== 'toukei' && isActive(tab)")
+        span.item-label
+          | {{ $t(tab) }}
+        span.price-label
+          | {{ price }}
+      span.label(v-else)
         | {{ $t(tab) }}
 </template>
 
@@ -31,6 +37,7 @@ import IconToukei from '@/components/assets/IconToukei.vue'
 })
 export default class DesktopTab extends Vue {
   @Prop({ type: String, default: '' }) selectedTab!: string
+  @Prop({ type: Number, default: 0 }) price!: number
 
   private tabs = {
     tsundoku: {
@@ -69,6 +76,10 @@ export default class DesktopTab extends Vue {
     margin-bottom: 24px
 
 .icon
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 48px
   margin-right: 24px
 
 .tsundoku
@@ -89,4 +100,17 @@ export default class DesktopTab extends Vue {
 
 .label
   font-weight: bold
+
+.label-with-price
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  .item-label
+    font-size: 0.8rem
+  .price-label
+    font-size: 1.2rem
+  .price-label::before
+    content: '¥'
+    display: inline-block
+    margin-right: 0.25rem
 </style>

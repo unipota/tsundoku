@@ -23,7 +23,7 @@ type Book struct {
 	Base
 	ISBN           string `gorm:"type:char(13)"`
 	Title          string `gorm:"type:char(60) not null;"`
-	Author         string `gorm:"type:char(60);"`
+	Author         string `gorm:"type:char(100);"`
 	TotalPages     int    `gorm:""`
 	RegularPrice   int    `gorm:""`
 	Caption        string `gorm:"type:TEXT;"`

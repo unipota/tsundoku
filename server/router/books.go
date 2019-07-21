@@ -1,9 +1,12 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/unipota/tsundoku/server/model"
 )
 
 func GetBookListHandler(c echo.Context) error {
@@ -11,7 +14,15 @@ func GetBookListHandler(c echo.Context) error {
 }
 
 func PostNewBookHandler(c echo.Context) error {
-	return c.NoContent(http.StatusNotImplemented)
+	bookRecord := model.BookRecord{}
+	c.Bind(&bookRecord)
+	deviceID := c.Get("deviceID").(uuid.UUID)
+	err := model.PostNewBook(bookRecord, deviceID)
+	if err != nil {
+		fmt.Println(err)
+		return c.NoContent(http.StatusInternalServerError)
+	}
+	return c.NoContent(http.StatusCreated)
 }
 
 func PutUpdateBookHandler(c echo.Context) error {

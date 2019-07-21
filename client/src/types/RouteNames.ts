@@ -1,4 +1,4 @@
-export enum ViewNames {
+export enum RouteNames {
   tsundoku = 'tsundoku',
   kidoku = 'kidoku',
   toukei = 'toukei',

@@ -29,7 +29,7 @@ import IconScanner from '@/components/assets/IconScanner.vue'
     IconScanner
   }
 })
-export default class DesktopTabBar extends Vue {}
+export default class DesktopNav extends Vue {}
 </script>
 
 <style lang="sass" scoped>

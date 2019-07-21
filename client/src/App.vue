@@ -12,11 +12,11 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MobileTemplate from '@/components/templates/MobileTemplate.vue'
-import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
 import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
-import DesktopTabBar from '@/components/molecules/DesktopTabBar.vue'
-import MobileTopBar from '@/components/atoms/MobileTopBar.vue'
+import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
+import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
 import DesktopTopBar from '@/components/molecules/DesktopTopBar.vue'
+import DesktopTabBar from '@/components/molecules/DesktopTabBar.vue'
 
 @Component({
   components: {
@@ -48,7 +48,7 @@ export default class App extends Vue {
     }
   }
 
-  mounted(): void {
+  mounted() {
     this.$nextTick(() => {
       this.handleResizeWindow()
     })

@@ -2,10 +2,11 @@ package model
 
 import (
 	"fmt"
+	os "os"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/xerrors"
-	os "os"
 )
 
 var (
@@ -43,8 +44,39 @@ func EstablishConnection() (*gorm.DB, error) {
 		return nil, xerrors.Errorf("Can't Connect to DATABASE: %w", err)
 	}
 	db = _db
+	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
 
-	db.AutoMigrate(&Book{})
 	return db, nil
+}
 
+func Migration() error {
+	if err := db.AutoMigrate(allTables...).Error; err != nil {
+		return err
+	}
+
+	foreignKeys := [][5]string{
+		{"books", "device_id", "devices(id)", "CASCADE", "CASCADE"},
+		{"book_histories", "book_id", "books(id)", "CASCADE", "CASCADE"},
+		{"device_users", "device_id", "devices(id)", "CASCADE", "CASCADE"},
+		{"device_users", "user_id", "users(id)", "CASCADE", "CASCADE"},
+		{"socials", "user_id", "users(id)", "CASCADE", "CASCADE"},
+	}
+
+	for _, c := range foreignKeys {
+		fmt.Println(c)
+		if err := db.Table(c[0]).AddForeignKey(c[1], c[2], c[3], c[4]).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+var allTables = []interface{}{
+	&Book{},
+	&Device{},
+	&DeviceUser{},
+	&User{},
+	&Social{},
+	&BookHistory{},
 }

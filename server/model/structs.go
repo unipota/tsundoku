@@ -8,7 +8,7 @@ import (
 )
 
 type Base struct {
-	ID        uuid.UUID  `gorm:"type:char(32);primary_key;"`
+	ID        uuid.UUID  `gorm:"type:char(36);primary_key;"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"update_at"`
 	DeletedAt *time.Time `sql:"index" json:"deleted_at"`
@@ -23,7 +23,7 @@ type Book struct {
 	Base
 	ISBN           string `gorm:"type:char(13)"`
 	Title          string `gorm:"type:char(60) not null;"`
-	Author         string `gorm:"type:char(60);"`
+	Author         string `gorm:"type:char(100);"`
 	TotalPages     int    `gorm:""`
 	RegularPrice   int    `gorm:""`
 	Caption        string `gorm:"type:TEXT;"`

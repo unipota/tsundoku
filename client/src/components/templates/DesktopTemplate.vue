@@ -6,10 +6,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import DesktopTabBar from '@/components/molecules/DesktopTabBar.vue'
+import DesktopNav from '@/components/molecules/DesktopNav.vue'
 
 @Component({
-  components: { DesktopTabBar }
+  components: { DesktopNav }
 })
 export default class DesktopTemplate extends Vue {}
 </script>

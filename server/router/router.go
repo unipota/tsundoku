@@ -1,15 +1,17 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"net/http"
+	"github.com/unipota/tsundoku/server/model"
 )
 
 type H struct {
-	Message string `json: "message"`
+	Message string `json:"message"`
 }
 
 func IdentifyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -22,7 +24,8 @@ func IdentifyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 				MaxAge:   60 * 60 * 24 * 14,
 				HttpOnly: true,
 			}
-			sess.Values["device_id"] = uuid.New().String()
+			device := model.NewDevice()
+			sess.Values["device_id"] = device.ID.String()
 		}
 
 		deviceID, ok := sess.Values["device_id"]
@@ -37,7 +40,9 @@ func IdentifyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		c.Set("deviceID", deviceUUID)
-		sess.Save(c.Request(), c.Response())
+		if err := sess.Save(c.Request(), c.Response()); err != nil {
+			return c.JSON(http.StatusInternalServerError, H{"Something error while save session"})
+		}
 		return next(c)
 	}
 }

@@ -24,7 +24,6 @@ export default class PriceDisplay extends Vue {
 <style lang="sass" scoped>
 .body
   display: flex
-  box-sizing: border-box
   min-width: 180px
   max-width: 40vw
   height: 48px

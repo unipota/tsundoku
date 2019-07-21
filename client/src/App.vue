@@ -1,31 +1,17 @@
 <template lang="pug">
   #app
     component(:is="templateComponent + '-template'")
-      template(#topBar)
-        component(:is="templateComponent + '-top-bar'")
-      template(#tabBar)
-        component(:is="templateComponent + '-tab-bar'")
-      template(#routerView)
-        router-view
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MobileTemplate from '@/components/templates/MobileTemplate.vue'
-import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
-import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
 import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
-import DesktopTopBar from '@/components/molecules/DesktopTopBar.vue'
-import DesktopTabBar from '@/components/molecules/DesktopTabBar.vue'
 
 @Component({
   components: {
     MobileTemplate,
-    DesktopTemplate,
-    MobileTabBar,
-    DesktopTabBar,
-    MobileTopBar,
-    DesktopTopBar
+    DesktopTemplate
   }
 })
 export default class App extends Vue {

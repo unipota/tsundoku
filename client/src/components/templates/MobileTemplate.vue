@@ -1,18 +1,22 @@
 <template lang="pug">
   div
-    slot(name="topBar")
-    slot(name="tabBar")
-    slot(name="routerView")
-
+    mobile-top-bar
+    router-view
+    mobile-tab-bar
+    floating-add-tsundoku-button
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
+import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
+import FloatingAddTsundokuButton from '@/components/atoms/FloatingAddTsundokuButton.vue'
 
 @Component({
   components: {
-    MobileTabBar
+    MobileTabBar,
+    MobileTopBar,
+    FloatingAddTsundokuButton
   }
 })
 export default class MobileTemplate extends Vue {}

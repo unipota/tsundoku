@@ -4,10 +4,10 @@
       icon-logo
     .tab-wrap
       desktop-tab(:selected-tab="$route.name")
-    .button-wrap
+    router-link.button-wrap(:to="`/${$route.matched[0].name}/add-books-search`")
       desktop-nav-button(:text="$t('add_by_searching')")
         icon-search(color="white" height="24")
-    .button-wrap
+    router-link.button-wrap(:to="`/${$route.matched[0].name}/add-books-scan`")
       desktop-nav-button(:text="$t('add_by_scanning')")
         icon-scanner(color="white" height="24")
 </template>

@@ -46,6 +46,7 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Debug = true
 	e.Use(middleware.Logger())
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 		Root:  "./static",

@@ -53,6 +53,10 @@ func main() {
 		HTML5: true,
 	}))
 
+	auth := e.Group("/auth", session.Middleware(store), router.IdentifyMiddleware)
+	auth.GET("/twitter/oauth", router.GetTwitterAuthHandler)
+	auth.GET("/twitter/callback", router.GetTwitterCallbackHandler)
+
 	api := e.Group("/api", session.Middleware(store), router.IdentifyMiddleware)
 	api.GET("/ping", router.Ping)
 

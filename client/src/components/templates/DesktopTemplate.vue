@@ -1,6 +1,5 @@
 <template lang="pug">
   div
-    slot(name="topBar")
     slot(name="tabBar")
     slot(name="routerView")
 </template>

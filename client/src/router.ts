@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Activity from './views/Activity.vue'
 import AddBooks from './views/AddBooks.vue'
 import BookDetails from './views/BookDetails.vue'
 import Kidoku from './views/Kidoku.vue'
@@ -11,6 +10,8 @@ import Toukei from './views/Toukei.vue'
 import Tsundoku from './views/Tsundoku.vue'
 import UserDetails from './views/UserDetails.vue'
 
+import { RouteNames } from './types/RouteNames'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -19,7 +20,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'tsundoku',
+      name: RouteNames.tsundoku,
       component: Tsundoku,
       children: [
         {
@@ -36,7 +37,7 @@ const router = new Router({
     },
     {
       path: '/kidoku',
-      name: 'kidoku',
+      name: RouteNames.kidoku,
       component: Kidoku,
       children: [
         {
@@ -53,27 +54,22 @@ const router = new Router({
     },
     {
       path: '/toukei',
-      name: 'toukei',
+      name: RouteNames.toukei,
       component: Toukei
     },
     {
       path: '/user',
-      name: 'userDetails',
+      name: RouteNames.user,
       component: UserDetails
     },
     {
-      path: '/activity',
-      name: 'activity',
-      component: Activity
-    },
-    {
       path: '/login',
-      name: 'login',
+      name: RouteNames.login,
       component: Login
     },
     {
       path: '/register',
-      name: 'register',
+      name: RouteNames.register,
       component: Register
     },
     {

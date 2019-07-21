@@ -5,8 +5,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import MobileTemplate from '@/components/templates/MobileTemplate.vue'
-import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
+const MobileTemplate = () => import('@/components/templates/MobileTemplate.vue')
+const DesktopTemplate = () =>
+  import('@/components/templates/DesktopTemplate.vue')
 
 @Component({
   components: {

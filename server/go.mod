@@ -3,6 +3,7 @@ module github.com/unipota/tsundoku/server
 go 1.12
 
 require (
+	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/sessions v1.2.0

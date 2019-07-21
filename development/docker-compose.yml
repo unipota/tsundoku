@@ -5,6 +5,8 @@ services:
     build:
       context: ../server/
       dockerfile: ../development/Dockerfile
+    env_file:
+      - .env
     volumes:
       - ../server:/tsundoku/server
     ports:

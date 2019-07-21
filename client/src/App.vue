@@ -1,7 +1,7 @@
 <template lang="pug">
   #app
     component(:is="templateComponent + '-template'")
-      template(v-if="templateComponent='mobile'" #topBar)
+      template(#topBar)
         component(:is="templateComponent + '-top-bar'")
       template(#tabBar)
         component(:is="templateComponent + '-tab-bar'")

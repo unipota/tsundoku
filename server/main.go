@@ -30,6 +30,10 @@ func main() {
 		}
 	}
 
+	if err := model.Migration(); err != nil {
+		panic(err)
+	}
+
 	cookieSecret := os.Getenv("COOKIE_SECRET")
 	if cookieSecret == "" {
 		cookieSecret = "tsundoku"

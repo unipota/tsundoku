@@ -72,6 +72,10 @@ func Migration() error {
 	return nil
 }
 
+func IsErrRecordNotFound(err error) bool {
+	return xerrors.Is(err, gorm.ErrRecordNotFound)
+}
+
 var allTables = []interface{}{
 	&Book{},
 	&Device{},

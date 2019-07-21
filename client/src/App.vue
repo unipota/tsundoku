@@ -1,31 +1,17 @@
 <template lang="pug">
   #app
     component(:is="templateComponent + '-template'")
-      template(v-slot:topBar)
-        component(:is="templateComponent + '-top-bar'")
-      template(v-slot:tabBar)
-        component(:is="templateComponent + '-tab-bar'")
-      template(v-slot:routerView)
-        router-view
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MobileTemplate from '@/components/templates/MobileTemplate.vue'
 import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
-import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
-import DesktopTabBar from '@/components/atoms/DesktopTabBar.vue'
-import MobileTopBar from '@/components/atoms/MobileTopBar.vue'
-import DesktopTopBar from '@/components/atoms/DesktopTopBar.vue'
 
 @Component({
   components: {
     MobileTemplate,
-    DesktopTemplate,
-    MobileTabBar,
-    DesktopTabBar,
-    MobileTopBar,
-    DesktopTopBar
+    DesktopTemplate
   }
 })
 export default class App extends Vue {
@@ -48,7 +34,7 @@ export default class App extends Vue {
     }
   }
 
-  mounted(): void {
+  mounted() {
     this.$nextTick(() => {
       this.handleResizeWindow()
     })

@@ -1,15 +1,15 @@
 <template lang="pug">
   div
-    slot(name="topBar")
-    slot(name="tabBar")
-    slot(name="routerView")
+    desktop-tab-bar
+    routerView
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import DesktopTabBar from '@/components/molecules/DesktopTabBar.vue'
 
 @Component({
-  components: {}
+  components: { DesktopTabBar }
 })
 export default class DesktopTemplate extends Vue {}
 </script>

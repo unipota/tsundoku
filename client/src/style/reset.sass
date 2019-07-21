@@ -70,13 +70,11 @@ td
   padding: 0
   border: 0
 
-
-// reset text decoration
-
-a 
+a
   text-decoration: none
 
 *
+  box-sizing: border-box
   -webkit-tap-highlight-color: transparent
 
   &:active
@@ -85,3 +83,12 @@ a
 
   &:focus
     outline: 0
+
+
+// reset input styles
+input[type="text"]
+  padding: 0
+  border: none
+  border-radius: 0
+  outline: none
+  background: none

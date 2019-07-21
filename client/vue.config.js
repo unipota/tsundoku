@@ -8,11 +8,21 @@ module.exports = {
       }
     }
   },
+
   configureWebpack: {
     resolve: {
       alias: {
         vue$: 'vue/dist/vue.esm.js'
       }
+    }
+  },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'ja',
+      fallbackLocale: 'ja',
+      localeDir: 'locales',
+      enableInSFC: true
     }
   }
 }

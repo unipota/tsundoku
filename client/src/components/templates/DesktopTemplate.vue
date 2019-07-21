@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    desktop-tab-bar
+    desktop-nav
     routerView
 </template>
 

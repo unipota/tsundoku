@@ -1,13 +1,31 @@
 <template lang="pug">
-  div
+  .tsundoku
+    .view-header-container
+    .view
+      .list-item-container(v-for="book in tsundoku")
+        BookListItem(:book="book")
     router-view
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import BookListItem from '@/components/molecules/BookListItem.vue'
+import { ExStore } from 'vuex'
 
-@Component({ components: {} })
-export default class Tsundoku extends Vue {}
+@Component({
+  components: {
+    BookListItem
+  }
+})
+export default class Tsundoku extends Vue {
+  public $store!: ExStore
+  get tsundoku() {
+    return this.$store.getters.getTsundoku
+  }
+}
 </script>
 
-<style lang="sass"></style>
+<style lang="sass">
+.list-item-container
+  margin: 1rem 0
+</style>

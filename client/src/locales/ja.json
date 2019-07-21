@@ -1,5 +1,8 @@
 {
   "tsundoku": "ツンドク",
   "kidoku": "キドク",
-  "toukei": "トウケイ"
+  "toukei": "トウケイ",
+
+  "add_by_searching": "検索して積む",
+  "add_by_scanning": "スキャンして積む"
 }

@@ -3,11 +3,13 @@
 import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
+import { BookRecord } from '@/types/Book'
 // ______________________________________________________
 //
 export const state = (): S => ({
   userId: '',
-  locale: 'ja'
+  locale: 'ja',
+  books: []
 })
 // ______________________________________________________
 //
@@ -17,6 +19,16 @@ export const getters: Getters<S, G> = {
   },
   getLocale(state): string {
     return state.locale
+  },
+  getTsundoku(state): BookRecord[] {
+    return state.books.filter(
+      (book): boolean => book.readPages < book.totalPages
+    )
+  },
+  getKidoku(state): BookRecord[] {
+    return state.books.filter(
+      (book): boolean => book.readPages >= book.totalPages
+    )
   }
 }
 // ______________________________________________________

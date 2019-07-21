@@ -3,7 +3,6 @@
     slot(name="topBar")
     slot(name="tabBar")
     slot(name="routerView")
-
 </template>
 
 <script lang="ts">

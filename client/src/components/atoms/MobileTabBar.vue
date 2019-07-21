@@ -8,7 +8,7 @@
         span.icon.tsundoku
           IconTsundoku(:color="selectedTab === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
         span.label(v-if="selectedTab === 'tsundoku'")
-          | {{ tabs.tsundoku.label }}
+          | {{ $t('tsundoku') }}
 
       router-link.tab.kidoku(
         :class="{'selected': selectedTab === 'kidoku'}"
@@ -17,7 +17,7 @@
         span.icon.tsundoku
           IconKidoku(:color="selectedTab==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
         span.label(v-if="selectedTab === 'kidoku'")
-          | {{ tabs.kidoku.label }}
+          | {{ $t('kidoku') }}
 
       router-link.tab.toukei(
         :class="{'selected': selectedTab === 'toukei'}"
@@ -26,7 +26,7 @@
         span.icon.toukei
           IconToukei(:color="selectedTab==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
         span.label(v-if="selectedTab === 'toukei'")
-          | {{ tabs.toukei.label }}
+          | {{ $t('toukei') }}
 </template>
 
 <script lang="ts">
@@ -50,17 +50,14 @@ export default class MobileTabBar extends Vue {
   private tabs = {
     tsundoku: {
       name: 'tsundoku',
-      label: 'ツンドク',
       to: 'tsundoku'
     },
     kidoku: {
       name: 'kidoku',
-      label: 'キドク',
       to: 'kidoku'
     },
     toukei: {
       name: 'toukei',
-      label: 'トウケイ',
       to: 'toukei'
     }
   }

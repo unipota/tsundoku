@@ -2,7 +2,6 @@ package router
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -18,26 +17,47 @@ type (
 )
 
 func SearchWithISBN(c echo.Context) error {
-	isbn := ISBN{}
-	c.Bind(&isbn)
+	isbn := c.QueryParam("isbn")
 
 	values := url.Values{}
-	values.Add("q", "isbn:"+isbn.ISBN)
-	resp, err := http.Get("https://www.googleapis.com/books/v1/volumes" + "?" + values.Encode())
+	values.Add("q", "isbn:"+isbn)
 
+	volumes, err := searchBooks(values)
 	if err != nil {
-		fmt.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	return c.JSON(http.StatusOK, volumes)
+}
+
+func SearchWithWord(c echo.Context) error {
+	search := c.QueryParam("search")
+
+	values := url.Values{}
+	values.Add("q", search)
+
+	volumes, err := searchBooks(values)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, volumes)
+
+}
+
+func searchBooks(values url.Values) (*books.Volumes, error) {
+	resp, err := http.Get("https://www.googleapis.com/books/v1/volumes" + "?" + values.Encode())
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
+	volumes := &books.Volumes{}
+	json.Unmarshal(body, volumes)
 
-	volumes := books.Volumes{}
-	json.Unmarshal(body, &volumes)
-
-	return c.JSON(http.StatusOK, volumes)
+	return volumes, nil
 }

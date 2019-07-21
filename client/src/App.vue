@@ -15,7 +15,7 @@ import MobileTemplate from '@/components/templates/MobileTemplate.vue'
 import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
 import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
 import DesktopTabBar from '@/components/atoms/DesktopTabBar.vue'
-import MobileTopBar from '@/components/atoms/MobileTopBar.vue'
+import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
 import DesktopTopBar from '@/components/atoms/DesktopTopBar.vue'
 
 @Component({
@@ -48,7 +48,7 @@ export default class App extends Vue {
     }
   }
 
-  mounted(): void {
+  mounted() {
     this.$nextTick(() => {
       this.handleResizeWindow()
     })

@@ -80,8 +80,9 @@ export default class MobileTabBar extends Vue {
     padding: 20px 30px
     display: flex
     width: auto
-    max-width: 375px - (18px * 2);
-    margin: auto;
+    max-width: 375px - (18px * 2)
+    margin: auto
+    box-sizing: content-box
 
     .tab
       display: flex

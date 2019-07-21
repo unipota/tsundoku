@@ -7,6 +7,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import MobileTemplate from '@/components/templates/MobileTemplate.vue'
 import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
+import { ExStore } from 'vuex'
 
 @Component({
   components: {
@@ -16,6 +17,7 @@ import DesktopTemplate from '@/components/templates/DesktopTemplate.vue'
 })
 export default class App extends Vue {
   private windowWidth = 0
+  public $store!: ExStore
 
   private handleResizeWindow() {
     this.windowWidth = window.innerWidth

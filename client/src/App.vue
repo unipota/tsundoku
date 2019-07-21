@@ -35,6 +35,11 @@ export default class App extends Vue {
     this.windowWidth = window.innerWidth
   }
 
+  private setLocale() {
+    // ブラウザの言語設定を取得
+    this.$store.commit('setLocale', window.navigator.language.split('-')[0])
+  }
+
   get templateComponent() {
     if (this.windowWidth < 750) {
       return 'mobile'
@@ -47,6 +52,7 @@ export default class App extends Vue {
     this.$nextTick(() => {
       this.handleResizeWindow()
     })
+    this.setLocale()
     window.addEventListener('resize', this.handleResizeWindow)
     window.addEventListener('orientationchange', this.handleResizeWindow)
   }

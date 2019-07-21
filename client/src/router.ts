@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Activity from './views/Activity.vue'
 import AddBooks from './views/AddBooks.vue'
 import BookDetails from './views/BookDetails.vue'
-import Home from './views/Home.vue'
 import Kidoku from './views/Kidoku.vue'
 import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
@@ -20,11 +19,6 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/tsundoku',
       name: 'tsundoku',
       component: Tsundoku,
       children: [

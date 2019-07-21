@@ -105,6 +105,8 @@ github.com/prometheus/common v0.2.0/go.mod h1:TNfzLD0ON7rHzMJeJkieUDPYmFC7Snx/y8
 github.com/prometheus/procfs v0.0.0-20181005140218-185b4288413d/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/prometheus/procfs v0.0.0-20190117184657-bf6a532e95b1/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
+github.com/seihmd/openbd v0.0.0-20171023124756-5018b854044b h1:AS6MwN0F+YozKxzkjfhiSojGlslTrB0dPt3NADKnTew=
+github.com/seihmd/openbd v0.0.0-20171023124756-5018b854044b/go.mod h1:pVh9UMkc5ceo5OH6J4esC5kDsxJulz0rvXmS0lVo8dc=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/srinathgs/mysqlstore v0.0.0-20170818123135-4f803440ed5b h1:5Bgx5+R5E4UY/rAD0zFB8IexgJiKFb7x/PV+ZHhSfNk=
 github.com/srinathgs/mysqlstore v0.0.0-20170818123135-4f803440ed5b/go.mod h1:kt46Hd+lF0rtpeRgOvYSWYJItOAd73EKkIBZFbX7TXs=

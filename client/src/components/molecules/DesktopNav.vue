@@ -3,13 +3,15 @@
     .brand
       icon-logo
     .tab-wrap
-      desktop-tab(:selected-tab="$route.name")
+      desktop-tab(:selected-tab="selectedPath")
     .button-wrap
-      desktop-nav-button(:text="$t('add_by_searching')")
-        icon-search(color="white" height="24")
+      router-link(:to="`${firstRouteName}/add-books-search`")
+        desktop-nav-button(:text="$t('add_by_searching')")
+          icon-search(color="white" height="24")
     .button-wrap
-      desktop-nav-button(:text="$t('add_by_scanning')")
-        icon-scanner(color="white" height="24")
+      router-link(:to="`${firstRouteName}/add-books-scan`")
+        desktop-nav-button(:text="$t('add_by_scanning')")
+          icon-scanner(color="white" height="24")
 </template>
 
 <script lang="ts">
@@ -29,7 +31,16 @@ import IconScanner from '@/components/assets/IconScanner.vue'
     IconScanner
   }
 })
-export default class DesktopTabBar extends Vue {}
+export default class DesktopNav extends Vue {
+  get firstRouteName() {
+    return this.$route.matched[0].path
+  }
+  get selectedPath() {
+    return this.firstRouteName === ''
+      ? 'tsundoku'
+      : this.firstRouteName.slice(1)
+  }
+}
 </script>
 
 <style lang="sass" scoped>

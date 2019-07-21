@@ -32,6 +32,8 @@ type Book struct {
 	Memo           string `gorm:"type:text;"`
 	PurchasedPrice int    `gorm:""`
 	DeviceID       string `gorm:"char(36);not null"`
+
+	BookHistories []BookHistory
 }
 
 type Device struct {

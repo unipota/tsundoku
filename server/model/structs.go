@@ -21,17 +21,16 @@ func (base *Base) BeforeCreate(scope *gorm.Scope) error {
 
 type Book struct {
 	Base
-	ISBN           string `gorm:"type:char(13)"`
-	Title          string `gorm:"type:char(60) not null;"`
-	Author         string `gorm:"type:char(100);"`
-	TotalPages     int    `gorm:""`
-	RegularPrice   int    `gorm:""`
-	Caption        string `gorm:"type:TEXT;"`
-	Publisher      string `gorm:"type:char(60);"`
-	CoverImageUrl  string `gorm:"type:char(200);"`
-	Memo           string `gorm:"type:text;"`
-	PurchasedPrice int    `gorm:""`
-	DeviceID       string `gorm:"char(36);not null"`
+	ISBN          string    `gorm:"type:char(13)"`
+	Title         string    `gorm:"type:char(60) not null;"`
+	Author        string    `gorm:"type:char(100);"`
+	TotalPages    int       `gorm:""`
+	Caption       string    `gorm:"type:TEXT;"`
+	Publisher     string    `gorm:"type:char(60);"`
+	CoverImageUrl string    `gorm:"type:char(200);"`
+	Memo          string    `gorm:"type:text;"`
+	Price         int       `gorm:""`
+	DeviceID      uuid.UUID `gorm:"type:char(36);not null"`
 
 	BookHistories []BookHistory
 }

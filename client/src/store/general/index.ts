@@ -9,6 +9,7 @@ import { BookRecord } from '@/types/Book'
 export const state = (): S => ({
   userId: '',
   locale: 'ja',
+  viewType: 'desktop',
   books: [
     {
       id: 'mock0',
@@ -86,6 +87,9 @@ export const mutations: Mutations<S, M> = {
   setLocale(state, locale): void {
     state.locale = locale
     i18n.locale = locale
+  },
+  setViewType(state, viewType): void {
+    state.viewType = viewType
   }
 }
 // ______________________________________________________

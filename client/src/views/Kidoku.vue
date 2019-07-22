@@ -20,7 +20,7 @@ import { ExStore } from 'vuex'
 export default class Kidoku extends Vue {
   public $store!: ExStore
   get books() {
-    return this.$store.getters.getKidoku
+    return this.$store.getters.kidokuBooks
   }
 }
 </script>

@@ -1,7 +1,9 @@
 <template lang="pug">
-  div
-    desktop-nav
-    routerView
+  .view-desktop
+    .nav-wrap
+      desktop-nav
+    .view-wrap
+      routerView
 </template>
 
 <script lang="ts">
@@ -14,4 +16,14 @@ import DesktopNav from '@/components/molecules/DesktopNav.vue'
 export default class DesktopTemplate extends Vue {}
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" scoped>
+.view-desktop
+  display: flex
+.nav-wrap
+  width: 320px
+  padding: 24px
+  flex-shrink: 0
+.view-wrap
+  width: 100%
+  padding: 24px
+</style>

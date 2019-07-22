@@ -45,9 +45,8 @@ export default class DesktopNav extends Vue {
 
 <style lang="sass" scoped>
 .main-nav
-  width: 320px
+  width: 100%
   height: 100%
-  padding: 24px
 .brand
   display: flex
   justify-content: flex-start

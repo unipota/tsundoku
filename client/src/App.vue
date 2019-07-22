@@ -1,13 +1,18 @@
 <template lang="pug">
   #app
-    component(:is="templateComponent + '-template'")
+    component(:is="$store.state.viewType + '-template'")
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
+
 const MobileTemplate = () => import('@/components/templates/MobileTemplate.vue')
 const DesktopTemplate = () =>
   import('@/components/templates/DesktopTemplate.vue')
+
+// TODO: move this to better position
+const mobileThreshould = 750
 
 @Component({
   components: {
@@ -17,22 +22,24 @@ const DesktopTemplate = () =>
 })
 export default class App extends Vue {
   private windowWidth = 0
+  public $store!: ExStore
 
   private handleResizeWindow() {
-    this.windowWidth = window.innerWidth
+    const width = window.innerWidth
+    if (this.$store.state.viewType !== 'mobile' && width < mobileThreshould) {
+      this.$store.commit('setViewType', 'mobile')
+    } else if (
+      this.$store.state.viewType !== 'desktop' &&
+      width >= mobileThreshould
+    ) {
+      this.$store.commit('setViewType', 'desktop')
+    }
+    this.windowWidth = width
   }
 
   private setLocale() {
     // ブラウザの言語設定を取得
     this.$store.commit('setLocale', window.navigator.language.split('-')[0])
-  }
-
-  get templateComponent() {
-    if (this.windowWidth < 750) {
-      return 'mobile'
-    } else {
-      return 'desktop'
-    }
   }
 
   mounted() {

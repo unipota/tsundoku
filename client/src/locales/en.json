@@ -4,5 +4,7 @@
   "toukei": "Stats",
 
   "add_by_searching": "Add books by searching",
-  "add_by_scanning": "Add books by scan barcode"
+  "add_by_scanning": "Add books by scan barcode",
+
+  "remaining": "{price}"
 }

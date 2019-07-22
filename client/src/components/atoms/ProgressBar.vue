@@ -1,0 +1,52 @@
+<template lang="pug">
+  .progress-bar
+    .progress(:style="progressStyle")
+    .progress-bg(:style="progressStyle")
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class ProgressBar extends Vue {
+  @Prop({ type: Number, required: true }) private progress!: number
+
+  get validatedProgress() {
+    return Math.min(1, Math.max(0, this.progress))
+  }
+
+  get progressStyle() {
+    return {
+      width: `${this.validatedProgress * 100}%`
+    }
+  }
+}
+</script>
+
+<style lang="sass" scoped>
+$height: 8px
+.progress-bar
+  position: relative
+  width: 100%
+  height: $height
+  background-color: $border-gray
+  border-radius: 999px
+  overflow: hidden
+
+.progress
+  height: $height
+  background-color: $kidoku-blue
+  border-radius: 999px
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 2
+.progress-bg
+  position: absolute
+  left: 4px
+  top: 0
+  z-index: 1
+  height: $height
+  background-color: white
+  border-radius: 999px
+</style>

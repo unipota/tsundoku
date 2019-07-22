@@ -8,11 +8,11 @@
           | {{ book.title }}
         .book-list-item__author
           | {{ book.author }}
-      .book-list-item__progress
-        .book-list-item-progress__price(v-if="kidoku")
-          span.book-list-item__total-price
-            | {{ book.price }}
-        book-list-item-progress(v-else :book="book")
+      .book-list-item__price(v-if="kidoku")
+        span.book-list-item__total-price
+          | {{ book.price }}
+      .book-list-item__progress(v-else)
+        book-list-item-progress(:book="book")
 </template>
 
 <script lang="ts">
@@ -71,7 +71,7 @@ export default class BookListItem extends Vue {
     justify-content: space-between
 
   &.is-mobile
-    display: block
+    display: flex
 
 .book-list-item__detail
   width: 100%
@@ -113,8 +113,17 @@ export default class BookListItem extends Vue {
     shrink: 1
   align-self: flex-end
 
-.book-list-item-progress__price_remaining
-  color: $tsundoku-red
+.book-list-item__price
+  width: 140px
+  text-align: right
+  flex:
+    basis: 140px
+    grow: 0
+    shrink: 1
+  align-self: flex-end
+
+.book-list-item__total-price
+  color: $kidoku-blue
   font:
     weight: bold
     size: 1.1rem

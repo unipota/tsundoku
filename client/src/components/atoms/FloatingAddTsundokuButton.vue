@@ -1,9 +1,9 @@
 <template lang="pug">
   transition-group.floating-add-tsundoku-button(:class="{'is-active': active}" name="transition-button" tag="div")
-    .button-search(key="search" v-if="active")
-      icon-search
-    .button-scan(key="scan" v-if="active")
-      icon-scanner
+    .button-search(key="search" v-show="active")
+      icon-search(width="30" height="30")
+    .button-scan(key="scan" v-show="active")
+      icon-scanner(width="38" height="38")
     .button-open(key="open" @click="handleClick")
       transition-group(name="transition-label" tag="div")
         .icon-plus(key="icon")
@@ -41,6 +41,7 @@ export default class FloatingAddTsundokuButton extends Vue {
 
 .button-open
   z-index: 100
+  overflow: hidden
   display: flex
   align-items: center
   background-color: var(--tsundoku-red)
@@ -54,7 +55,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   font:
     size: 24px
     weight: bold
-  transition: border-radius .3s, width .3s, height .3s, margin .3s
+  transition: border-radius .3s, width .3s $easeOutBack, height .3s $easeOutBack, margin .3s
 
   div
     display: flex
@@ -71,9 +72,10 @@ export default class FloatingAddTsundokuButton extends Vue {
     justify-content: center
 
 .icon-plus
+  transform: rotate(0)
 
   .is-active &
-    transform: rotate(45deg)
+    transform: rotate(135deg)
 
 %button
   display: flex
@@ -102,10 +104,14 @@ export default class FloatingAddTsundokuButton extends Vue {
 
 .transition-button
   &-enter, &-leave-to
-    transform: translateX(120px)
-    opacity: 0
+    transform: translateX(160px) rotate(30deg)
+    // opacity: 0
 
-  &-enter-active, &-leave-active
+  &-enter-active
+    transition: transform .5s $easeOutBack, opacity .5s
+    pointer-events: none
+
+  &-leave-active
     transition: transform .5s, opacity .5s
 
 .transition-label
@@ -114,7 +120,7 @@ export default class FloatingAddTsundokuButton extends Vue {
     opacity: 0
 
   &-enter-active
-    transition: transform .5s, opacity .5s
+    transition: transform .5s $easeOutBack, opacity .5s
 
   &-leave-active
     opacity: 0

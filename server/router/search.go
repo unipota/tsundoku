@@ -8,7 +8,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/seihmd/openbd"
-	"github.com/unipota/tsundoku/server/model"
 	"google.golang.org/api/books/v1"
 )
 
@@ -28,7 +27,6 @@ func SearchWithISBN(c echo.Context) error {
 	}
 
 	bookRecords := volumesToBookRecords(volumes)
-
 	return c.JSON(http.StatusOK, bookRecords)
 }
 
@@ -61,18 +59,20 @@ func searchBooks(values url.Values) (*books.Volumes, error) {
 		return nil, err
 	}
 	volumes := &books.Volumes{}
-	json.Unmarshal(body, volumes)
+	if err := json.Unmarshal(body, volumes); err != nil {
+		return nil, err
+	}
 
 	return volumes, nil
 }
 
-func convertVolumeToBookRecord(volume *books.Volume) *model.BookRecord {
-	bookRecord := &model.BookRecord{
+func convertVolumeToBookRecord(volume *books.Volume) *BookRecord {
+	bookRecord := &BookRecord{
 		ID:            "",
 		ISBN:          "",
 		Title:         volume.VolumeInfo.Title,
 		Author:        volume.VolumeInfo.Authors,
-		TotalPages:    volume.VolumeInfo.PageCount,
+		TotalPages:    int(volume.VolumeInfo.PageCount),
 		Price:         0,
 		Caption:       "",
 		Publisher:     volume.VolumeInfo.Publisher,
@@ -115,8 +115,8 @@ func convertVolumeToBookRecord(volume *books.Volume) *model.BookRecord {
 	return bookRecord
 }
 
-func volumesToBookRecords(volumes *books.Volumes) []*model.BookRecord {
-	bookRecords := make([]*model.BookRecord, 0)
+func volumesToBookRecords(volumes *books.Volumes) []*BookRecord {
+	bookRecords := make([]*BookRecord, 0)
 
 	for _, volume := range volumes.Items {
 		bookRecord := convertVolumeToBookRecord(volume)
@@ -127,7 +127,7 @@ func volumesToBookRecords(volumes *books.Volumes) []*model.BookRecord {
 	return bookRecords
 }
 
-func updateBookRecordWithOpenDB(bookRecord *model.BookRecord) *model.BookRecord {
+func updateBookRecordWithOpenDB(bookRecord *BookRecord) *BookRecord {
 	openBD := openbd.New()
 	book, err := openBD.Get(bookRecord.ISBN)
 	if err != nil {

@@ -24,5 +24,6 @@ export default class DesktopTemplate extends Vue {}
   padding: 24px
   flex-shrink: 0
 .view-wrap
+  width: 100%
   padding: 24px
 </style>

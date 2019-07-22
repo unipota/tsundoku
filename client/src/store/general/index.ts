@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* tslint:disable:no-shadowed-variable */
 
 import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
-import { BookRecord } from '@/types/Book'
 // ______________________________________________________
 //
 export const state = (): S => ({
   userId: '',
   locale: 'ja',
   viewType: 'desktop',
-  books: [
-    {
+  booksMap: {
+    mock0: {
       id: 'mock0',
       isbn: '9784101800042',
       title: 'いなくなれ、群青',
@@ -26,7 +26,7 @@ export const state = (): S => ({
       readPages: 200,
       memo: ''
     },
-    {
+    mock1: {
       id: 'mock1',
       isbn: '9784832249905',
       title: 'ご注文はうさぎですか？　7',
@@ -40,7 +40,7 @@ export const state = (): S => ({
       readPages: 119,
       memo: ''
     },
-    {
+    mock2: {
       id: 'mock2',
       isbn: '9784839941062',
       title:
@@ -56,28 +56,31 @@ export const state = (): S => ({
       readPages: 20,
       memo: ''
     }
-  ]
+  }
 })
 // ______________________________________________________
 //
 export const getters: Getters<S, G> = {
-  getUserId(state): string {
+  getUserId(state) {
     return state.userId
   },
-  getLocale(state): string {
+  getLocale(state) {
     return state.locale
   },
-  getTsundoku(state): BookRecord[] {
-    return state.books.filter(
-      (book): boolean => book.readPages < book.totalPages
-    )
+  books(state) {
+    return Object.values(state.booksMap)
   },
-  getKidoku(state): BookRecord[] {
-    return state.books.filter(
-      (book): boolean => book.readPages >= book.totalPages
-    )
+  tsundokuBooks(_, getters) {
+    return getters.books.filter(book => book.readPages < book.totalPages)
+  },
+  kidokuBooks(_, getters) {
+    return getters.books.filter(book => book.readPages >= book.totalPages)
+  },
+  getBookById(state) {
+    return bookId => state.booksMap[bookId]
   }
 }
+
 // ______________________________________________________
 //
 export const mutations: Mutations<S, M> = {

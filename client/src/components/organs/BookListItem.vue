@@ -1,13 +1,10 @@
 <template lang="pug">
   .book-list-item
-    .book-list-item__cover
+    router-link.book-list-item__cover(:to="`${$route.matched[0].path}/book/${book.id}`")
       book-cover(:book="book")
     .book-list-item__info(:class="`is-${$store.state.viewType}`")
       .book-list-item__detail
-        .book-list-item__title
-          | {{ book.title }}
-        .book-list-item__author
-          | {{ book.author }}
+        book-major-info(:book="book")
       .book-list-item__price(v-if="kidoku")
         span.book-list-item__total-price
           | {{ book.price }}
@@ -19,11 +16,13 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { BookRecord } from '../../types/Book'
 import BookCover from '@/components/atoms/BookCover.vue'
+import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookListItemProgress from '@/components/molecules/BookListItemProgress.vue'
 
 @Component({
   components: {
     BookCover,
+    BookMajorInfo,
     BookListItemProgress
   }
 })
@@ -72,6 +71,7 @@ export default class BookListItem extends Vue {
 
   &.is-mobile
     display: flex
+    flex-direction: column
 
 .book-list-item__detail
   width: 100%
@@ -81,37 +81,16 @@ export default class BookListItem extends Vue {
     grow: 1
     shrink: 1
 
-.book-list-item__title
-  font:
-    size: 1.2rem
-    weight: bold
-  width: 100%
-  margin-bottom: 8px
-  overflow: hidden
-
-  display: -webkit-box
-  -webkit-box-orient: vertical
-  .is-mobile &
-    -webkit-line-clamp: 1
-  .is-desktop &
-    -webkit-line-clamp: 2
-
-  max-height: 3.6rem
-
-.book-list-item__author
-  height: 1.5rem
-  width: 100%
-  overflow: hidden
-  white-space: nowrap
-  text-overflow: ellipsis
-
 .book-list-item__progress
-  width: 280px
-  flex:
-    basis: 280px
-    grow: 0
-    shrink: 1
-  align-self: flex-end
+  .is-desktop &
+    width: 280px
+    flex:
+      basis: 280px
+      grow: 0
+      shrink: 1
+    align-self: flex-end
+  .is-mobile &
+    width: 100%
 
 .book-list-item__price
   width: 140px

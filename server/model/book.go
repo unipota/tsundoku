@@ -6,20 +6,33 @@ import (
 	"github.com/google/uuid"
 )
 
-func PostNewBook(bookRecord BookRecord, deviceID uuid.UUID) error {
+type BookRecord struct {
+	ID            string   `json:"id"`
+	ISBN          string   `json:"isbn"`
+	Title         string   `json:"title"`
+	Author        []string `json:"author"`
+	TotalPages    int64    `json:"total_pages"`
+	Price         int      `json:"price"`
+	Caption       string   `json:"caption"`
+	Publisher     string   `json:"publisher"`
+	CoverImageURL string   `json:"cover_image_url`
+	ReadPages     int      `json:"read_pages"`
+	Memo          string   `json:"memo"`
+}
+
+func AddNewBook(bookRecord BookRecord, deviceID uuid.UUID) error {
 	bookData := &Book{
-		ISBN:           bookRecord.ISBN,
-		Title:          bookRecord.Title,
-		TotalPages:     int(bookRecord.TotalPages),
-		Caption:        bookRecord.Caption,
-		Publisher:      bookRecord.Publisher,
-		CoverImageUrl:  bookRecord.CoverImageURL,
-		Memo:           bookRecord.Memo,
-		PurchasedPrice: bookRecord.Price,
-		DeviceID:       deviceID.String(),
+		ISBN:          bookRecord.ISBN,
+		Title:         bookRecord.Title,
+		TotalPages:    int(bookRecord.TotalPages),
+		Caption:       bookRecord.Caption,
+		Publisher:     bookRecord.Publisher,
+		CoverImageUrl: bookRecord.CoverImageURL,
+		Memo:          bookRecord.Memo,
+		Price:         bookRecord.Price,
+		DeviceID:      deviceID,
 	}
 
-	bookData.RegularPrice = GetPriceWithISBN(bookRecord.ISBN)
 	bookData.Author = strings.Join(bookRecord.Author, ",")
 
 	deviceCount := 0

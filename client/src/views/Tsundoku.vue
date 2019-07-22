@@ -2,7 +2,7 @@
   .tsundoku
     .view-header-container
     .view
-      .list-item-container(v-for="book in tsundoku")
+      .list-item-container(v-for="book in books")
         BookListItem(:book="book")
     router-view
 </template>
@@ -19,13 +19,18 @@ import { ExStore } from 'vuex'
 })
 export default class Tsundoku extends Vue {
   public $store!: ExStore
-  get tsundoku() {
+  get books() {
     return this.$store.getters.getTsundoku
   }
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
+.tsundoku
+  width: 100%
+.view
+  width: 100%
 .list-item-container
   margin: 1rem 0
+  width: 100%
 </style>

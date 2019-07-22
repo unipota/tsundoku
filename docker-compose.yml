@@ -13,6 +13,8 @@ services:
       - 3000
     depends_on:
       - nginx-proxy
+      - db
+    restart: always
   nginx-proxy:
     image: jwilder/nginx-proxy
     labels:
@@ -41,6 +43,15 @@ services:
     restart: always
     depends_on:
       - nginx-proxy
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: tsundoku
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/mysql_data:/var/lib/mysql
 
 volumes:
   proxy: 

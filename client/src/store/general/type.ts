@@ -1,11 +1,14 @@
 import { BookRecord } from '@/types/Book'
 
+type ViewType = 'mobile' | 'desktop'
+
 // ______________________________________________________
 //
 // state
 export interface S {
   userId: string
   locale: string
+  viewType: ViewType
   books: BookRecord[]
 }
 // ______________________________________________________
@@ -27,6 +30,7 @@ export type RG = {
 export interface M {
   setUserId: string
   setLocale: string
+  setViewType: ViewType
 }
 export type RM = {
   [K in keyof M]: M[K]

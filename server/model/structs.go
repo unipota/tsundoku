@@ -30,7 +30,7 @@ type Book struct {
 	CoverImageUrl string    `gorm:"type:char(200);"`
 	Memo          string    `gorm:"type:text;"`
 	Price         int       `gorm:""`
-	DeviceID      uuid.UUID `gorm:"char(36);not null"`
+	DeviceID      uuid.UUID `gorm:"type:char(36);not null"`
 
 	BookHistories []BookHistory
 }

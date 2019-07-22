@@ -2,14 +2,17 @@
   .book-list-item
     .book-list-item__cover
       book-cover(:book="book")
-    .book-list-item__info
+    .book-list-item__info(:class="`is-${$store.state.viewType}`")
       .book-list-item__detail
         .book-list-item__title
           | {{ book.title }}
         .book-list-item__author
           | {{ book.author }}
       .book-list-item__progress
-        book-list-item-progress(:book="book")
+        .book-list-item-progress__price(v-if="kidoku")
+          span.book-list-item__total-price
+            | {{ book.price }}
+        book-list-item-progress(v-else :book="book")
 </template>
 
 <script lang="ts">
@@ -27,6 +30,9 @@ import BookListItemProgress from '@/components/molecules/BookListItemProgress.vu
 export default class BookListItem extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord
+
+  @Prop({ type: Boolean, default: false })
+  private kidoku!: boolean
 }
 </script>
 
@@ -52,16 +58,20 @@ export default class BookListItem extends Vue {
   left: 64px
   z-index: -1
 
-  display: flex
-  justify-content: space-between
-
-  width: calc(100% - 64px)
+  width: calc(100% - 80px)
   height: 100%
 
   padding: 16px 16px 16px 64px
   margin: 8px
   border-radius: 8px
   background-color: $bg-suppressed-gray
+
+  &.is-desktop
+    display: flex
+    justify-content: space-between
+
+  &.is-mobile
+    display: block
 
 .book-list-item__detail
   width: 100%
@@ -80,8 +90,11 @@ export default class BookListItem extends Vue {
   overflow: hidden
 
   display: -webkit-box
-  -webkit-line-clamp: 2
   -webkit-box-orient: vertical
+  .is-mobile &
+    -webkit-line-clamp: 1
+  .is-desktop &
+    -webkit-line-clamp: 2
 
   max-height: 3.6rem
 
@@ -99,4 +112,13 @@ export default class BookListItem extends Vue {
     grow: 0
     shrink: 1
   align-self: flex-end
+
+.book-list-item-progress__price_remaining
+  color: $tsundoku-red
+  font:
+    weight: bold
+    size: 1.1rem
+  &::before
+    content: '¥'
+    margin: 0 0.25rem
 </style>

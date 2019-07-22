@@ -17,7 +17,7 @@ func PostNewBookHandler(c echo.Context) error {
 	bookRecord := model.BookRecord{}
 	c.Bind(&bookRecord)
 	deviceID := c.Get("deviceID").(uuid.UUID)
-	err := model.PostNewBook(bookRecord, deviceID)
+	err := model.AddNewBook(bookRecord, deviceID)
 	if err != nil {
 		fmt.Println(err)
 		return c.NoContent(http.StatusInternalServerError)

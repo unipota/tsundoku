@@ -1,9 +1,15 @@
+import { BookRecord } from '@/types/Book'
+
+type ViewType = 'mobile' | 'desktop'
+
 // ______________________________________________________
 //
 // state
 export interface S {
   userId: string
   locale: string
+  viewType: ViewType
+  books: BookRecord[]
 }
 // ______________________________________________________
 //
@@ -11,10 +17,12 @@ export interface S {
 export interface G {
   getUserId: string
   getLocale: string
+  getTsundoku: BookRecord[]
+  getKidoku: BookRecord[]
 }
-export interface RG {
-  getUserId: G['getUserId']
-  getLocale: G['getLocale']
+// root getters has no namespace, so we can write root getter names like this
+export type RG = {
+  [K in keyof G]: G[K]
 }
 // ______________________________________________________
 //
@@ -22,10 +30,10 @@ export interface RG {
 export interface M {
   setUserId: string
   setLocale: string
+  setViewType: ViewType
 }
-export interface RM {
-  setUserId: M['setUserId']
-  setLocale: M['setLocale']
+export type RM = {
+  [K in keyof M]: M[K]
 }
 // ______________________________________________________
 //

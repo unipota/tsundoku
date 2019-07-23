@@ -3,7 +3,7 @@
     .view-header-container
     .view
       .list-item-container(v-for="book in books")
-        BookListItem(:book="book")
+        book-list-item(:book="book")
     router-view
 </template>
 
@@ -28,8 +28,13 @@ export default class Tsundoku extends Vue {
 <style lang="sass" scoped>
 .tsundoku
   width: 100%
+
 .view
   width: 100%
+  padding:
+    left: 5%
+    right: 5%
+
 .list-item-container
   margin: 1rem 0
   width: 100%

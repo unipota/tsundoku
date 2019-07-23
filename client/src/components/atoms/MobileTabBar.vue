@@ -2,30 +2,30 @@
   div.wrapper
     div.tab-bar
       router-link.tab.tsundoku(
-        :class="{'selected': selectedTab === 'tsundoku'}"
+        :class="{'selected': selectedPath === 'tsundoku'}"
         :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconTsundoku(:color="selectedTab === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
-        span.label(v-if="selectedTab === 'tsundoku'")
+          IconTsundoku(:color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
+        span.label(v-if="selectedPath === 'tsundoku'")
           | {{ $t('tsundoku') }}
 
       router-link.tab.kidoku(
-        :class="{'selected': selectedTab === 'kidoku'}"
+        :class="{'selected': selectedPath === 'kidoku'}"
         :to="{ name: tabs.kidoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconKidoku(:color="selectedTab==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
-        span.label(v-if="selectedTab === 'kidoku'")
+          IconKidoku(:color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
+        span.label(v-if="selectedPath === 'kidoku'")
           | {{ $t('kidoku') }}
 
       router-link.tab.toukei(
-        :class="{'selected': selectedTab === 'toukei'}"
+        :class="{'selected': selectedPath === 'toukei'}"
         :to="{ name: tabs.toukei.to }"
       )
         span.icon.toukei
-          IconToukei(:color="selectedTab==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
-        span.label(v-if="selectedTab === 'toukei'")
+          IconToukei(:color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
+        span.label(v-if="selectedPath === 'toukei'")
           | {{ $t('toukei') }}
 </template>
 
@@ -43,8 +43,13 @@ import IconToukei from '@/components/assets/IconToukei.vue'
   }
 })
 export default class MobileTabBar extends Vue {
-  get selectedTab(): string | undefined {
-    return this.$route.name
+  get firstRouteName() {
+    return this.$route.matched[0].path
+  }
+  get selectedPath() {
+    return this.firstRouteName === ''
+      ? 'tsundoku'
+      : this.firstRouteName.slice(1)
   }
 
   private tabs = {

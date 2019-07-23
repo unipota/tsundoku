@@ -40,7 +40,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   align-items: center
   position: fixed
   right: 0
-  bottom: 94px + 18px
+  bottom: calc(94px + 1vh)
 
 .button-open
   z-index: 100

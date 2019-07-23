@@ -1,8 +1,8 @@
 <template lang="pug">
   transition-group.floating-add-tsundoku-button(:class="{'is-active': active}" name="transition-button" tag="div")
-    .button-search(key="search" v-show="active")
+    router-link(:to="`${firstRouteName}/add-books-search`").button-search(key="search" v-show="active")
       icon-search(width="30" height="30")
-    .button-scan(key="scan" v-show="active")
+    router-link(:to="`${firstRouteName}/add-books-scan`").button-scan(key="scan" v-show="active")
       icon-scanner(width="38" height="38")
     .button-open(key="open" @click="handleClick")
       transition-group(name="transition-label" tag="div")
@@ -26,6 +26,9 @@ export default class FloatingAddTsundokuButton extends Vue {
 
   handleClick() {
     this.active = !this.active
+  }
+  get firstRouteName() {
+    return this.$route.matched[0].path
   }
 }
 </script>

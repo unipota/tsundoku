@@ -3,7 +3,8 @@
     .nav-wrap
       desktop-nav
     .view-wrap
-      routerView
+      keep-alive
+        routerView
 </template>
 
 <script lang="ts">

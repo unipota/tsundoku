@@ -55,16 +55,19 @@ export default class BookListItem extends Vue {
 .book-list-item__info
   position: absolute
   top: 0
-  left: 64px
+  left: 80px
   z-index: -1
 
   width: calc(100% - 80px)
   height: 100%
 
-  padding: 16px 16px 16px 64px
-  margin: 8px
+  padding: 16px 16px 16px 28px
   border-radius: 8px
   background-color: $bg-suppressed-gray
+
+  &.is-mobile
+    padding:
+      left: calc(20px + 5%)
 
   &.is-desktop
     display: flex
@@ -72,6 +75,7 @@ export default class BookListItem extends Vue {
 
   &.is-mobile
     display: flex
+    flex-flow: column
 
 .book-list-item__detail
   width: 100%
@@ -91,6 +95,7 @@ export default class BookListItem extends Vue {
 
   display: -webkit-box
   -webkit-box-orient: vertical
+
   .is-mobile &
     -webkit-line-clamp: 1
   .is-desktop &
@@ -106,12 +111,16 @@ export default class BookListItem extends Vue {
   text-overflow: ellipsis
 
 .book-list-item__progress
-  width: 280px
-  flex:
-    basis: 280px
-    grow: 0
-    shrink: 1
   align-self: flex-end
+
+  .is-mobile &
+    width: 100%
+
+  .is-desktop &
+    flex:
+      basis: 280px
+      grow: 0
+      shrink: 1
 
 .book-list-item__price
   width: 140px

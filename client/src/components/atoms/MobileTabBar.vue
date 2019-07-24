@@ -6,7 +6,7 @@
         :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconTsundoku(:color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
+          icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
         span.label(v-if="selectedPath === 'tsundoku'")
           | {{ $t('tsundoku') }}
 
@@ -15,7 +15,7 @@
         :to="{ name: tabs.kidoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconKidoku(:color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
+          icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
         span.label(v-if="selectedPath === 'kidoku'")
           | {{ $t('kidoku') }}
 
@@ -24,23 +24,18 @@
         :to="{ name: tabs.toukei.to }"
       )
         span.icon.toukei
-          IconToukei(:color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
+          icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
         span.label(v-if="selectedPath === 'toukei'")
           | {{ $t('toukei') }}
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import IconKidoku from '@/components/assets/IconKidoku.vue'
-import IconTsundoku from '@/components/assets/IconTsundoku.vue'
-import IconToukei from '@/components/assets/IconToukei.vue'
+
+import Icon from '@/components/assets/Icon.vue'
 
 @Component({
-  components: {
-    IconKidoku,
-    IconTsundoku,
-    IconToukei
-  }
+  components: { Icon }
 })
 export default class MobileTabBar extends Vue {
   get firstRouteName() {
@@ -72,14 +67,6 @@ export default class MobileTabBar extends Vue {
 <style lang="sass">
 .wrapper
   width: 100%
-  // fix to bottom
-  bottom: 0
-  position: fixed
-  z-index: 10
-  @media (min-width: 750px)
-    // desktop
-    bottom: auto
-    top: 0
 
   .tab-bar
     padding: 20px 30px

@@ -5,14 +5,15 @@
     .price-body
       | {{priceWithDelimiter}}
     .menu-button
-      icon-down-arrow
+      icon(name="down-arrow")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import IconDownArrow from '@/components/assets/IconDownArrow.vue'
 
-@Component({ components: { IconDownArrow } })
+import Icon from '@/components/assets/Icon.vue'
+
+@Component({ components: { Icon } })
 export default class PriceDisplay extends Vue {
   @Prop({ type: Number, default: 0 }) readonly price!: number
   get priceWithDelimiter(): string {

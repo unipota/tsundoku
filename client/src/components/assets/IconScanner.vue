@@ -49,11 +49,11 @@ export default class IconLogo extends Vue {
   @Prop({ type: String, default: 'white' })
   private color!: string
 
-  @Prop(String)
-  private height!: string
+  @Prop({ type: Number, default: 20 })
+  private height!: number
 
-  @Prop(String)
-  private width!: string
+  @Prop({ type: Number, default: 20 })
+  private width!: number
 }
 </script>
 

@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
@@ -17,7 +19,6 @@ func NewBook(book *Book) (*Book, error) {
 }
 
 func UpdateBook(book *Book) (*Book, error) {
-	// TODO: ない場合はエラーを返す
 	if err := db.Save(book).Error; err != nil {
 		return nil, err
 	}
@@ -42,9 +43,9 @@ func GetBooksByDeviceID(deviceID uuid.UUID) ([]*Book, error) {
 	return books, nil
 }
 
-func GetBookByBookID(bookID, deviceID uuid.UUID) (*Book, error) {
+func GetBookByBookID(bookID uuid.UUID) (*Book, error) {
 	book := &Book{}
-	if err := db.Table("books").Where("device_id IN ?", db.Table("device_users").Where("user_id = ?", db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()).Select("device_id").SubQuery()).Or("device_id = ?", deviceID).Where("id = ?", bookID).Preload("ReadHistories", func(db *gorm.DB) *gorm.DB {
+	if err := db.Where("id = ?", bookID).Preload("ReadHistories", func(db *gorm.DB) *gorm.DB {
 		return db.Order("read_histories.created_at DESC")
 	}).First(book).Error; err != nil {
 		return nil, err
@@ -55,8 +56,11 @@ func GetBookByBookID(bookID, deviceID uuid.UUID) (*Book, error) {
 
 func IsOwnBook(bookID, deviceID uuid.UUID) bool {
 	count := 0
-	if err := db.Table("books").Where("device_id IN ?", db.Table("device_users").Where("user_id = ?", db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()).Select("device_id").SubQuery()).Or("device_id = ?", deviceID).Where("id = ?", bookID).Count(&count).Error; err != nil {
+	sub1 := db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()
+	sub2 := db.Table("device_users").Where("user_id = ?", sub1).Select("device_id").SubQuery()
+	if err := db.Table("books").Where("device_id IN ? OR device_id = ?", sub2, deviceID).Where("id = ?", bookID).Count(&count).Error; err != nil {
 		return false
 	}
+	fmt.Println(count)
 	return count > 0
 }

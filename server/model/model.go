@@ -82,5 +82,5 @@ var allTables = []interface{}{
 	&DeviceUser{},
 	&User{},
 	&Social{},
-	&BookHistory{},
+	&ReadHistory{},
 }

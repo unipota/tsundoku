@@ -56,4 +56,7 @@ export default class App extends Vue {
 <style lang="sass">
 @import '@/style/global.sass'
 @import '@/style/reset.sass'
+
+#app
+  height: 100vh
 </style>

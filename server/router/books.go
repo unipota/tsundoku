@@ -69,10 +69,15 @@ func GetBookDetailHandler(c echo.Context) error {
 		c.Logger().Error(err)
 		return c.JSON(http.StatusNotFound, H{"invalid uuid"})
 	}
-	book, err := model.GetBookByBookID(bookID, deviceID)
+
+	if !model.IsOwnBook(bookID, deviceID) {
+		return c.JSON(http.StatusNotFound, H{"book not found"})
+	}
+
+	book, err := model.GetBookByBookID(bookID)
 	if err != nil {
 		c.Logger().Error(err)
-		return c.JSON(http.StatusInternalServerError, H{"Error with create book"})
+		return c.JSON(http.StatusInternalServerError, H{"Error with get book"})
 	}
 	return c.JSON(http.StatusOK, book2BookDetail(*book))
 
@@ -83,6 +88,7 @@ func PostNewBookHandler(c echo.Context) error {
 	if err := c.Bind(&bookRecord); err != nil {
 		return c.JSON(http.StatusBadRequest, H{"Bad request"})
 	}
+
 	deviceID := c.Get("deviceID").(uuid.UUID)
 	book := bookRecord2Book(bookRecord, deviceID)
 	newBook, err := model.NewBook(&book)
@@ -104,6 +110,10 @@ func PutUpdateBookHandler(c echo.Context) error {
 	if err != nil {
 		c.Logger().Error(err)
 		return c.JSON(http.StatusNotFound, H{"invalid uuid"})
+	}
+
+	if bookRecord.ID != bookID.String() {
+		return c.JSON(http.StatusBadRequest, H{"Bad request"})
 	}
 
 	if !model.IsOwnBook(bookID, deviceID) {

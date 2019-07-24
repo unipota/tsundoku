@@ -6,7 +6,7 @@ import (
 )
 
 func NewBook(book *Book) (*Book, error) {
-	book.BookHistories = []BookHistory{
+	book.ReadHistories = []ReadHistory{
 		{},
 	}
 	if err := db.Create(book).Error; err != nil {
@@ -17,6 +17,7 @@ func NewBook(book *Book) (*Book, error) {
 }
 
 func UpdateBook(book *Book) (*Book, error) {
+	// TODO: ない場合はエラーを返す
 	if err := db.Save(book).Error; err != nil {
 		return nil, err
 	}
@@ -32,13 +33,24 @@ func GetBooksByDeviceID(deviceID uuid.UUID) ([]*Book, error) {
 	books := []*Book{}
 	sub1 := db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()
 	sub2 := db.Table("device_users").Where("user_id = ?", sub1).Select("device_id").SubQuery()
-	err := db.Where("device_id IN ?", sub2).Or("device_id = ?", deviceID).Preload("BookHistories", func(db *gorm.DB) *gorm.DB {
-		return db.Order("book_histories.created_at DESC")
+	err := db.Where("device_id IN ?", sub2).Or("device_id = ?", deviceID).Preload("ReadHistories", func(db *gorm.DB) *gorm.DB {
+		return db.Order("read_histories.created_at DESC")
 	}).Find(&books).Error
 	if err != nil {
 		return nil, err
 	}
 	return books, nil
+}
+
+func GetBookByBookID(bookID, deviceID uuid.UUID) (*Book, error) {
+	book := &Book{}
+	if err := db.Table("books").Where("device_id IN ?", db.Table("device_users").Where("user_id = ?", db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()).Select("device_id").SubQuery()).Or("device_id = ?", deviceID).Where("id = ?", bookID).Preload("ReadHistories", func(db *gorm.DB) *gorm.DB {
+		return db.Order("read_histories.created_at DESC")
+	}).First(book).Error; err != nil {
+		return nil, err
+	}
+
+	return book, nil
 }
 
 func IsOwnBook(bookID, deviceID uuid.UUID) bool {

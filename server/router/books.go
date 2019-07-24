@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -23,6 +24,27 @@ type BookRecord struct {
 	Memo          string   `json:"memo"`
 }
 
+type ReadHistory struct {
+	ReadPages int       `json:"readPages"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+type BookDetail struct {
+	ID            string        `json:"id"`
+	ISBN          string        `json:"isbn"`
+	Title         string        `json:"title"`
+	Author        []string      `json:"author"`
+	TotalPages    int           `json:"totalPages"`
+	Price         int           `json:"price"`
+	Caption       string        `json:"caption"`
+	Publisher     string        `json:"publisher"`
+	CoverImageURL string        `json:"coverImageUrl"`
+	ReadHistories []ReadHistory `json:"readHistories"`
+	Memo          string        `json:"memo"`
+	CreatedAt     time.Time     `json:"createdAt"`
+	UpdatedAt     time.Time     `json:"updatedAt"`
+}
+
 func GetBookListHandler(c echo.Context) error {
 	deviceID := c.Get("deviceID").(uuid.UUID)
 	books, err := model.GetBooksByDeviceID(deviceID)
@@ -37,6 +59,23 @@ func GetBookListHandler(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, booksForResponse)
+}
+
+func GetBookDetailHandler(c echo.Context) error {
+	deviceID := c.Get("deviceID").(uuid.UUID)
+	pathParam := c.Param("bookID")
+	bookID, err := uuid.Parse(pathParam)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusNotFound, H{"invalid uuid"})
+	}
+	book, err := model.GetBookByBookID(bookID, deviceID)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusInternalServerError, H{"Error with create book"})
+	}
+	return c.JSON(http.StatusOK, book2BookDetail(*book))
+
 }
 
 func PostNewBookHandler(c echo.Context) error {
@@ -113,7 +152,7 @@ func bookRecord2Book(bookRecord BookRecord, deviceID uuid.UUID) model.Book {
 		Memo:          bookRecord.Memo,
 		Price:         bookRecord.Price,
 		DeviceID:      deviceID,
-		BookHistories: []model.BookHistory{
+		ReadHistories: []model.ReadHistory{
 			{ReadPage: bookRecord.ReadPages},
 		},
 	}
@@ -136,7 +175,32 @@ func book2BookRecord(book model.Book) BookRecord {
 		Caption:       book.Caption,
 		Publisher:     book.Publisher,
 		CoverImageURL: book.CoverImageUrl,
-		ReadPages:     book.BookHistories[0].ReadPage,
+		ReadPages:     book.ReadHistories[0].ReadPage,
 		Memo:          book.Memo,
 	}
+}
+
+func book2BookDetail(book model.Book) BookDetail {
+	bookDetail := BookDetail{
+		ID:            book.ID.String(),
+		ISBN:          book.ISBN,
+		Title:         book.ISBN,
+		Author:        strings.Split(book.Author, ","),
+		TotalPages:    book.TotalPages,
+		Price:         book.Price,
+		Caption:       book.Caption,
+		Publisher:     book.Publisher,
+		CoverImageURL: book.CoverImageUrl,
+		Memo:          book.Memo,
+		CreatedAt:     book.CreatedAt,
+		UpdatedAt:     book.UpdatedAt,
+	}
+
+	for _, history := range book.ReadHistories {
+		bookDetail.ReadHistories = append(bookDetail.ReadHistories, ReadHistory{
+			history.ReadPage,
+			history.CreatedAt,
+		})
+	}
+	return bookDetail
 }

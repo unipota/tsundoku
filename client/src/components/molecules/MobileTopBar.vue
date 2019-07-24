@@ -1,11 +1,12 @@
 <template lang="pug">
   .mobile-top-bar
-    price-display(:price="114514")
+    price-display(:price="0")
     user-icon
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+
 import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
 import UserIcon from '@/components/atoms/UserIcon.vue'
 

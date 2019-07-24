@@ -1,8 +1,9 @@
 <template lang="pug">
   div
+    portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
       mobile-top-bar
-    .content-wrap
+    .content-wrap(ref="scrollContainer")
       keep-alive
         router-view
     .bottom-bar-wrap
@@ -12,6 +13,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+
 import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
 import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
 import FloatingAddTsundokuButton from '@/components/atoms/FloatingAddTsundokuButton.vue'
@@ -38,19 +40,29 @@ export default class MobileTemplate extends Vue {
 <style lang="sass">
 .top-bar-wrap
   position: fixed
-  z-index: 9999
+  z-index: 1000
   top: 0
   width: 100%
 
 .content-wrap
+  position: relative
+  overflow:
+    x: hidden
+    y: scroll
+  width: 100vw
+  height: calc(100vh - 80px)
   padding:
     top: 80px
-  margin:
     bottom: 90px
+  -webkit-overflow-scrolling: touch
 
 .bottom-bar-wrap
   position: fixed
-  z-index: 9999
+  z-index: 1000
   bottom: 0
   width: 100%
+
+.modal-wrap
+  position: fixed
+  z-index: 2000
 </style>

@@ -1,5 +1,6 @@
 <template lang="pug">
   div
+    | add books search
 </template>
 
 <script lang="ts">

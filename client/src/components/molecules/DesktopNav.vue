@@ -1,34 +1,31 @@
 <template lang="pug">
   section.main-nav
     .brand
-      icon-logo
+      icon(name="logo")
     .tab-wrap
       desktop-tab(:selected-tab="selectedPath")
     .button-wrap
       router-link(:to="`${firstRouteName}/add-books-search`")
         desktop-nav-button(:text="$t('add_by_searching')")
-          icon-search(color="white" height="24")
+          icon(name="search" color="white" :height="24" :width="24")
     .button-wrap
       router-link(:to="`${firstRouteName}/add-books-scan`")
         desktop-nav-button(:text="$t('add_by_scanning')")
-          icon-scanner(color="white" height="24")
+          icon(name="scanner" color="white" :height="24" :width="24")
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+
 import DesktopTab from '@/components/atoms/DesktopTab.vue'
 import DesktopNavButton from '@/components/atoms/DesktopNavButton.vue'
-import IconLogo from '@/components/assets/IconLogo.vue'
-import IconSearch from '@/components/assets/IconSearch.vue'
-import IconScanner from '@/components/assets/IconScanner.vue'
+import Icon from '@/components/assets/Icon.vue'
 
 @Component({
   components: {
+    Icon,
     DesktopTab,
-    DesktopNavButton,
-    IconLogo,
-    IconSearch,
-    IconScanner
+    DesktopNavButton
   }
 })
 export default class DesktopNav extends Vue {

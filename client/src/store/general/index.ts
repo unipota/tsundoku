@@ -55,6 +55,22 @@ export const state = (): S => ({
         'https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1062/9784839941062.jpg?_ex=200x200',
       readPages: 20,
       memo: ''
+    },
+    {
+      id: 'mock3',
+      isbn: '9784839941062',
+      title:
+        'プログラミングコンテストチャレンジブック第2版 問題解決のアルゴリズム活用力とコーディングテクニッ',
+      author: '秋葉拓哉/岩田陽一',
+      totalPages: 367,
+      price: 3542,
+      caption:
+        'プログラミングコンテストの問題を通してアルゴリズムのしくみや考え方を楽しく習得。世界トップレベルの著者たちがコンテストで得た知識やノウハウを難易度別にまとめました。現役プログラマだけでなくプログラマを目指している方にもぜひ読んでいたただきたい１冊。',
+      publisher: 'マイナビ出版',
+      coverImageUrl:
+        'https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1062/9784839941062.jpg?_ex=200x200',
+      readPages: 20,
+      memo: ''
     }
   ]
 })

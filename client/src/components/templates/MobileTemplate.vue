@@ -50,7 +50,7 @@ export default class MobileTemplate extends Vue {
     x: hidden
     y: scroll
   width: 100vw
-  height: calc(100vh - 80px)
+  height: 100vh
   padding:
     top: 80px
     bottom: 90px

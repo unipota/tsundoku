@@ -9,6 +9,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+
+// あえて遅延読み込みをしない
 import IconClose from './IconClose.vue'
 import IconDownArrow from './IconDownArrow.vue'
 import IconKidoku from './IconKidoku.vue'

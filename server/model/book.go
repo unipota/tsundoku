@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
@@ -61,6 +59,5 @@ func IsOwnBook(bookID, deviceID uuid.UUID) bool {
 	if err := db.Table("books").Where("device_id IN ? OR device_id = ?", sub2, deviceID).Where("id = ?", bookID).Count(&count).Error; err != nil {
 		return false
 	}
-	fmt.Println(count)
 	return count > 0
 }

@@ -1,13 +1,16 @@
 <template lang="pug">
-  div
-    | add books scan
+  modal-frame
+    div
+      | add books scan
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 
+import ModalFrame from '@/components/atoms/ModalFrame.vue'
+
 @Component({
-  components: {}
+  components: { ModalFrame }
 })
 export default class AddBooksScan extends Vue {}
 </script>

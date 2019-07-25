@@ -1,13 +1,17 @@
 <template lang="pug">
   .book-details
     .header
+      .header-bg(:style="headerBgStyle")
+        .info-bg
+          book-major-info(:book="book")
+      .header-fade
       .close
         router-link.icon-close(:to="parentPath")
           icon-plus(color='white' :height="16")
       .info
         book-major-info(:book="book")
-      .cover-wrap
-        book-cover(:book="book")
+    .cover-wrap
+      book-cover(:book="book")
     .body
 </template>
 
@@ -43,6 +47,12 @@ export default class BookDetails extends Vue {
     const matched = this.$route.matched
     return matched[0]
   }
+
+  get headerBgStyle() {
+    return {
+      backgroundImage: `url(${this.book.coverImageUrl})`
+    }
+  }
 }
 </script>
 
@@ -53,7 +63,7 @@ export default class BookDetails extends Vue {
   top: 0
   right: 0
   height: 100vh
-  width: 320px
+  width: 400px
   background: white
 
 .header
@@ -63,8 +73,33 @@ export default class BookDetails extends Vue {
   height: 240px
   padding: 24px
 
-  color: white
-  background: linear-gradient(180deg, #2488D0 0%, #56CCF2 100%)
+  overflow: hidden
+
+.header-bg
+  $blur-radius: 20px
+
+  position: absolute
+  top: -$blur-radius
+  left: -$blur-radius
+  width: calc(100% + #{$blur-radius * 2})
+  height: calc(100% + #{$blur-radius * 2})
+
+  background:
+    size: cover
+    repeat: no-repeat
+    position: center center
+
+  filter: blur(20px)
+
+.header-fade
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0) 70%)
+  opacity: 0.5
 
 .close
   display: flex
@@ -76,9 +111,13 @@ export default class BookDetails extends Vue {
   transform: rotate(45deg)
 
 .info
-  margin: 24px 0
+  margin: 12px
+  position: relative
+
+  color: white
 
 .cover-wrap
-  position: absolute
-  bottom: -96px
+  position: relative
+  top: -64px
+  left: 24px
 </style>

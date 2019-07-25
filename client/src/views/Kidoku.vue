@@ -4,21 +4,29 @@
     .view
       .list-item-container(v-for="book in books")
         BookListItem(:book="book" kidoku)
-    router-view
+    portal(to="modalView")
+      modal-frame(v-show="routeDepth > 1")
+        router-view
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import BookListItem from '@/components/organs/BookListItem.vue'
 import { ExStore } from 'vuex'
+
+import ModalFrame from '@/components/atoms/ModalFrame.vue'
+import BookListItem from '@/components/organs/BookListItem.vue'
 
 @Component({
   components: {
+    ModalFrame,
     BookListItem
   }
 })
 export default class Kidoku extends Vue {
   public $store!: ExStore
+  get routeDepth() {
+    return this.$route.matched.length
+  }
   get books() {
     return this.$store.getters.kidokuBooks
   }

@@ -8,8 +8,8 @@
       :to="{ name: tabs[tab].to, hash: $route.hash }"
     )
       span.icon(:class="tab")
-        component(
-          :is="`icon-${tab}`"
+        icon(
+          :name="tab"
           :color="isActive(tab) ? undefined : tabs[tab].inactiveColor"
           :height="48"
         )
@@ -24,15 +24,12 @@
 
 <script lang="ts">
 import { Vue, Prop, Component } from 'vue-property-decorator'
-import IconKidoku from '@/components/assets/IconKidoku.vue'
-import IconTsundoku from '@/components/assets/IconTsundoku.vue'
-import IconToukei from '@/components/assets/IconToukei.vue'
+
+import Icon from '@/components/assets/Icon.vue'
 
 @Component({
   components: {
-    IconKidoku,
-    IconTsundoku,
-    IconToukei
+    Icon
   }
 })
 export default class DesktopTab extends Vue {

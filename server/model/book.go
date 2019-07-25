@@ -1,57 +1,50 @@
 package model
 
 import (
-	"strings"
-
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
-func PostNewBook(bookRecord BookRecord, deviceID uuid.UUID) error {
-	bookData := &Book{
-		ISBN:           bookRecord.ISBN,
-		Title:          bookRecord.Title,
-		TotalPages:     int(bookRecord.TotalPages),
-		Caption:        bookRecord.Caption,
-		Publisher:      bookRecord.Publisher,
-		CoverImageUrl:  bookRecord.CoverImageURL,
-		Memo:           bookRecord.Memo,
-		PurchasedPrice: bookRecord.Price,
-		DeviceID:       deviceID.String(),
+func NewBook(book *Book) (*Book, error) {
+	book.BookHistories = []BookHistory{
+		{},
+	}
+	if err := db.Create(book).Error; err != nil {
+		return nil, err
 	}
 
-	bookData.RegularPrice = GetPriceWithISBN(bookRecord.ISBN)
-	bookData.Author = strings.Join(bookRecord.Author, ",")
-
-	deviceCount := 0
-	err := db.Table("devices").Count(&deviceCount).Error
-	if err != nil {
-		return err
-	}
-
-	if deviceCount == 0 {
-		device := Device{}
-		device.Base.ID = deviceID
-		err = db.Table("devices").Create(device).Error
-		if err != nil {
-			return err
-		}
-	}
-
-	err = db.Table("books").Create(bookData).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return book, nil
 }
 
-func GetBooksByDeviceID(deviceID uuid.UUID) (*[]Book, error) {
-	books := &[]Book{}
-	if err := db.Where("device_id IN ?", db.Table("device_users").Where("user_id = ?", db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()).Select("device_id").SubQuery()).Preload("BookHistories", func(db *gorm.DB) *gorm.DB {
+func UpdateBook(book *Book) (*Book, error) {
+	if err := db.Save(book).Error; err != nil {
+		return nil, err
+	}
+
+	return book, nil
+}
+
+func DeleteBook(bookID uuid.UUID) error {
+	return db.Delete(Book{Base: Base{ID: bookID}}).Error
+}
+
+func GetBooksByDeviceID(deviceID uuid.UUID) ([]*Book, error) {
+	books := []*Book{}
+	sub1 := db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()
+	sub2 := db.Table("device_users").Where("user_id = ?", sub1).Select("device_id").SubQuery()
+	err := db.Where("device_id IN ?", sub2).Or("device_id = ?", deviceID).Preload("BookHistories", func(db *gorm.DB) *gorm.DB {
 		return db.Order("book_histories.created_at DESC")
-	}).Find(books).Error; err != nil {
+	}).Find(&books).Error
+	if err != nil {
 		return nil, err
 	}
 	return books, nil
+}
+
+func IsOwnBook(bookID, deviceID uuid.UUID) bool {
+	count := 0
+	if err := db.Table("books").Where("device_id IN ?", db.Table("device_users").Where("user_id = ?", db.Table("device_users").Where("device_id = ?", deviceID).Select("user_id").SubQuery()).Select("device_id").SubQuery()).Or("device_id = ?", deviceID).Where("id = ?", bookID).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
 }

@@ -2,49 +2,49 @@
   div.wrapper
     div.tab-bar
       router-link.tab.tsundoku(
-        :class="{'selected': selectedTab === 'tsundoku'}"
+        :class="{'selected': selectedPath === 'tsundoku'}"
         :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconTsundoku(:color="selectedTab === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
-        span.label(v-if="selectedTab === 'tsundoku'")
+          icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="30")
+        span.label(v-if="selectedPath === 'tsundoku'")
           | {{ $t('tsundoku') }}
 
       router-link.tab.kidoku(
-        :class="{'selected': selectedTab === 'kidoku'}"
+        :class="{'selected': selectedPath === 'kidoku'}"
         :to="{ name: tabs.kidoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          IconKidoku(:color="selectedTab==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
-        span.label(v-if="selectedTab === 'kidoku'")
+          icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="30").icon.kidoku
+        span.label(v-if="selectedPath === 'kidoku'")
           | {{ $t('kidoku') }}
 
       router-link.tab.toukei(
-        :class="{'selected': selectedTab === 'toukei'}"
+        :class="{'selected': selectedPath === 'toukei'}"
         :to="{ name: tabs.toukei.to }"
       )
         span.icon.toukei
-          IconToukei(:color="selectedTab==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
-        span.label(v-if="selectedTab === 'toukei'")
+          icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="26").icon.toukei
+        span.label(v-if="selectedPath === 'toukei'")
           | {{ $t('toukei') }}
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import IconKidoku from '@/components/assets/IconKidoku.vue'
-import IconTsundoku from '@/components/assets/IconTsundoku.vue'
-import IconToukei from '@/components/assets/IconToukei.vue'
+
+import Icon from '@/components/assets/Icon.vue'
 
 @Component({
-  components: {
-    IconKidoku,
-    IconTsundoku,
-    IconToukei
-  }
+  components: { Icon }
 })
 export default class MobileTabBar extends Vue {
-  get selectedTab(): string | undefined {
-    return this.$route.name
+  get firstRouteName() {
+    return this.$route.matched[0].path
+  }
+  get selectedPath() {
+    return this.firstRouteName === ''
+      ? 'tsundoku'
+      : this.firstRouteName.slice(1)
   }
 
   private tabs = {
@@ -67,14 +67,6 @@ export default class MobileTabBar extends Vue {
 <style lang="sass">
 .wrapper
   width: 100%
-  // fix to bottom
-  bottom: 0
-  position: fixed
-  z-index: 10
-  @media (min-width: 750px)
-    // desktop
-    bottom: auto
-    top: 0
 
   .tab-bar
     padding: 20px 30px

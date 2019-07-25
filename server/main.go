@@ -65,8 +65,8 @@ func main() {
 
 	api.GET("/books", router.GetBookListHandler)
 	api.POST("/books", router.PostNewBookHandler)
-	api.PUT("/books/:id", router.PutUpdateBookHandler)
-	api.DELETE("/books/:id", router.DeleteBookHandler)
+	api.PUT("/books/:bookID", router.PutUpdateBookHandler)
+	api.DELETE("/books/:bookID", router.DeleteBookHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

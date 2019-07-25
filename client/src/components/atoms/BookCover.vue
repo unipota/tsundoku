@@ -1,5 +1,6 @@
 <template lang="pug">
-  v-lazy-image(:src="book.coverImageUrl").cover-image.v-lazy-image.blur
+  div.book-cover
+    v-lazy-image(v-if="book.coverImageUrl" :src="book.coverImageUrl").cover-image
 </template>
 
 <script lang="ts">
@@ -19,14 +20,25 @@ export default class BookCover extends Vue {
 </script>
 
 <style lang="sass">
-.cover-image
-  width: 101px
+.book-cover
+  width: 100px
+  height: 140px
   border-radius: 10px
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
-.v-lazy-image.blur
-  filter: blur(5px)
-  transition: filter 1s
-  will-change: filter
-.v-lazy-image-loaded.blur
-  filter: blur(0)
+  background-color: var(--text-white)
+  overflow: hidden
+
+.cover-image
+  width: 100%
+  height: 100%
+  transition: filter .3s .1s, opacity .1s
+  will-change: filter, opacity
+  opacity: 0
+
+  &.v-lazy-image
+    filter: blur(1px)
+
+  &.v-lazy-image-loaded
+    opacity: 1
+    filter: blur(0)
 </style>

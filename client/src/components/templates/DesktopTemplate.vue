@@ -2,20 +2,39 @@
   .view-desktop
     portal-target.modal-wrap(name="modalView")
     .nav-wrap
-      desktop-nav
+      desktop-nav(v-if="$store.getters.getShowDesktopNav")
     .view-wrap
       // keep-alive だと複数存在する同名のポータルでハマるのでとりあえず無効化
       routerView
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
+
+import { ViewNames } from '../../router'
 import DesktopNav from '@/components/molecules/DesktopNav.vue'
 
 @Component({
   components: { DesktopNav }
 })
-export default class DesktopTemplate extends Vue {}
+export default class DesktopTemplate extends Vue {
+  public $store!: ExStore
+  hideNavList: ViewNames[] = ['login', 'register']
+
+  @Watch('$route')
+  private handleShowDesktopNav() {
+    if (this.hideNavList.includes(this.$route.name as ViewNames)) {
+      this.$store.commit('setShowDesktopNav', false)
+    } else {
+      this.$store.commit('setShowDesktopNav', true)
+    }
+  }
+
+  mounted() {
+    this.handleShowDesktopNav()
+  }
+}
 </script>
 
 <style lang="sass" scoped>

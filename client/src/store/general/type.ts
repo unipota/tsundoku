@@ -9,6 +9,9 @@ export interface S {
   userId: string
   locale: string
   viewType: ViewType
+  showMobileTopBar: boolean
+  showMobileTabBar: boolean
+  showDesktopNav: boolean
   booksMap: Record<string, BookRecord>
 }
 // ______________________________________________________
@@ -21,6 +24,10 @@ export interface G {
   tsundokuBooks: BookRecord[]
   kidokuBooks: BookRecord[]
   getBookById: (bookId: string) => BookRecord
+  getViewType: ViewType
+  getShowMobileTopBar: boolean
+  getShowMobileTabBar: boolean
+  getShowDesktopNav: boolean
 }
 // root getters has no namespace, so we can write root getter names like this
 export type RG = {
@@ -33,6 +40,9 @@ export interface M {
   setUserId: string
   setLocale: string
   setViewType: ViewType
+  setShowMobileTopBar: boolean
+  setShowMobileTabBar: boolean
+  setShowDesktopNav: boolean
 }
 export type RM = {
   [K in keyof M]: M[K]

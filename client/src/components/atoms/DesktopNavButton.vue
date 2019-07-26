@@ -25,6 +25,7 @@ export default class DesktopNavBarButton extends Vue {
   border-radius: 999px
   user-select: none
   cursor: pointer
+  box-shadow: 0px 3px 5px -1px #e3402a6e
 .icon
   display: flex
   align-items: center

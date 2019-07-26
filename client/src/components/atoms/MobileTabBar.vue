@@ -67,6 +67,10 @@ export default class MobileTabBar extends Vue {
 <style lang="sass">
 .wrapper
   width: 100%
+  background: rgba(255,255,255,0.6)
+  backdrop-filter: blur(2px)
+  border:
+    radius: 32px 32px 0 0
 
   .tab-bar
     padding: 20px 30px

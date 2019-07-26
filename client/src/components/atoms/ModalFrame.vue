@@ -2,7 +2,7 @@
   .modal-frame-overlay
     .modal-frame-body
       slot
-      router-link(:to="{path: '../'}" append)
+      router-link.close-button(:to="{path: '../'}" append)
         icon(name="close" color="var(--text-gray)")
 </template>
 
@@ -36,8 +36,14 @@ export default class ModalFrame extends Vue {}
   border:
     radius: 24px 24px 0 0
   padding:
-    top: 18px
-    left: 18px
-    right: 18px
+    top: 32px
+    left: 24px
+    right: 24px
   box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.25)
+
+.close-button
+  position: absolute
+  right: 16px
+  top: 16px
+  padding: 12px
 </style>

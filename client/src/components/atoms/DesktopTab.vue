@@ -68,7 +68,7 @@ export default class DesktopTab extends Vue {
   height: 72px
   width: 100%
   padding: 0 32px
-  border-radius: 9999px
+  border-radius: 100vw
   &:not(:last-child)
     margin-bottom: 24px
 

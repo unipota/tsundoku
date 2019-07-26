@@ -10,6 +10,9 @@ export const state = (): S => ({
   userId: '',
   locale: 'ja',
   viewType: 'desktop',
+  showMobileTopBar: true,
+  showMobileTabBar: true,
+  showDesktopNav: true,
   booksMap: {
     mock0: {
       id: 'mock0',
@@ -94,6 +97,18 @@ export const getters: Getters<S, G> = {
   },
   getBookById(state) {
     return bookId => state.booksMap[bookId]
+  },
+  getViewType(state) {
+    return state.viewType
+  },
+  getShowMobileTopBar(state) {
+    return state.showMobileTopBar
+  },
+  getShowMobileTabBar(state) {
+    return state.showMobileTabBar
+  },
+  getShowDesktopNav(state) {
+    return state.showDesktopNav
   }
 }
 
@@ -109,6 +124,15 @@ export const mutations: Mutations<S, M> = {
   },
   setViewType(state, viewType): void {
     state.viewType = viewType
+  },
+  setShowMobileTopBar(state, showMobileTopBar): void {
+    state.showMobileTopBar = showMobileTopBar
+  },
+  setShowMobileTabBar(state, showMobileTabBar): void {
+    state.showMobileTabBar = showMobileTabBar
+  },
+  setShowDesktopNav(state, showDesktopNav): void {
+    state.showDesktopNav = showDesktopNav
   }
 }
 // ______________________________________________________

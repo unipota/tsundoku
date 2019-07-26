@@ -56,7 +56,7 @@ export const state = (): S => ({
       readPages: 20,
       memo: ''
     },
-    {
+    mock3: {
       id: 'mock3',
       isbn: '9784839941062',
       title:

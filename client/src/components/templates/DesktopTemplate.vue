@@ -1,5 +1,6 @@
 <template lang="pug">
   .view-desktop
+    portal-target.modal-wrap(name="modalView")
     .nav-wrap
       desktop-nav
     .view-wrap

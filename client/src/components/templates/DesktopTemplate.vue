@@ -4,8 +4,8 @@
     .nav-wrap
       desktop-nav
     .view-wrap
-      keep-alive
-        routerView
+      // keep-alive だと複数存在する同名のポータルでハマるのでとりあえず無効化
+      routerView
 </template>
 
 <script lang="ts">

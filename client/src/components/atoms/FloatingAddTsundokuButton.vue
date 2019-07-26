@@ -135,7 +135,7 @@ export default class FloatingAddTsundokuButton extends Vue {
     opacity: 0
 
   &-enter-active
-    transition: transform .5s $easeOutBack, opacity .5s
+    transition: transform .5s $easeInOutQuint, opacity .5s
 
   &-leave-active
     opacity: 0

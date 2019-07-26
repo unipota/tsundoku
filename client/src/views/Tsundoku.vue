@@ -6,29 +6,22 @@
         book-list-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
-        modal-frame(v-show="routeDepth > 1")
-          router-view
+        router-view
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
-import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookListItem from '@/components/organs/BookListItem.vue'
 
 @Component({
   components: {
-    ModalFrame,
     BookListItem
   }
 })
 export default class Tsundoku extends Vue {
   public $store!: ExStore
-
-  get routeDepth() {
-    return this.$route.matched.length
-  }
 
   get books() {
     return this.$store.getters.tsundokuBooks
@@ -49,11 +42,4 @@ export default class Tsundoku extends Vue {
 .list-item-container
   margin: 1rem 0
   width: 100%
-
-.modal-show
-  &-enter, &-leave-to
-    transform: translateY(100%)
-
-  &-enter-active, &-leave-active
-    transition: transform .5s
 </style>

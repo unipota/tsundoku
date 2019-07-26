@@ -1,6 +1,8 @@
 <template lang="pug">
   div
-    router-view
+    portal(to="modalView")
+      transition(name="modal-show")
+          router-view
 </template>
 
 <script lang="ts">

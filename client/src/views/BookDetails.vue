@@ -11,19 +11,23 @@
       .cover-wrap
         book-cover(:book="book")
       .body
+        book-details-item.item(:name="$t('price')" :value="`¥ ${book.price.toLocaleString()}`")
+        book-details-item.item(:name="$t('totalPages')" :value="book.totalPages.toString()")
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
+import { BookRecord } from '../types/Book'
+import BookDetailsItem from '@/components/atoms/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import IconPlus from '@/components/assets/IconPlus.vue'
-import { BookRecord } from '../types/Book'
 
 @Component({
   components: {
+    BookDetailsItem,
     ModalFrame,
     BookCover,
     BookMajorInfo,
@@ -42,15 +46,21 @@ export default class BookDetails extends Vue {
 
   get headerBgStyle() {
     return {
-      backgroundImage: `url(${this.book.coverImageUrl})`
+      backgroundImage: this.book ? `url(${this.book.coverImageUrl})` : 'white'
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.header
+.book-details
   position: absolute
+  top: 0
+  left: 0
+  width: 100%
+
+.header
+  position: relative
   top: 0
   left: 0
 
@@ -92,9 +102,6 @@ export default class BookDetails extends Vue {
 
   width: 100%
 
-.icon-close
-  transform: rotate(45deg)
-
 .info
   margin: 16px
   position: relative
@@ -105,4 +112,11 @@ export default class BookDetails extends Vue {
   position: absolute
   top: 160px
   left: 24px
+
+.body
+  padding: 32px
+  margin-top: 64px
+
+.item
+  margin-bottom: 8px
 </style>

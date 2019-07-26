@@ -8,7 +8,7 @@
         router-view
     .bottom-bar-wrap
       mobile-tab-bar
-    floating-add-tsundoku-button(v-if="selectedPath === 'tsundoku'")
+    floating-add-tsundoku-button
 </template>
 
 <script lang="ts">

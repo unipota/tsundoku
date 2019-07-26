@@ -6,5 +6,15 @@
   "add_by_searching": "検索して積む",
   "add_by_scanning": "スキャンして積む",
 
-  "remaining": "残り"
+  "remaining": "残り",
+
+  "isbn": "ISBN",
+  "title": "タイトル",
+  "author": "著者",
+  "totalPages": "総ページ数",
+  "price": "購入価格",
+  "caption": "キャプション",
+  "publisher": "出版社",
+  "readPages": "読了ページ数",
+  "memo": "メモ"
 }

@@ -24,7 +24,7 @@ export default class Kidoku extends Vue {
   public $store!: ExStore
 
   get books() {
-    return this.$store.getters.getKidoku
+    return this.$store.getters.kidokuBooks
   }
 }
 </script>
@@ -32,8 +32,13 @@ export default class Kidoku extends Vue {
 <style lang="sass" scoped>
 .kidoku
   width: 100%
+
 .view
   width: 100%
+  padding:
+    left: 5%
+    right: 5%
+
 .list-item-container
   margin: 1rem 0
   width: 100%

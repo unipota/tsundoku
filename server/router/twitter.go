@@ -22,7 +22,7 @@ import (
 type Account struct {
 	ID              string `json:"id_str"`
 	ScreenName      string `json:"screen_name"`
-	ProfileImageURL string `json:"profile_image_url"`
+	ProfileImageURL string `json:"profile_image_url_https"`
 	Email           string `json:"email"`
 }
 
@@ -101,7 +101,7 @@ func GetTwitterCallbackHandler(c echo.Context) error {
 	if err != nil {
 		if model.IsErrRecordNotFound(err) {
 			// TODO: 複数IdPとの連携するとき
-			user, err = model.NewUser(account.ScreenName)
+			user, err = model.NewUser(account.ScreenName, account.ProfileImageURL)
 			if err != nil {
 				return c.JSON(http.StatusInternalServerError, H{"Error with create user"})
 			}
@@ -113,7 +113,7 @@ func GetTwitterCallbackHandler(c echo.Context) error {
 			return c.JSON(http.StatusInternalServerError, H{"get social error"})
 		}
 	} else {
-		user, err = model.GetUserByID(social.UserID)
+		user, err = model.GetUserByUserUUID(social.UserID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, H{"Error with get user"})
 		}

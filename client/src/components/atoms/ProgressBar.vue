@@ -13,6 +13,12 @@ export default class ProgressBar extends Vue {
   get validatedProgress() {
     return Math.min(1, Math.max(0, this.progress))
   }
+
+  get progressStyle() {
+    return {
+      width: `${this.validatedProgress * 100}%`
+    }
+  }
 }
 </script>
 

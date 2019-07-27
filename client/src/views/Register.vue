@@ -1,11 +1,8 @@
 <template lang="pug">
   div.page-wrapper
-    span.icon-back(@click="goBack")
-      icon(name="back")
+    page-top-bar(name="register")
     div.title-logo
       title-logo
-    div.register
-      | {{ $t('register') }}
     div.columns
       div.column.icon-cloud-tsundoku
         icon(name="cloud")
@@ -42,6 +39,7 @@ import { Vue, Component } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
+import PageTopBar from '@/components/molecules/PageTopBar.vue'
 import TitleLogo from '@/components/atoms/TitleLogo.vue'
 
 type serviceNames = 'google' | 'twitter' | 'github'
@@ -58,6 +56,7 @@ type Services = {
   components: {
     Icon,
     TitleLogo,
+    PageTopBar,
     ModalFrame
   }
 })
@@ -85,9 +84,6 @@ export default class Register extends Vue {
       iconWidth: 20
     }
   }
-  private goBack() {
-    this.$router.go(-1)
-  }
 }
 </script>
 
@@ -99,23 +95,13 @@ export default class Register extends Vue {
   left: 0
   right: 0
   display: block
-  .icon-back
-    position: absolute
-    left: 37px
-    top: 38px
-    cursor: pointer
   .title-logo
     margin:
-      top: 74px
-  .register
-    font-size: 22px
-    font-weight: bold
-    margin:
-      top: 16px
+      top: 102px
   .columns
     display: flex
     width: max-content
-    margin: 27px auto 0 auto
+    margin: 48px auto 0 auto
     .icon-cloud-tsundoku
       svg
         display: block

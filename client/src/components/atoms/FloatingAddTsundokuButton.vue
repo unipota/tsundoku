@@ -61,7 +61,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   flex-wrap: nowrap
   align-items: center
   position: fixed
-  right: 0
+  right: 12px
   bottom: calc(94px + 1vh)
 
 .button-open
@@ -76,9 +76,9 @@ export default class FloatingAddTsundokuButton extends Vue {
   width: 94px
   height: 60px
   padding:
-    left: 16px
+    left: 14px
   border:
-    radius: 100vw 0 0 100vw
+    radius: 100vw
   color: var(--text-white)
   font:
     size: 24px
@@ -139,8 +139,8 @@ export default class FloatingAddTsundokuButton extends Vue {
 
 .transition-button
   &-enter, &-leave-to
-    transform: translateX(160px) rotate(30deg)
-    // opacity: 0
+    transform: translateX(60px) rotate(30deg)
+    opacity: 0
 
   &-enter-active
     transition: transform .5s $easeOutBack, opacity .5s

@@ -7,7 +7,7 @@
         book-major-info(:book="book")
       .book-list-item__price(v-if="kidoku")
         span.book-list-item__total-price
-          | {{ book.price }}
+          | {{ book.price.toLocaleString() }}
       .book-list-item__progress(v-else)
         book-list-item-progress(:book="book")
 </template>
@@ -62,7 +62,7 @@ export default class BookListItem extends Vue {
 
   padding: 16px 16px 16px 28px
   border-radius: 8px
-  background-color: $bg-suppressed-gray
+  // background-color: $bg-suppressed-gray
 
   &.is-mobile
     padding:

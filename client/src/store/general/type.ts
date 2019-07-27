@@ -21,6 +21,8 @@ export interface G {
   tsundokuBooks: BookRecord[]
   kidokuBooks: BookRecord[]
   getBookById: (bookId: string) => BookRecord
+  tsundokuPrice: number
+  kidokuPrice: number
 }
 // root getters has no namespace, so we can write root getter names like this
 export type RG = {
@@ -41,6 +43,10 @@ export type RM = {
 //
 // actions
 // eslint-disable-next-line
-export interface A {}
+export interface A {
+  searchBooksByISBN: { isbn: string }
+}
 // eslint-disable-next-line
-export interface RA {}
+export interface RA {
+  searchBooksByISBN: A['searchBooksByISBN']
+}

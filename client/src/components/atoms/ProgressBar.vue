@@ -41,4 +41,5 @@ $height: 8px
   left: 0
   z-index: 2
   box-shadow: 0 0 0 4px white
+  transition: width .5s $easeInOutQuint
 </style>

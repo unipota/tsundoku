@@ -23,15 +23,13 @@ import BookDetailsItem from '@/components/atoms/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
-import IconPlus from '@/components/assets/IconPlus.vue'
 
 @Component({
   components: {
     BookDetailsItem,
     ModalFrame,
     BookCover,
-    BookMajorInfo,
-    IconPlus
+    BookMajorInfo
   }
 })
 export default class BookDetails extends Vue {

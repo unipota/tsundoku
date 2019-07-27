@@ -78,7 +78,7 @@ func getGitHubConnect() *oauth2.Config {
 		ClientSecret: GITHUB_CLIENT_SECRET,
 		Endpoint:     githuboauth.Endpoint,
 		Scopes:       []string{"user:email"},
-		RedirectURL:  "http://localhost:3000/auth/github/callback",
+		RedirectURL:  BASE_URL + "/auth/github/callback",
 	}
 
 	return config

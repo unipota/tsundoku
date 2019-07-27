@@ -38,8 +38,8 @@ export default class MobileTemplate extends Vue {
       : this.firstRouteName.slice(1)
   }
 
-  hideTopBarList: ViewNames[] = ['login', 'register', 'toukei']
-  hideTabBarList: ViewNames[] = ['login', 'register']
+  hideTopBarList: ViewNames[] = ['login', 'toukei', 'user']
+  hideTabBarList: ViewNames[] = ['login', 'user']
 
   @Watch('$route')
   private handleShowMobileBars() {

@@ -20,7 +20,7 @@ import DesktopNav from '@/components/molecules/DesktopNav.vue'
 })
 export default class DesktopTemplate extends Vue {
   public $store!: ExStore
-  hideNavList: ViewNames[] = ['login', 'register']
+  hideNavList: ViewNames[] = ['login']
 
   @Watch('$route')
   private handleShowDesktopNav() {

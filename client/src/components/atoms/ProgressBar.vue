@@ -1,7 +1,6 @@
 <template lang="pug">
   .progress-bar
     .progress(:style="progressStyle")
-    .progress-bg(:style="progressStyle")
 </template>
 
 <script lang="ts">
@@ -41,12 +40,5 @@ $height: 8px
   top: 0
   left: 0
   z-index: 2
-.progress-bg
-  position: absolute
-  left: 4px
-  top: 0
-  z-index: 1
-  height: $height
-  background-color: white
-  border-radius: 100vw
+  box-shadow: 0 0 0 4px white
 </style>

@@ -21,7 +21,10 @@ export default class MobileTopBar extends Vue {}
   display: flex
   justify-content: space-between
   padding:
-    top: 24px
+    top: 16px
     left: 16px
     right: 16px
+    bottom: 8px
+  background: rgba(255,255,255,0.8)
+  backdrop-filter: blur(2px)
 </style>

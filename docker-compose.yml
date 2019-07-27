@@ -49,6 +49,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: tsundoku
+      MYSQL_USER: root
+      MYSQL_PASSWORD: mysql
     volumes:
       - ./db/mysql_data:/var/lib/mysql
 

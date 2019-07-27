@@ -11,6 +11,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 // あえて遅延読み込みをしない
+import IconAuthor from './IconAuthor.vue'
 import IconBack from './IconBack.vue'
 import IconCheck from './IconCheck.vue'
 import IconCloud from './IconCloud.vue'
@@ -30,6 +31,7 @@ import IconTwitter from './IconTwitter.vue'
 
 @Component({
   components: {
+    IconAuthor,
     IconBack,
     IconCheck,
     IconCloud,

@@ -109,6 +109,9 @@ func main() {
 	auth.GET("/google/oauth", router.GetGoogleAuthHandler)
 	auth.GET("/google/callback", router.GetGoogleCallbackHandler)
 
+	auth.GET("/github/oauth", router.GetGitHubAuthHandler)
+	auth.GET("/github/callback", router.GetGitHubCallbackHandler)
+
 	api := e.Group("/api", session.Middleware(store), router.IdentifyMiddleware)
 	api.GET("/ping", router.Ping)
 	api.POST("/logout", router.PostLogoutHandler)

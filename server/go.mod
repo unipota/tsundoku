@@ -6,6 +6,8 @@ require (
 	cloud.google.com/go v0.43.0 // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/go-sql-driver/mysql v1.4.1
+	github.com/google/go-github v17.0.0+incompatible
+	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/pprof v0.0.0-20190723021845-34ac40c74b70 // indirect
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/sessions v1.2.0

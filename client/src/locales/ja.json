@@ -5,15 +5,15 @@
 
   "multi_device": "複数デバイスでの利用",
   "backup": "データのバックアップ",
-  "register_with_google": "Googleで登録",
-  "register_with_twitter": "Twitterで登録",
-  "register_with_github": "GitHubで登録",
   "will_not_post": "このアプリが投稿などを行うことはありません",
   "terms": "利用規約",
   "privacy_policy": "プライバシーポリシー",
 
-  "title_register": "新規登録",
-  "title_login": "ログイン",
+  "login_with_google": "Googleで登録/ログイン",
+  "login_with_twitter": "Twitterで登録/ログイン",
+  "login_with_github": "GitHubで登録/ログイン",
+
+  "title_login": "新規登録/ログイン",
   "title_user_notregistered": "設定",
   "title_user_registered": "ユーザー設定",
 

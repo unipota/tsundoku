@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/unipota/tsundoku/server/model"
 
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 
 	"golang.org/x/oauth2"
@@ -33,16 +34,28 @@ type googleCallbackRequest struct {
 func GetGoogleAuthHandler(c echo.Context) error {
 	config := getGoogleConnect()
 
-	url := config.AuthCodeURL("")
+	state := genState()
+	sess, _ := session.Get("session", c)
+	sess.Values["state"] = state
+
+	sess.Save(c.Request(), c.Response())
+
+	url := config.AuthCodeURL(state)
 
 	return c.Redirect(http.StatusFound, url)
 }
 
-// Get コールバックする
 func GetGoogleCallbackHandler(c echo.Context) error {
 	req := &googleCallbackRequest{}
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusInternalServerError, H{"Bind error"})
+	}
+
+	sess, _ := session.Get("session", c)
+	state := sess.Values["state"].(string)
+
+	if state != req.State {
+		return c.JSON(http.StatusBadRequest, H{"Invalid state"})
 	}
 
 	config := getGoogleConnect()
@@ -73,7 +86,6 @@ func GetGoogleCallbackHandler(c echo.Context) error {
 	return c.Redirect(http.StatusFound, "/")
 }
 
-// GetConnect 接続を取得する
 func getGoogleConnect() *oauth2.Config {
 	config := &oauth2.Config{
 		ClientID:     GOOGLE_CLIENT_ID,

@@ -43,4 +43,7 @@ export default class BookListItem extends Vue {
   overflow: hidden
   white-space: nowrap
   text-overflow: ellipsis
+  .icon
+    margin:
+      right: 7px
 </style>

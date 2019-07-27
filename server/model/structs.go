@@ -47,7 +47,8 @@ type DeviceUser struct {
 
 type User struct {
 	Base
-	Name string `gorm:"type:char(40);not null;"`
+	Name    string `gorm:"type:char(40);not null;"`
+	IconURL string `gorm:"type:char(200);"`
 }
 
 type Social struct {

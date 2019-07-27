@@ -53,12 +53,17 @@ func main() {
 		HTML5: true,
 	}))
 
-	auth := e.Group("/auth", session.Middleware(store), router.IdentifyMiddleware)
+	auth := e.Group("/auth", session.Middleware(store), router.IdentifyMiddleware, router.LoginedUserRedirect)
 	auth.GET("/twitter/oauth", router.GetTwitterAuthHandler)
 	auth.GET("/twitter/callback", router.GetTwitterCallbackHandler)
 
+	auth.GET("/google/oauth", router.GetGoogleAuthHandler)
+	auth.GET("/google/callback", router.GetGoogleCallbackHandler)
+
 	api := e.Group("/api", session.Middleware(store), router.IdentifyMiddleware)
 	api.GET("/ping", router.Ping)
+	api.POST("/logout", router.PostLogoutHandler)
+	api.GET("/logout", router.PostLogoutHandler)
 
 	api.GET("/users/me", router.GetWhoAmIHandler)
 

@@ -31,13 +31,13 @@ var (
 	TWITTER_CONSUMER_SECRET = os.Getenv("TWITTER_CONSUMER_SECRET")
 )
 
-type CallbackRequest struct {
+type twitterCallbackRequest struct {
 	Token    string `query:"oauth_token"`
 	Verifier string `query:"oauth_verifier"`
 }
 
 func GetTwitterAuthHandler(c echo.Context) error {
-	config := getConnect()
+	config := getTwitterConnect()
 	rt, err := config.RequestTemporaryCredentials(nil, "http://localhost:3000/auth/twitter/callback", nil)
 	if err != nil {
 		panic(err)
@@ -60,7 +60,7 @@ func GetTwitterAuthHandler(c echo.Context) error {
 }
 
 func GetTwitterCallbackHandler(c echo.Context) error {
-	req := &CallbackRequest{}
+	req := &twitterCallbackRequest{}
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusInternalServerError, H{"Bind error"})
 	}
@@ -95,37 +95,16 @@ func GetTwitterCallbackHandler(c echo.Context) error {
 	}
 
 	deviceID := c.Get("deviceID").(uuid.UUID)
-	var user *model.User
 
-	social, err := model.GetSocial("twitter", account.ID)
-	if err != nil {
-		if model.IsErrRecordNotFound(err) {
-			// TODO: 複数IdPとの連携するとき
-			user, err = model.NewUser(account.ScreenName, account.ProfileImageURL)
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, H{"Error with create user"})
-			}
-			_, err = model.NewSocial(user.ID, "twitter", account.ID)
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, H{"Error with create social"})
-			}
-		} else {
-			return c.JSON(http.StatusInternalServerError, H{"get social error"})
-		}
-	} else {
-		user, err = model.GetUserByUserUUID(social.UserID)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, H{"Error with get user"})
-		}
-	}
-	if _, err := model.NewDeviceUser(deviceID, user.ID); err != nil {
-		return c.JSON(http.StatusInternalServerError, H{"Error with create device_user"})
+	if err := model.ModifyUserAccount(deviceID, "twitter", account.ID, account.ScreenName, account.ProfileImageURL); err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusInternalServerError, H{"Error with modify user"})
 	}
 
 	return c.Redirect(http.StatusFound, "/")
 }
 
-func getConnect() *oauth.Client {
+func getTwitterConnect() *oauth.Client {
 	return &oauth.Client{
 		TemporaryCredentialRequestURI: "https://api.twitter.com/oauth/request_token",
 		ResourceOwnerAuthorizationURI: "https://api.twitter.com/oauth/authorize",
@@ -139,7 +118,7 @@ func getConnect() *oauth.Client {
 
 // getAccessToken アクセストークンを取得する
 func getAccessToken(rt *oauth.Credentials, oauthVerifier string) (*oauth.Credentials, error) {
-	oc := getConnect()
+	oc := getTwitterConnect()
 	at, _, err := oc.RequestToken(nil, rt, oauthVerifier)
 
 	return at, err
@@ -147,7 +126,7 @@ func getAccessToken(rt *oauth.Credentials, oauthVerifier string) (*oauth.Credent
 
 // getMe 自身を取得する
 func getMe(at *oauth.Credentials, user *Account) error {
-	oc := getConnect()
+	oc := getTwitterConnect()
 
 	v := url.Values{}
 	v.Set("include_email", "true")

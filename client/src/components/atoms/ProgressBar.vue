@@ -1,7 +1,6 @@
 <template lang="pug">
   .progress-bar
     .progress(:style="progressStyle")
-    .progress-bg(:style="progressStyle")
 </template>
 
 <script lang="ts">
@@ -13,12 +12,6 @@ export default class ProgressBar extends Vue {
 
   get validatedProgress() {
     return Math.min(1, Math.max(0, this.progress))
-  }
-
-  get progressStyle() {
-    return {
-      width: `${this.validatedProgress * 100}%`
-    }
   }
 }
 </script>
@@ -41,12 +34,5 @@ $height: 8px
   top: 0
   left: 0
   z-index: 2
-.progress-bg
-  position: absolute
-  left: 4px
-  top: 0
-  z-index: 1
-  height: $height
-  background-color: white
-  border-radius: 100vw
+  box-shadow: 0 0 0 4px white
 </style>

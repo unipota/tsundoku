@@ -19,7 +19,7 @@ func GetSocial(typeName, identifier string) (*Social, error) {
 		Type:       typeName,
 		Identifier: identifier,
 	}
-	if err := db.Find(social).Error; err != nil {
+	if err := db.Where(social).First(social).Error; err != nil {
 		return nil, err
 	}
 	return social, nil

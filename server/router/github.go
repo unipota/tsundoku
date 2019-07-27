@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/labstack/echo-contrib/session"
+
 	"github.com/google/uuid"
 	"github.com/unipota/tsundoku/server/model"
 
@@ -17,7 +19,8 @@ import (
 
 // CallbackRequest コールバックリクエスト
 type githubCallbackRequest struct {
-	Code string `form:"code"`
+	Code  string `form:"code"`
+	State string `form:"state"`
 }
 
 var (
@@ -29,7 +32,13 @@ var (
 func GetGitHubAuthHandler(c echo.Context) error {
 	config := getGitHubConnect()
 
-	url := config.AuthCodeURL("")
+	state := genState()
+	sess, _ := session.Get("session", c)
+	sess.Values["state"] = state
+
+	sess.Save(c.Request(), c.Response())
+
+	url := config.AuthCodeURL(state)
 
 	return c.Redirect(http.StatusFound, url)
 }
@@ -40,8 +49,13 @@ func GetGitHubCallbackHandler(c echo.Context) error {
 	if err := c.Bind(req); err != nil {
 		return c.JSON(http.StatusInternalServerError, H{"Bind error"})
 	}
+	sess, _ := session.Get("session", c)
+	state := sess.Values["state"].(string)
 
-	c.Logger().Info(req.Code)
+	if state != req.State {
+		return c.JSON(http.StatusBadRequest, H{"Invalid state"})
+	}
+
 	config := getGitHubConnect()
 
 	background := context.Background()
@@ -78,7 +92,7 @@ func getGitHubConnect() *oauth2.Config {
 		ClientSecret: GITHUB_CLIENT_SECRET,
 		Endpoint:     githuboauth.Endpoint,
 		Scopes:       []string{"user:email"},
-		RedirectURL:  "http://localhost:3000/auth/github/callback",
+		RedirectURL:  BASE_URL + "/auth/github/callback",
 	}
 
 	return config

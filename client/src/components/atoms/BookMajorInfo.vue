@@ -3,14 +3,16 @@
     .book-list-item__title
       | {{ book.title }}
     .book-list-item__author
+      icon.icon(name="author")
       | {{ book.author }}
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { BookRecord } from '../../types/Book'
+import Icon from '../assets/Icon.vue'
 
-@Component({ components: {} })
+@Component({ components: { Icon } })
 export default class BookListItem extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord

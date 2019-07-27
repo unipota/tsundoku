@@ -3,7 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
+	"path"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/srinathgs/mysqlstore"
@@ -48,10 +53,54 @@ func main() {
 	e := echo.New()
 	e.Debug = true
 	e.Use(middleware.Logger())
-	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:  "./static",
-		HTML5: true,
-	}))
+
+	// middleware.StaticWithConfigからほぼコピペ・一部改変
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) (err error) {
+			p := c.Request().URL.Path
+			if strings.HasSuffix(c.Path(), "*") { // When serving from a group, e.g. `/static*`.
+				p = c.Param("*")
+			}
+			p, err = url.PathUnescape(p)
+			if err != nil {
+				return
+			}
+			name := filepath.Join("./static", path.Clean("/"+p)) // "/"+ for security
+
+			fi, err := os.Stat(name)
+			if err != nil {
+				if os.IsNotExist(err) {
+					if err = next(c); err != nil {
+						if he, ok := err.(*echo.HTTPError); ok {
+							if he.Code == http.StatusNotFound {
+								// TODO: OGP周り
+								return c.File("./static/index.html")
+							}
+						}
+						return
+					}
+				}
+				return
+			}
+
+			if fi.IsDir() {
+				// トップページ('/')にアクセスしてきた時
+				index := filepath.Join(name, "index.html")
+				fi, err = os.Stat(index)
+
+				if err != nil {
+					if os.IsNotExist(err) {
+						return next(c)
+					}
+					return
+				}
+				// TODO: OGP周り
+				return c.File(index)
+			}
+
+			return c.File(name)
+		}
+	})
 
 	auth := e.Group("/auth", session.Middleware(store), router.IdentifyMiddleware)
 	auth.GET("/twitter/oauth", router.GetTwitterAuthHandler)

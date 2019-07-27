@@ -65,6 +65,7 @@ func main() {
 
 	api.GET("/books", router.GetBookListHandler)
 	api.POST("/books", router.PostNewBookHandler)
+	api.GET("/books/:bookID", router.GetBookDetailHandler)
 	api.PUT("/books/:bookID", router.PutUpdateBookHandler)
 	api.DELETE("/books/:bookID", router.DeleteBookHandler)
 

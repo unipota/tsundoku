@@ -1,8 +1,11 @@
 package router
 
 import (
+	"crypto/rand"
+	"encoding/binary"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
@@ -75,4 +78,10 @@ func LoginedUserRedirect(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		return c.Redirect(http.StatusFound, "/")
 	}
+}
+
+func genState() string {
+	var n uint64
+	binary.Read(rand.Reader, binary.LittleEndian, &n)
+	return strconv.FormatUint(n, 36)
 }

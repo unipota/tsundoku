@@ -1,6 +1,6 @@
 <template lang="pug">
   div.book-cover
-    v-lazy-image(v-if="book.coverImageUrl" :src="book.coverImageUrl").cover-image
+    v-lazy-image(v-if="book && book.coverImageUrl" :src="book.coverImageUrl").cover-image
 </template>
 
 <script lang="ts">

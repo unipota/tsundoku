@@ -4,8 +4,8 @@
     .top-bar-wrap
       mobile-top-bar
     .content-wrap(ref="scrollContainer")
-      keep-alive
-        router-view
+      // keep-alive (see: DesktopTemplate)
+      router-view
     .bottom-bar-wrap
       mobile-tab-bar
     floating-add-tsundoku-button

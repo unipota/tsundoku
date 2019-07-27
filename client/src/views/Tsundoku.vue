@@ -24,7 +24,7 @@ export default class Tsundoku extends Vue {
   public $store!: ExStore
 
   get books() {
-    return this.$store.getters.getTsundoku
+    return this.$store.getters.tsundokuBooks
   }
 }
 </script>

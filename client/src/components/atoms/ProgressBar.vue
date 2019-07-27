@@ -30,13 +30,13 @@ $height: 8px
   width: 100%
   height: $height
   background-color: $border-gray
-  border-radius: 999px
+  border-radius: 100vw
   overflow: hidden
 
 .progress
   height: $height
   background-color: $kidoku-blue
-  border-radius: 999px
+  border-radius: 100vw
   position: absolute
   top: 0
   left: 0
@@ -48,5 +48,5 @@ $height: 8px
   z-index: 1
   height: $height
   background-color: white
-  border-radius: 999px
+  border-radius: 100vw
 </style>

@@ -9,7 +9,7 @@ export interface S {
   userId: string
   locale: string
   viewType: ViewType
-  books: BookRecord[]
+  booksMap: Record<string, BookRecord>
 }
 // ______________________________________________________
 //
@@ -17,8 +17,10 @@ export interface S {
 export interface G {
   getUserId: string
   getLocale: string
-  getTsundoku: BookRecord[]
-  getKidoku: BookRecord[]
+  books: BookRecord[]
+  tsundokuBooks: BookRecord[]
+  kidokuBooks: BookRecord[]
+  getBookById: (bookId: string) => BookRecord
 }
 // root getters has no namespace, so we can write root getter names like this
 export type RG = {

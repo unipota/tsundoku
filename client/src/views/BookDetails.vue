@@ -11,8 +11,8 @@
       .cover-wrap
         book-cover(:book="book")
       .body
-        book-details-item.item(:name="$t('price')" :value="`¥ ${book.price.toLocaleString()}`")
-        book-details-item.item(:name="$t('totalPages')" :value="book.totalPages.toString()")
+        book-details-item.item(:name="$t('price')" :value="`¥ ${price}`")
+        book-details-item.item(:name="$t('totalPages')" :value="totalPages")
 </template>
 
 <script lang="ts">
@@ -46,6 +46,14 @@ export default class BookDetails extends Vue {
     return {
       backgroundImage: this.book ? `url(${this.book.coverImageUrl})` : 'white'
     }
+  }
+
+  get price() {
+    return this.book && this.book.price.toLocaleString()
+  }
+
+  get totalPages() {
+    return this.book && this.book.totalPages.toString()
   }
 }
 </script>

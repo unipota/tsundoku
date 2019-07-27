@@ -81,18 +81,20 @@ func convertVolumeToBookRecord(volume *books.Volume) *BookRecord {
 		Memo:          "",
 	}
 
-	imageLinks := [...]string{
-		volume.VolumeInfo.ImageLinks.ExtraLarge,
-		volume.VolumeInfo.ImageLinks.Large,
-		volume.VolumeInfo.ImageLinks.Medium,
-		volume.VolumeInfo.ImageLinks.Small,
-		volume.VolumeInfo.ImageLinks.Thumbnail,
-		volume.VolumeInfo.ImageLinks.SmallThumbnail,
-	}
-	for _, imageLink := range imageLinks {
-		if imageLink != "" {
-			bookRecord.CoverImageURL = imageLink
-			break
+	if volume.VolumeInfo.ImageLinks != nil {
+		imageLinks := [...]string{
+			volume.VolumeInfo.ImageLinks.ExtraLarge,
+			volume.VolumeInfo.ImageLinks.Large,
+			volume.VolumeInfo.ImageLinks.Medium,
+			volume.VolumeInfo.ImageLinks.Small,
+			volume.VolumeInfo.ImageLinks.Thumbnail,
+			volume.VolumeInfo.ImageLinks.SmallThumbnail,
+		}
+		for _, imageLink := range imageLinks {
+			if imageLink != "" {
+				bookRecord.CoverImageURL = imageLink
+				break
+			}
 		}
 	}
 

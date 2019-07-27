@@ -48,6 +48,7 @@ func main() {
 	e := echo.New()
 	e.Debug = true
 	e.Use(middleware.Logger())
+
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
 		Root:  "./static",
 		HTML5: true,
@@ -59,6 +60,9 @@ func main() {
 
 	auth.GET("/google/oauth", router.GetGoogleAuthHandler)
 	auth.GET("/google/callback", router.GetGoogleCallbackHandler)
+
+	auth.GET("/github/oauth", router.GetGitHubAuthHandler)
+	auth.GET("/github/callback", router.GetGitHubCallbackHandler)
 
 	api := e.Group("/api", session.Middleware(store), router.IdentifyMiddleware)
 	api.GET("/ping", router.Ping)

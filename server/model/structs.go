@@ -32,7 +32,7 @@ type Book struct {
 	Price         int       `gorm:""`
 	DeviceID      uuid.UUID `gorm:"type:char(36);not null"`
 
-	BookHistories []BookHistory
+	ReadHistories []ReadHistory
 }
 
 type Device struct {
@@ -47,7 +47,8 @@ type DeviceUser struct {
 
 type User struct {
 	Base
-	Name string `gorm:"type:char(40);not null;"`
+	Name    string `gorm:"type:char(40);not null;"`
+	IconURL string `gorm:"type:char(200);"`
 }
 
 type Social struct {
@@ -57,7 +58,7 @@ type Social struct {
 	UserID     uuid.UUID `gorm:"type:char(36);not null;"`
 }
 
-type BookHistory struct {
+type ReadHistory struct {
 	Base
 	BookID   uuid.UUID `gorm:"type:char(36);not null;"`
 	ReadPage int       `gorm:""`

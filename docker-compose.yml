@@ -45,11 +45,10 @@ services:
       - nginx-proxy
   db:
     image: mysql:5.7
+    user: "1000:1000"
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: tsundoku
-    ports:
-      - "3306:3306"
     volumes:
       - ./db/mysql_data:/var/lib/mysql
 

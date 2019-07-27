@@ -2,19 +2,21 @@
   div
     portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
-      mobile-top-bar
+      mobile-top-bar(v-if="$store.getters.getShowMobileTopBar")
     .content-wrap(ref="scrollContainer")
       // keep-alive (see: DesktopTemplate)
       router-view
     .bottom-bar-wrap
-      mobile-tab-bar
+      mobile-tab-bar(v-if="$store.getters.getShowMobileTabBar")
     transition(name="transition-floating-button")
       floating-add-tsundoku-button(v-show="selectedPath === 'tsundoku'")
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
 
+import { ViewNames } from '../../router'
 import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
 import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
 import FloatingAddTsundokuButton from '@/components/atoms/FloatingAddTsundokuButton.vue'
@@ -27,6 +29,7 @@ import FloatingAddTsundokuButton from '@/components/atoms/FloatingAddTsundokuBut
   }
 })
 export default class MobileTemplate extends Vue {
+  public $store!: ExStore
   get firstRouteName() {
     return this.$route.matched[0].path
   }
@@ -34,6 +37,25 @@ export default class MobileTemplate extends Vue {
     return this.firstRouteName === ''
       ? 'tsundoku'
       : this.firstRouteName.slice(1)
+  }
+
+  hideTopBarList: ViewNames[] = ['login', 'toukei', 'user']
+  hideTabBarList: ViewNames[] = ['login', 'user']
+
+  @Watch('$route')
+  private handleShowMobileBars() {
+    this.$store.commit(
+      'setShowMobileTopBar',
+      !this.hideTopBarList.includes(this.$route.name as ViewNames)
+    )
+    this.$store.commit(
+      'setShowMobileTabBar',
+      !this.hideTabBarList.includes(this.$route.name as ViewNames)
+    )
+  }
+
+  mounted() {
+    this.handleShowMobileBars()
   }
 }
 </script>

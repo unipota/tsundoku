@@ -45,6 +45,9 @@ func EstablishConnection() (*gorm.DB, error) {
 	}
 	db = _db
 	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4")
+	if os.Getenv("GORM_DEBUG") != "" {
+		db = db.Debug()
+	}
 
 	return db, nil
 }
@@ -82,5 +85,5 @@ var allTables = []interface{}{
 	&DeviceUser{},
 	&User{},
 	&Social{},
-	&BookHistory{},
+	&ReadHistory{},
 }

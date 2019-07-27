@@ -39,7 +39,8 @@ export default class App extends Vue {
 
   private setLocale() {
     // ブラウザの言語設定を取得
-    this.$store.commit('setLocale', window.navigator.language.split('-')[0])
+    // this.$store.commit('setLocale', window.navigator.language.split('-')[0])
+    this.$store.commit('setLocale', 'ja') // 今のところは日本語のみにしておく
   }
 
   mounted() {

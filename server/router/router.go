@@ -55,3 +55,19 @@ func Ping(c echo.Context) error {
 
 	return c.String(http.StatusOK, "pong"+deviceUUID.String())
 }
+
+func LoginedUserRedirect(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		deviceID := c.Get("deviceID").(uuid.UUID)
+		_, err := model.GetUserByDeviceUUID(deviceID)
+		if err != nil {
+			if model.IsErrRecordNotFound(err) {
+				return next(c)
+			}
+
+			c.Logger().Error(err)
+			return c.JSON(http.StatusInternalServerError, H{"Error with get user"})
+		}
+		return c.Redirect(http.StatusFound, "/")
+	}
+}

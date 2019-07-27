@@ -59,7 +59,7 @@ func Migration() error {
 
 	foreignKeys := [][5]string{
 		{"books", "device_id", "devices(id)", "CASCADE", "CASCADE"},
-		{"book_histories", "book_id", "books(id)", "CASCADE", "CASCADE"},
+		{"read_histories", "book_id", "books(id)", "CASCADE", "CASCADE"},
 		{"device_users", "device_id", "devices(id)", "CASCADE", "CASCADE"},
 		{"device_users", "user_id", "users(id)", "CASCADE", "CASCADE"},
 		{"socials", "user_id", "users(id)", "CASCADE", "CASCADE"},

@@ -22,7 +22,7 @@ export default class DesktopNavBarButton extends Vue {
   display: flex
   align-items: center
   background-color: $tsundoku-red-bg
-  border-radius: 999px
+  border-radius: 100vw
   user-select: none
   cursor: pointer
   box-shadow: 0px 3px 5px -1px #e3402a6e
@@ -33,7 +33,7 @@ export default class DesktopNavBarButton extends Vue {
   width: 48px
   height: 48px
   margin-right: 16px
-  border-radius: 999px
+  border-radius: 100vw
   background-color: $tsundoku-red
 .label
   color: $tsundoku-red

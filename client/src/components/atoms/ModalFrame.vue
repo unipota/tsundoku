@@ -1,20 +1,27 @@
 <template lang="pug">
   .modal-frame-overlay
     .modal-frame-body
+      .modal-frame-close
+        router-link.close-link(:to="{ path }" append)
+          icon(name="close" :color="closeColor" :width="16")
       slot
-      router-link.close-button(:to="{path: '../'}" append)
-        icon(name="close" color="var(--text-gray)")
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
 
 @Component({
   components: { Icon }
 })
-export default class ModalFrame extends Vue {}
+export default class ModalFrame extends Vue {
+  @Prop({ type: String, default: '../' })
+  private path!: string
+
+  @Prop({ type: String, default: 'var(--text-gray)' })
+  private closeColor!: string
+}
 </script>
 
 <style lang="sass">
@@ -23,6 +30,7 @@ export default class ModalFrame extends Vue {}
   bottom: 0
   width: 100%
   height: 100%
+  z-index: 10
 
 .modal-frame-body
   position: absolute
@@ -42,9 +50,10 @@ export default class ModalFrame extends Vue {}
     right: 24px
   box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.25)
 
-.close-button
-  position: absolute
-  right: 16px
-  top: 16px
-  padding: 12px
+.modal-frame-close
+  position: relative
+  width: 100%
+  display: flex
+  justify-content: flex-end
+  z-index: 10
 </style>

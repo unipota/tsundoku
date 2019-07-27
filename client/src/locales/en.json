@@ -6,5 +6,15 @@
   "add_by_searching": "Add books by searching",
   "add_by_scanning": "Add books by scan barcode",
 
-  "remaining": "{price}"
+  "remaining": "remaining",
+
+  "isbn": "ISBN",
+  "title": "Title",
+  "author": "Author",
+  "totalPages": "Total pages",
+  "price": "Price",
+  "caption": "Caption",
+  "publisher": "Publisher",
+  "readPages": "Pages read",
+  "memo": "Notes"
 }

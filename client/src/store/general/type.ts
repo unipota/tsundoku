@@ -24,6 +24,8 @@ export interface G {
   tsundokuBooks: BookRecord[]
   kidokuBooks: BookRecord[]
   getBookById: (bookId: string) => BookRecord
+  tsundokuPrice: number
+  kidokuPrice: number
   getViewType: ViewType
   getShowMobileTopBar: boolean
   getShowMobileTabBar: boolean
@@ -51,6 +53,10 @@ export type RM = {
 //
 // actions
 // eslint-disable-next-line
-export interface A {}
+export interface A {
+  searchBooksByISBN: { isbn: string }
+}
 // eslint-disable-next-line
-export interface RA {}
+export interface RA {
+  searchBooksByISBN: A['searchBooksByISBN']
+}

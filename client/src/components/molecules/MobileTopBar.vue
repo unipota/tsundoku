@@ -1,19 +1,21 @@
 <template lang="pug">
   .mobile-top-bar
-    price-display(:price="0")
+    portal-target(name="priceDisplay")
     user-icon
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
 
-import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
 import UserIcon from '@/components/atoms/UserIcon.vue'
 
 @Component({
-  components: { PriceDisplay, UserIcon }
+  components: { UserIcon }
 })
-export default class MobileTopBar extends Vue {}
+export default class MobileTopBar extends Vue {
+  public $store!: ExStore
+}
 </script>
 
 <style lang="sass">

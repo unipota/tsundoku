@@ -1,17 +1,22 @@
 <template lang="pug">
   .body(:style="bodyStyle")
-    .currency-symbol
-      | ¥
-    .price-body
-      | {{priceWithDelimiter}}
+    .currency-symbol ¥
+    .price-body {{priceWithDelimiter}}
     .menu-button
       icon(name="down-arrow" :color="`var(--${currentColor})`")
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import TWEEN from '@tweenjs/tween.js'
 
 import Icon from '@/components/assets/Icon.vue'
+
+const animate = () => {
+  if (TWEEN.update()) {
+    requestAnimationFrame(animate)
+  }
+}
 
 @Component({ components: { Icon } })
 export default class PriceDisplay extends Vue {
@@ -24,8 +29,12 @@ export default class PriceDisplay extends Vue {
   @Prop({ type: Boolean, default: false })
   readonly kidoku!: boolean
 
+  tweenedPriceNumberObject = { price: 0 }
+
   get priceWithDelimiter(): string {
-    return `${this.tsundoku ? '-' : ''}${this.price.toLocaleString()}`
+    return `${
+      this.tsundoku && this.tweenedPriceNumberObject.price !== 0 ? '-' : ''
+    }${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString()}`
   }
 
   get bodyStyle() {
@@ -41,6 +50,21 @@ export default class PriceDisplay extends Vue {
       : this.kidoku
       ? 'kidoku-blue'
       : undefined
+  }
+
+  @Watch('price')
+  onPriceChanged(val: number) {
+    const tween = new TWEEN.Tween(this.tweenedPriceNumberObject).to(
+      { price: val },
+      300
+    )
+    tween.easing(TWEEN.Easing.Quartic.InOut)
+    tween.start()
+    animate()
+  }
+
+  created() {
+    this.tweenedPriceNumberObject.price = this.price
   }
 }
 </script>
@@ -61,7 +85,6 @@ export default class PriceDisplay extends Vue {
   padding:
     left: 24px
     right: 18px
-  transition: background .5s, color .5s
 
 .currency-symbol
   display: flex
@@ -70,6 +93,8 @@ export default class PriceDisplay extends Vue {
   flex-grow: 1
 
 .price-body
+  position: relative
+  overflow: hidden
   display: flex
   align-items: center
   height: 100%
@@ -81,5 +106,4 @@ export default class PriceDisplay extends Vue {
   align-items: center
   padding:
     left: 8px
-  transition: all .5s
 </style>

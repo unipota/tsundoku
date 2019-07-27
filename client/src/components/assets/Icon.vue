@@ -13,6 +13,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 // あえて遅延読み込みをしない
 import IconAuthor from './IconAuthor.vue'
 import IconBack from './IconBack.vue'
+import IconBookmark from './IconBookmark.vue'
 import IconCheck from './IconCheck.vue'
 import IconCloud from './IconCloud.vue'
 import IconClose from './IconClose.vue'
@@ -22,6 +23,7 @@ import IconGithub from './IconGithub.vue'
 import IconGoogle from './IconGoogle.vue'
 import IconKidoku from './IconKidoku.vue'
 import IconLogo from './IconLogo.vue'
+import IconPen from './IconPen.vue'
 import IconPlus from './IconPlus.vue'
 import IconScanner from './IconScanner.vue'
 import IconSearch from './IconSearch.vue'
@@ -33,6 +35,7 @@ import IconTwitter from './IconTwitter.vue'
   components: {
     IconAuthor,
     IconBack,
+    IconBookmark,
     IconCheck,
     IconCloud,
     IconClose,
@@ -42,6 +45,7 @@ import IconTwitter from './IconTwitter.vue'
     IconGoogle,
     IconKidoku,
     IconLogo,
+    IconPen,
     IconPlus,
     IconScanner,
     IconSearch,

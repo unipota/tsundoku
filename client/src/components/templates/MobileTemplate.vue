@@ -17,7 +17,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import { ViewNames } from '../../router'
-import MobileTabBar from '@/components/atoms/MobileTabBar.vue'
+import MobileTabBar from '@/components/molecules/MobileTabBar.vue'
 import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
 import FloatingAddTsundokuButton from '@/components/atoms/FloatingAddTsundokuButton.vue'
 
@@ -39,7 +39,7 @@ export default class MobileTemplate extends Vue {
       : this.firstRouteName.slice(1)
   }
 
-  hideTopBarList: ViewNames[] = ['login', 'toukei', 'user']
+  hideTopBarList: ViewNames[] = ['login', 'user']
   hideTabBarList: ViewNames[] = ['login', 'user']
 
   @Watch('$route')
@@ -87,7 +87,7 @@ export default class MobileTemplate extends Vue {
 
 .modal-wrap
   position: fixed
-  z-index: 2000
+  z-index: 3000
 
 .transition-floating-button
   &-enter, &-leave-to

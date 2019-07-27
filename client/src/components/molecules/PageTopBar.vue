@@ -22,7 +22,7 @@ export default class PageTopBar extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .wrapper
   position: absolute
   left: 37px

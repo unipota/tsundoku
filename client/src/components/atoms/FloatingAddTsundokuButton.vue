@@ -6,8 +6,13 @@
     v-click-outside="handleClickOutside")
     .button-search(@click="openSearchModal" key="search" v-show="active")
       icon(name="search" :width="30" :height="30")
+      span.under-button-label 検索
     .button-scan(@click="openScanModal" key="scan" v-show="active")
       icon(name="scanner" :width="38" :height="38")
+      span.under-button-label スキャン
+    .button-scan(@click="openEditModal" key="edit" v-show="active")
+      icon(name="pen" :width="38" :height="38" color="white")
+      span.under-button-label 入力
     .button-open(key="open" @click="handleClick")
       transition-group.button-open-inner-wrapper(name="transition-label" tag="div")
         .icon-plus(key="icon")
@@ -49,6 +54,11 @@ export default class FloatingAddTsundokuButton extends Vue {
     this.$router.push(`${this.firstRouteName}/add-books-scan`)
   }
 
+  openEditModal() {
+    this.active = false
+    this.$router.push(`${this.firstRouteName}/edit`)
+  }
+
   get firstRouteName() {
     return this.$route.matched[0].path
   }
@@ -57,12 +67,13 @@ export default class FloatingAddTsundokuButton extends Vue {
 
 <style lang="sass" scoped>
 .floating-add-tsundoku-button
+  position: fixed
+  z-index: 2000
+  right: 12px
+  bottom: calc(94px + 1vh)
   display: inline-flex
   flex-wrap: nowrap
   align-items: center
-  position: fixed
-  right: 12px
-  bottom: calc(94px + 1vh)
 
 .button-open
   cursor: pointer
@@ -110,6 +121,22 @@ export default class FloatingAddTsundokuButton extends Vue {
 
   .is-active &
     transform: rotate(135deg)
+
+.under-button-label
+  position: absolute
+  top: calc(100% + 4px)
+  text-align: center
+  white-space: nowrap
+  font:
+    weight: bold
+  color: var(--tsundoku-red)
+  opacity: 0
+  transform: translateY(-100%)
+
+  .is-active &
+    opacity: 1
+    transform: translateY(0)
+    transition: all .5s $easeInOutQuint .3s
 
 %button
   display: flex

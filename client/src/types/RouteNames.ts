@@ -3,6 +3,5 @@ export enum RouteNames {
   kidoku = 'kidoku',
   toukei = 'toukei',
   user = 'user',
-  login = 'login',
-  register = 'register'
+  login = 'login'
 }

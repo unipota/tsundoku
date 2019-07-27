@@ -3,7 +3,6 @@
   "kidoku": "キドク",
   "toukei": "トウケイ",
 
-  "register": "新規登録",
   "multi_device": "複数デバイスでの利用",
   "backup": "データのバックアップ",
   "register_with_google": "Googleで登録",
@@ -12,6 +11,11 @@
   "will_not_post": "このアプリが投稿などを行うことはありません",
   "terms": "利用規約",
   "privacy_policy": "プライバシーポリシー",
+
+  "title_register": "新規登録",
+  "title_login": "ログイン",
+  "title_user_notregistered": "設定",
+  "title_user_registered": "ユーザー設定",
 
   "add_by_searching": "検索して積む",
   "add_by_scanning": "スキャンして積む",

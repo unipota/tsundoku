@@ -83,7 +83,7 @@ func getGoogleConnect() *oauth2.Config {
 			TokenURL: tokenEndpoint,
 		},
 		Scopes:      []string{"openid", "profile"},
-		RedirectURL: "http://localhost:3000/auth/google/callback",
+		RedirectURL: BASE_URL + "/auth/google/callback",
 	}
 
 	return config

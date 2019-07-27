@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
@@ -13,6 +14,10 @@ import (
 type H struct {
 	Message string `json:"message"`
 }
+
+var (
+	BASE_URL = os.Getenv("BASE_URL")
+)
 
 func IdentifyMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {

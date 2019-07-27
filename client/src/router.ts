@@ -4,9 +4,8 @@ import AddBooksSearch from './views/AddBooksSearch.vue'
 import AddBooksScan from './views/AddBooksScan.vue'
 import BookDetails from './views/BookDetails.vue'
 import Kidoku from './views/Kidoku.vue'
-import Login from './views/Login.vue'
 import NotFound from './views/NotFound.vue'
-import Register from './views/Register.vue'
+import Login from './views/Login.vue'
 import Toukei from './views/Toukei.vue'
 import Tsundoku from './views/Tsundoku.vue'
 import UserDetails from './views/UserDetails.vue'
@@ -25,7 +24,6 @@ export type ViewNames =
   | 'bookDetails'
   | 'login'
   | 'user'
-  | 'register'
   | 'notfound'
 
 type ViewNamesToComponentMap = {
@@ -75,7 +73,6 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
   bookDetails: BookDetails,
   login: Login,
   user: UserDetails,
-  register: Register,
   notfound: NotFound
 }
 
@@ -90,7 +87,7 @@ const routes: ViewDeclaration[] = [
   { view: 'kidoku', children: modalSubTree },
   { view: 'toukei', children: modalSubTree },
   { view: 'user' },
-  { view: 'register' },
+  { view: 'login' },
   { view: 'notfound', path: '*' }
 ]
 

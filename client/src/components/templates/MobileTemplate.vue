@@ -8,7 +8,8 @@
       router-view
     .bottom-bar-wrap
       mobile-tab-bar(v-if="$store.getters.getShowMobileTabBar")
-    floating-add-tsundoku-button(v-if="selectedPath === 'tsundoku'")
+    transition(name="transition-floating-button")
+      floating-add-tsundoku-button(v-show="selectedPath === 'tsundoku'")
 </template>
 
 <script lang="ts">
@@ -87,4 +88,12 @@ export default class MobileTemplate extends Vue {
 .modal-wrap
   position: fixed
   z-index: 2000
+
+.transition-floating-button
+  &-enter, &-leave-to
+    transform: translateX(100%)
+    opacity: 0
+
+  &-enter-active, &-leave-active
+    transition: transform .5s $easeInOutQuint, opacity .5s
 </style>

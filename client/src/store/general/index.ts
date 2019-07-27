@@ -4,6 +4,8 @@
 import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
+import api from './api'
+import { BookRecord } from '@/types/Book'
 // ______________________________________________________
 //
 export const state = (): S => ({
@@ -98,6 +100,16 @@ export const getters: Getters<S, G> = {
   getBookById(state) {
     return bookId => state.booksMap[bookId]
   },
+  tsundokuPrice(_, getters) {
+    return getters.tsundokuBooks.reduce(
+      (sum, book) =>
+        sum + Math.round((1 - book.readPages / book.totalPages) * book.price),
+      0
+    )
+  },
+  kidokuPrice(_, getters) {
+    return getters.kidokuBooks.reduce((sum, book) => sum + book.price, 0)
+  },
   getViewType(state) {
     return state.viewType
   },
@@ -137,7 +149,20 @@ export const mutations: Mutations<S, M> = {
 }
 // ______________________________________________________
 //
-export const actions: Actions<S, A, G, M> = {}
+export const actions: Actions<S, A, G, M> = {
+  searchBooksByISBN({}, { isbn }): Promise<BookRecord[]> {
+    console.log(isbn)
+    return new Promise((resolve, reject) => {
+      api.searchBooksByISBN(isbn).then(result => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
+  }
+}
 
 export default {
   namespaced: true,

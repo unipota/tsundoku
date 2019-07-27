@@ -10,7 +10,7 @@
       span.book-list-item-progress__price_remaining
         | {{ remainingPrice }}
       span.book-list-item-progress__price_total
-        | {{ book.price }}
+        | {{ book.price.toLocaleString() }}
 </template>
 
 <script lang="ts">
@@ -27,16 +27,16 @@ export default class BookListItemProgress extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord
 
-  get progressRatio() {
+  get progressRatio(): number {
     return this.book.readPages / this.book.totalPages
   }
-  get progressPercentStr() {
+  get progressPercentStr(): string {
     return `${Math.round((this.book.readPages / this.book.totalPages) * 100)}%`
   }
-  get remainingPrice() {
+  get remainingPrice(): string {
     return `${Math.round(
       (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    )}`
+    ).toLocaleString()}`
   }
 }
 </script>

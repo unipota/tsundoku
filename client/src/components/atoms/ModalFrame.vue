@@ -26,6 +26,7 @@ export default class ModalFrame extends Vue {}
 
 .modal-frame-body
   position: absolute
+  z-index: 1000
   bottom: 0
   width: 100%
   height: calc(100% - 24px)

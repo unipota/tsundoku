@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gorilla/sessions"
 
@@ -13,9 +14,10 @@ import (
 )
 
 type whoAmIResponse struct {
-	Logined    bool   `json:"logined"`
-	ScreenName string `json:"screenName,omitempty"`
-	IconURL    string `json:"iconUrl,omitempty"`
+	Logined    bool      `json:"logined"`
+	ScreenName string    `json:"screenName,omitempty"`
+	IconURL    string    `json:"iconUrl,omitempty"`
+	CreatedAt  time.Time `json:"createdAt"`
 }
 
 func GetWhoAmIHandler(c echo.Context) error {
@@ -25,12 +27,17 @@ func GetWhoAmIHandler(c echo.Context) error {
 
 	if err != nil {
 		if model.IsErrRecordNotFound(err) {
-			return c.JSON(http.StatusOK, whoAmIResponse{false, "", ""})
+			device, err := model.GetDeviceByDeviceID(deviceID)
+			if err != nil {
+				c.Logger().Error(err)
+				return c.JSON(http.StatusInternalServerError, H{"Error with get device"})
+			}
+			return c.JSON(http.StatusOK, whoAmIResponse{false, "", "", device.CreatedAt})
 		}
 		return c.JSON(http.StatusInternalServerError, H{"Error with get user"})
 	}
 
-	return c.JSON(http.StatusOK, whoAmIResponse{true, user.Name, user.IconURL})
+	return c.JSON(http.StatusOK, whoAmIResponse{true, user.Name, user.IconURL, user.CreatedAt})
 }
 
 func PostLogoutHandler(c echo.Context) error {

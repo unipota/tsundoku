@@ -4,12 +4,12 @@
     name="transition-button" 
     tag="div"
     v-click-outside="handleClickOutside")
-    router-link.button-search(:to="`${firstRouteName}/add-books-search`" key="search" v-show="active")
+    .button-search(@click="openSearchModal" key="search" v-show="active")
       icon(name="search" :width="30" :height="30")
-    router-link.button-scan(:to="`${firstRouteName}/add-books-scan`" key="scan" v-show="active")
+    .button-scan(@click="openScanModal" key="scan" v-show="active")
       icon(name="scanner" :width="38" :height="38")
     .button-open(key="open" @click="handleClick")
-      transition-group(name="transition-label" tag="div")
+      transition-group.button-open-inner-wrapper(name="transition-label" tag="div")
         .icon-plus(key="icon")
           icon(name="plus" color="var(--text-white)")
         span.button-label(key="label" v-if="!active")
@@ -39,6 +39,16 @@ export default class FloatingAddTsundokuButton extends Vue {
     this.active = false
   }
 
+  openSearchModal() {
+    this.active = false
+    this.$router.push(`${this.firstRouteName}/add-books-search`)
+  }
+
+  openScanModal() {
+    this.active = false
+    this.$router.push(`${this.firstRouteName}/add-books-scan`)
+  }
+
   get firstRouteName() {
     return this.$route.matched[0].path
   }
@@ -55,11 +65,14 @@ export default class FloatingAddTsundokuButton extends Vue {
   bottom: calc(94px + 1vh)
 
 .button-open
+  cursor: pointer
+  user-select: none
   z-index: 100
   overflow: hidden
   display: flex
   align-items: center
   background-color: var(--tsundoku-red)
+  box-shadow: 0px 3px 5px -1px #e3402a6e
   width: 94px
   height: 60px
   padding:
@@ -70,11 +83,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   font:
     size: 24px
     weight: bold
-  transition: border-radius .3s, width .3s $easeOutBack, height .3s $easeOutBack, margin .3s
-
-  div
-    display: flex
-    align-items: center
+  transition: border-radius .3s, width .3s $easeInOutQuint, height .3s $easeInOutQuint, margin .3s
 
   .is-active &
     width: 48px
@@ -86,8 +95,18 @@ export default class FloatingAddTsundokuButton extends Vue {
       right: 12px
     justify-content: center
 
+  &-inner-wrapper
+    display: inline-flex
+    flex: 0
+    align-items: center
+    justify-content: center
+
 .icon-plus
   transform: rotate(0)
+  height: 36px
+  display: inline-flex
+  align-items: center
+  justify-content: center
 
   .is-active &
     transform: rotate(135deg)
@@ -96,6 +115,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   display: flex
   align-items: center
   background-color: var(--tsundoku-red)
+  box-shadow: 0px 3px 5px -1px #e3402a6e
   justify-content: center
   width: 60px
   height: 60px

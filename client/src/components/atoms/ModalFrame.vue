@@ -34,6 +34,7 @@ export default class ModalFrame extends Vue {
 
 .modal-frame-body
   position: absolute
+  z-index: 1000
   bottom: 0
   width: 100%
   height: calc(100% - 24px)
@@ -44,9 +45,9 @@ export default class ModalFrame extends Vue {
   border:
     radius: 24px 24px 0 0
   padding:
-    top: 18px
-    left: 18px
-    right: 18px
+    top: 32px
+    left: 24px
+    right: 24px
   box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.25)
 
 .modal-frame-close

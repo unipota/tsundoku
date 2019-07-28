@@ -2,12 +2,12 @@
   div
     portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
-      mobile-top-bar(v-if="$store.getters.getShowMobileTopBar")
+      mobile-top-bar(v-if="$store.state.showMobileTopBar")
     .content-wrap(ref="scrollContainer")
       // keep-alive (see: DesktopTemplate)
       router-view
     .bottom-bar-wrap
-      mobile-tab-bar(v-if="$store.getters.getShowMobileTabBar")
+      mobile-tab-bar(v-if="$store.state.showMobileTabBar")
     transition(name="transition-floating-button")
       floating-add-tsundoku-button(v-show="selectedPath === 'tsundoku'")
 </template>

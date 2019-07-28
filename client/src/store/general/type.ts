@@ -1,6 +1,8 @@
 import { BookRecord } from '@/types/Book'
 
 type ViewType = 'mobile' | 'desktop'
+type ViewTypeClass = 'is-mobile' | 'is-desktop'
+type ModalTransitionClass = 'translate-y' | 'translate-x'
 
 // ______________________________________________________
 //
@@ -20,16 +22,14 @@ export interface S {
 export interface G {
   getUserId: string
   getLocale: string
+  viewTypeClass: ViewTypeClass
+  modalTransitionClass: ModalTransitionClass
   books: BookRecord[]
   tsundokuBooks: BookRecord[]
   kidokuBooks: BookRecord[]
   getBookById: (bookId: string) => BookRecord
   tsundokuPrice: number
   kidokuPrice: number
-  getViewType: ViewType
-  getShowMobileTopBar: boolean
-  getShowMobileTabBar: boolean
-  getShowDesktopNav: boolean
 }
 // root getters has no namespace, so we can write root getter names like this
 export type RG = {

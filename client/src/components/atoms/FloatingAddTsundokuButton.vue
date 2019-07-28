@@ -5,13 +5,13 @@
     tag="div"
     v-click-outside="handleClickOutside")
     .button-search(@click="openSearchModal" key="search" v-show="active")
-      icon(name="search" :width="30" :height="30")
+      icon(name="search" :width="24" :height="24")
       span.under-button-label 検索
     .button-scan(@click="openScanModal" key="scan" v-show="active")
-      icon(name="scanner" :width="38" :height="38")
+      icon(name="scanner" :width="30" :height="30")
       span.under-button-label スキャン
     .button-scan(@click="openEditModal" key="edit" v-show="active")
-      icon(name="pen" :width="38" :height="38" color="white")
+      icon(name="pen" :width="30" :height="30" color="white")
       span.under-button-label 入力
     .button-open(key="open" @click="handleClick")
       transition-group.button-open-inner-wrapper(name="transition-label" tag="div")
@@ -70,7 +70,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   position: fixed
   z-index: 2000
   right: 12px
-  bottom: calc(94px + 1vh)
+  bottom: calc(63px + 12px)
   display: inline-flex
   flex-wrap: nowrap
   align-items: center
@@ -84,21 +84,21 @@ export default class FloatingAddTsundokuButton extends Vue {
   align-items: center
   background-color: var(--tsundoku-red)
   box-shadow: 0px 3px 5px -1px #e3402a6e
-  width: 94px
-  height: 60px
+  width: 84px
+  height: 48px
   padding:
     left: 14px
   border:
     radius: 100vw
   color: var(--text-white)
   font:
-    size: 24px
+    size: 18px
     weight: bold
   transition: border-radius .3s, width .3s $easeInOutQuint, height .3s $easeInOutQuint, margin .3s
 
   .is-active &
-    width: 48px
-    height: 48px
+    width: 42px
+    height: 42px
     border:
       radius: 100vw 100vw 100vw 100vw
     padding: 0
@@ -144,8 +144,8 @@ export default class FloatingAddTsundokuButton extends Vue {
   background-color: var(--tsundoku-red)
   box-shadow: 0px 3px 5px -1px #e3402a6e
   justify-content: center
-  width: 60px
-  height: 60px
+  width: 48px
+  height: 48px
   border:
     radius: 100%
 

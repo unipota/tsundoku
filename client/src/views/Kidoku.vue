@@ -8,7 +8,7 @@
         book-list-item(:book="book" kidoku)
     portal(to="modalView")
       transition(name="modal-show")
-          router-view
+        router-view
 </template>
 
 <script lang="ts">

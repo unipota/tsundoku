@@ -88,6 +88,22 @@ export const getters: Getters<S, G> = {
   getLocale(state) {
     return state.locale
   },
+  viewTypeClass(state) {
+    switch (state.viewType) {
+      case 'mobile':
+        return 'is-mobile'
+      case 'desktop':
+        return 'is-desktop'
+    }
+  },
+  modalTransitionClass(state) {
+    switch (state.viewType) {
+      case 'mobile':
+        return 'translate-y'
+      case 'desktop':
+        return 'translate-x'
+    }
+  },
   books(state) {
     return Object.values(state.booksMap)
   },
@@ -109,18 +125,6 @@ export const getters: Getters<S, G> = {
   },
   kidokuPrice(_, getters) {
     return getters.kidokuBooks.reduce((sum, book) => sum + book.price, 0)
-  },
-  getViewType(state) {
-    return state.viewType
-  },
-  getShowMobileTopBar(state) {
-    return state.showMobileTopBar
-  },
-  getShowMobileTabBar(state) {
-    return state.showMobileTabBar
-  },
-  getShowDesktopNav(state) {
-    return state.showDesktopNav
   }
 }
 

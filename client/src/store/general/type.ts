@@ -26,10 +26,6 @@ export interface G {
   getBookById: (bookId: string) => BookRecord
   tsundokuPrice: number
   kidokuPrice: number
-  getViewType: ViewType
-  getShowMobileTopBar: boolean
-  getShowMobileTabBar: boolean
-  getShowDesktopNav: boolean
 }
 // root getters has no namespace, so we can write root getter names like this
 export type RG = {

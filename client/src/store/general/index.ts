@@ -109,18 +109,6 @@ export const getters: Getters<S, G> = {
   },
   kidokuPrice(_, getters) {
     return getters.kidokuBooks.reduce((sum, book) => sum + book.price, 0)
-  },
-  getViewType(state) {
-    return state.viewType
-  },
-  getShowMobileTopBar(state) {
-    return state.showMobileTopBar
-  },
-  getShowMobileTabBar(state) {
-    return state.showMobileTabBar
-  },
-  getShowDesktopNav(state) {
-    return state.showDesktopNav
   }
 }
 

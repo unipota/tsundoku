@@ -2,7 +2,7 @@
   .view-desktop
     portal-target.modal-wrap(name="modalView")
     .nav-wrap
-      desktop-nav(v-if="$store.getters.getShowDesktopNav")
+      desktop-nav(v-if="$store.state.showDesktopNav")
     .view-wrap
       // keep-alive だと複数存在する同名のポータルでハマるのでとりあえず無効化
       routerView

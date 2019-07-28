@@ -1,8 +1,8 @@
 <template lang="pug">
   div
     portal(to="modalView")
-      transition(:name="`modal-show-${$store.state.viewType}`")
-          router-view
+      transition(name="modal-show")  
+        router-view
 </template>
 
 <script lang="ts">

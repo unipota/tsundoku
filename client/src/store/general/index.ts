@@ -88,6 +88,22 @@ export const getters: Getters<S, G> = {
   getLocale(state) {
     return state.locale
   },
+  viewTypeClass(state) {
+    switch (state.viewType) {
+      case 'mobile':
+        return 'is-mobile'
+      case 'desktop':
+        return 'is-desktop'
+    }
+  },
+  modalTransitionClass(state) {
+    switch (state.viewType) {
+      case 'mobile':
+        return 'translate-y'
+      case 'desktop':
+        return 'translate-x'
+    }
+  },
   books(state) {
     return Object.values(state.booksMap)
   },

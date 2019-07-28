@@ -1,6 +1,6 @@
 <template lang="pug">
-  .modal-frame-overlay(:class="`is-${$store.state.viewType}`")
-    .modal-frame-wrapper(:class="`is-${$store.state.viewType}`")
+  .modal-frame-overlay(:class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`")
+    .modal-frame-wrapper(:class="`${$store.getters.viewTypeClass}`")
       .modal-frame-close
         router-link.close-link(:to="{ path }" append)
           icon(name="close" :color="closeColor" :width="16")

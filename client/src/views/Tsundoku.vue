@@ -7,7 +7,7 @@
       .list-item-container(v-for="book in books")
         book-list-item(:book="book")
     portal(to="modalView")
-      transition(:name="`modal-show-${$store.state.viewType}`")
+      transition(name="modal-show") 
         router-view
 </template>
 

@@ -7,7 +7,7 @@
       .list-item-container(v-for="book in books")
         book-list-item(:book="book" kidoku)
     portal(to="modalView")
-      transition(name="modal-show")
+      transition(:name="`modal-show-${$store.state.viewType}`")
           router-view
 </template>
 

@@ -33,6 +33,7 @@ export default class PageTopBar extends Vue {
     margin: auto 0
     display: flex
   .title
+    color: var(--text-black)
     font-weight: bold
     font-size: 22px
     margin:

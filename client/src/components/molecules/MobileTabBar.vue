@@ -6,7 +6,7 @@
         :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="20")
+          icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="20" :width="30")
         span.label(v-if="selectedPath === 'tsundoku'")
           | {{ $t('tsundoku') }}
 
@@ -15,7 +15,7 @@
         :to="{ name: tabs.kidoku.to, hash: $route.hash}"
       )
         span.icon.tsundoku
-          icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="20").icon.kidoku
+          icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="20" :width="30").icon.kidoku
         span.label(v-if="selectedPath === 'kidoku'")
           | {{ $t('kidoku') }}
 
@@ -24,7 +24,7 @@
         :to="{ name: tabs.toukei.to }"
       )
         span.icon.toukei
-          icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="20").icon.toukei
+          icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="20" :width="30").icon.toukei
         span.label(v-if="selectedPath === 'toukei'")
           | {{ $t('toukei') }}
 </template>
@@ -73,7 +73,7 @@ export default class MobileTabBar extends Vue {
     radius: 32px 32px 0 0
 
   .tab-bar
-    padding: 20px 30px
+    padding: 8px 36px
     display: flex
     width: auto
     max-width: 375px - (18px * 2)
@@ -95,8 +95,8 @@ export default class MobileTabBar extends Vue {
 
       &.selected
         padding:
-          left: 19px
-          right: 19px
+          left: 18px
+          right: 18px
 
       &.tsundoku
         color: $tsundoku-red

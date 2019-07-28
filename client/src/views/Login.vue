@@ -139,6 +139,7 @@ export default class Login extends Vue {
       .icon
         margin: auto 0 auto 14px
       .text
+        color: var(--text-black)
         margin: auto 0 auto 24px
   .will-not-post
     display: flex

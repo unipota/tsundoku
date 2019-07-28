@@ -2,7 +2,7 @@
   .book-list-item
     router-link.book-list-item__cover(:to="`${$route.matched[0].path}/book/${book.id}`")
       book-cover(:book="book")
-    .book-list-item__info(:class="`is-${$store.state.viewType}`")
+    .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
       .book-list-item__detail
         book-major-info(:book="book")
       .book-list-item__price(v-if="kidoku")

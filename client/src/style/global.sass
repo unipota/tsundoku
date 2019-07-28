@@ -18,14 +18,11 @@
 .pointer
   cursor: pointer
 
-.modal-show-mobile
+.modal-show
   &-enter, &-leave-to
-    transform: translateY(100%)
-  &-enter-active, &-leave-active
-    transition: transform .5s $easeInOutQuint
-
-.modal-show-desktop
-  &-enter, &-leave-to
-    transform: translateX(-100%)
+    &.translate-y
+      transform: translateY(100%)
+    &.translate-x
+      transform: translateX(-100%)      
   &-enter-active, &-leave-active
     transition: transform .5s $easeInOutQuint

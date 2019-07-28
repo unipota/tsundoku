@@ -75,7 +75,7 @@ export default class MobileTemplate extends Vue {
   width: 100vw
   height: 100vh
   padding:
-    top: 80px
+    top: 64px
     bottom: 90px
   -webkit-overflow-scrolling: touch
 
@@ -83,6 +83,7 @@ export default class MobileTemplate extends Vue {
   position: fixed
   z-index: 1000
   bottom: 0
+  bottom: env(safe-area-inset-bottom)
   width: 100%
 
 .modal-wrap

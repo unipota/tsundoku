@@ -9,7 +9,7 @@
         .info
           book-major-info(:book="book")
       .cover-wrap
-        book-cover(:url="book.coverImageUrl")
+        book-cover(:url="book.coverImageUrl" :hasShadow="true")
       .body
         book-details-item.item(:name="$t('price')" :value="`¥ ${price}`")
         book-details-item.item(:name="$t('totalPages')" :value="totalPages")

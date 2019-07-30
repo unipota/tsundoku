@@ -1,9 +1,11 @@
 <template lang="pug">
   .modal-frame-overlay(:class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`")
     .modal-frame-wrapper(:class="modalClass")
-      .modal-frame-close
+      .modal-frame-top
+        .title(v-if="title")
+          | {{ title }}
         router-link.close-link(:to="{ path }" append)
-          icon(name="close" :color="closeColor" :width="16")
+          icon.close-icon(name="close" :color="closeColor" :width="16")
       .modal-frame-body
         slot
 </template>
@@ -29,9 +31,12 @@ export default class ModalFrame extends Vue {
   @Prop({ type: Boolean, default: false })
   private noPadding!: boolean
 
+  @Prop({ type: String, required: false })
+  private title: string
+
   get modalClass() {
     return {
-      [ this.$store.getters.viewTypeClass ]: true,
+      [this.$store.getters.viewTypeClass]: true,
       'no-padding': this.noPadding
     }
   }
@@ -70,6 +75,7 @@ export default class ModalFrame extends Vue {
 
 .modal-frame-body
   padding:
+    top: 48px
     left: 24px
     right: 24px
   height: calc(100% - 30px - 24px) // .modal-frame-close の高さとborder-radiusの分を引いた
@@ -80,7 +86,7 @@ export default class ModalFrame extends Vue {
   .no-padding &
     padding: 0
 
-.modal-frame-close
+.modal-frame-top
   position: relative
   width: 100%
   display: flex
@@ -88,4 +94,12 @@ export default class ModalFrame extends Vue {
   z-index: 10
   padding:
     right: 24px
+  .title
+    margin: auto
+    font-size: 22px
+    font-weight: bold
+  .close-link
+    display: flex
+    .close-icon
+      margin: auto
 </style>

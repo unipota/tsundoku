@@ -36,5 +36,7 @@
   "addTsundoku": "積む",
   "currency": "￥",
 
+  "addBooksSearchTitle": "ツンドクの追加",
+
   "networkError": "ネットワークエラー"
 }

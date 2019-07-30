@@ -5,16 +5,20 @@
       #crop-area
         .barcode-reader-container
           add-book-scan-barcode-reader(:color="scannerColor")
+    .info
+      scan-card(v-for="book in scannedBooks" :key="book.isbn")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
+import ScanCard from '@/components/molecules/ScanCard.vue'
+import ModalFrame from '@/components/atoms/ModalFrame.vue'
+
+import api from '@/store/general/api'
 
 import { BrowserBarcodeReader, BarcodeFormat, DecodeHintType, Result } from '@zxing/library'
-
-import ModalFrame from '@/components/atoms/ModalFrame.vue'
-import { clearTimeout } from 'timers';
+import { BookRecord } from '../types/Book';
 
 const codeReader = new BrowserBarcodeReader(
   500,
@@ -34,18 +38,20 @@ interface VideoInputDevice {
   label: string
 }
 
-type ScanState = 'scanning' | 'incorrect' | 'scanned' | 'known'
+type ScanState = 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
 
 const stateColorMap: Record<ScanState, string> = {
   'scanning': 'white',
   'incorrect': 'var(--tsundoku-red)',
   'scanned': 'var(--succeed-blue)',
   'known': 'rgba(255, 255, 255, 0.5)',
+  'noresult': 'rgba(255, 255, 255, 0.5)',
 }
 
 @Component({
   components: {
     ModalFrame,
+    ScanCard,
     AddBookScanBarcodeReader
   }
 })
@@ -54,7 +60,8 @@ export default class AddBooksScan extends Vue {
   captureIntervalID = 0
   stateResetTimeoutId = 0
 
-  scannedBooks: Record<string, string> = {}
+  scannedBooksMap: Record<string, BookRecord> = {}
+  scannedBooks: BookRecord[] = []
 
   state: ScanState = 'scanning'
 
@@ -190,10 +197,10 @@ export default class AddBooksScan extends Vue {
     }
   }
 
-  barcodeScanned(result: Result) {
-    const isbn = result.getText()
+  async barcodeScanned(scanResult: Result) {
+    const isbn = scanResult.getText()
     const prefix = isbn.substring(0, 3)
-    if (isbn in this.scannedBooks) {
+    if (isbn in this.scannedBooksMap) {
       // スキャンに成功した直後に読み続けている場合はscannedにする
       this.setScanState(this.state === 'scanned' ? 'scanned' : 'known')
       return
@@ -202,8 +209,16 @@ export default class AddBooksScan extends Vue {
       this.setScanState('incorrect')
       return
     }
+
     this.setScanState('scanned')
-    this.$set(this.scannedBooks, isbn, isbn)
+    const searchResult = await api.searchBooksByISBN(isbn)
+
+    if (searchResult.data.length !== 1) {
+      this.setScanState('noresult')
+      return
+    }
+    this.scannedBooks.push(searchResult.data[0])
+    this.$set(this.scannedBooksMap, isbn, searchResult.data[0])
   }
 
   get scannerColor() {
@@ -212,7 +227,7 @@ export default class AddBooksScan extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 #video
   position: absolute
   top: 0

@@ -54,7 +54,7 @@ export default class AddBookCard extends Vue {
   private readonly type!: cardType
 
   @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  private readonly book!: BookRecord
 
   private bookAdded = false
   private showCard = true
@@ -117,7 +117,7 @@ export default class AddBookCard extends Vue {
   font-weight: bold
   font-size: 20px
   color: var(--tsundoku-red)
-  min-width: 6rem;
+  min-width: 6rem
   &.is-mobile
     text-align: right
   &.is-desktop

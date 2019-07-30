@@ -4,7 +4,7 @@
       v-if="url.length > 0"
       :src="url"
     )
-    dummy-book-cover(v-else :height="155")
+    dummy-book-cover(v-else)
 </template>
 
 <script lang="ts">

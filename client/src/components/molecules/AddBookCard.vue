@@ -15,7 +15,7 @@
           div.buttons
             component(
               :is="editButtonComponent"
-              to="/add-books-edit"
+              :to="firstRouteName + '/add-books-edit'"
             )
             add-tsundoku-button(
               size="small"
@@ -69,6 +69,10 @@ export default class AddBookCard extends Vue {
 
   get bookMajorInfoSize() {
     return this.$store.state.viewType === 'mobile' ? 'small' : 'normal'
+  }
+
+  get firstRouteName() {
+    return this.$route.matched[0].path
   }
 
   addTsundoku() {

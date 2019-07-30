@@ -12,7 +12,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 
 // あえて遅延読み込みをしない
 import IconAuthor from './IconAuthor.vue'
-import IconBack from './IconBack.vue'
 import IconBookmark from './IconBookmark.vue'
 import IconCheck from './IconCheck.vue'
 import IconCloud from './IconCloud.vue'
@@ -22,9 +21,11 @@ import IconExclamationMark from './IconExclamationMark.vue'
 import IconGithub from './IconGithub.vue'
 import IconGoogle from './IconGoogle.vue'
 import IconKidoku from './IconKidoku.vue'
+import IconLeftArrow from './IconLeftArrow.vue'
 import IconLogo from './IconLogo.vue'
 import IconPen from './IconPen.vue'
 import IconPlus from './IconPlus.vue'
+import IconRightArrow from './IconRightArrow.vue'
 import IconScanner from './IconScanner.vue'
 import IconSearch from './IconSearch.vue'
 import IconToukei from './IconToukei.vue'
@@ -34,7 +35,6 @@ import IconTwitter from './IconTwitter.vue'
 @Component({
   components: {
     IconAuthor,
-    IconBack,
     IconBookmark,
     IconCheck,
     IconCloud,
@@ -44,9 +44,11 @@ import IconTwitter from './IconTwitter.vue'
     IconGithub,
     IconGoogle,
     IconKidoku,
+    IconLeftArrow,
     IconLogo,
     IconPen,
     IconPlus,
+    IconRightArrow,
     IconScanner,
     IconSearch,
     IconToukei,

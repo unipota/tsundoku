@@ -165,6 +165,18 @@ export const actions: Actions<S, A, G, M> = {
         }
       })
     })
+  },
+  searchBooks({}, { search }): Promise<BookRecord[]> {
+    console.log(search)
+    return new Promise((resolve, reject) => {
+      api.searchBooks(search).then(result => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
   }
 }
 

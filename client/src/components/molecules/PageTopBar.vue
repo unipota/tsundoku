@@ -1,7 +1,7 @@
 <template lang="pug">
   div.wrapper
     span.icon-back(@click="$router.go(-1)")
-      icon(name="back")
+      icon(name="left-arrow")
     span.title
       | {{ $t('title_' + name) }}
 </template>

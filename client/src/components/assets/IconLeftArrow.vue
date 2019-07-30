@@ -19,7 +19,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class IconBack extends Vue {
+export default class IconLeftArrow extends Vue {
   @Prop({ type: String, default: 'var(--border-gray)' })
   private color!: string
 

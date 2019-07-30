@@ -1,12 +1,14 @@
 <template lang="pug">
-  modal-frame
+  modal-frame(close-color="white" no-padding)
     video#video(autoplay muted playsinline)
     #overlay
       #crop-area
         .barcode-reader-container
           add-book-scan-barcode-reader(:color="scannerColor")
     .info
-      scan-card(v-for="book in scannedBooks" :key="book.isbn")
+      vue-scroll-snap.cards(horizontal)
+        .scan-card-wrap(v-for="book in scannedBooks" :key="book.isbn")
+          scan-card(:book="book")
 </template>
 
 <script lang="ts">
@@ -14,6 +16,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
 import ScanCard from '@/components/molecules/ScanCard.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
+import VueScrollSnap from 'vue-scroll-snap'
 
 import api from '@/store/general/api'
 
@@ -50,6 +53,7 @@ const stateColorMap: Record<ScanState, string> = {
 
 @Component({
   components: {
+    VueScrollSnap,
     ModalFrame,
     ScanCard,
     AddBookScanBarcodeReader
@@ -264,7 +268,35 @@ export default class AddBooksScan extends Vue {
   height: 100%
   padding: 16px
 
+.info
+  position: relative
+  top: 0
+  height: 100%
+  width: 100%
+
+.cards
+  position: absolute
+  bottom: 0
+  height: 160px
+  width: 100%
+  display: flex
+  flex-direction: row
+  overflow-x: scroll
+  align-items: flex-end
+
+.scan-card-wrap
+  margin: 0 16px
+
+  &:first-child
+    margin-left: 0
+    padding-left: 48px
+  &:last-child
+    margin-right: 0
+    padding-right: 48px
+
+</style>
+
+<style lang="sass">
 .barcode-reader-canvas
   border-radius: 16px
-
 </style>

@@ -1,7 +1,7 @@
 <template lang="pug">
   .scan-card
     .cover
-      book-cover(:book="book")
+      book-cover(:url="book.coverImageUrl")
     div
       .isbn
         | {{ book.isbn }}

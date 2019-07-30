@@ -30,7 +30,7 @@ const api = {
   searchBooksByISBN(isbn: string): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/search/isbn', { params: { isbn } })
   },
-  searchBooks(search: string): Promise<AxiosResponse> {
+  searchBooks(search: string): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/search', { params: { search } })
   }
 }

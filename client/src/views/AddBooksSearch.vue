@@ -1,31 +1,126 @@
 <template lang="pug">
-  modal-frame
-    div
-      | add books search
-      input(v-model="searchQuery" @keyup.enter="submitSearchQuery")
+  modal-frame(:title="$t('addBooksSearchTitle')")
+    book-cover(:hasShadow="true")
+    text-input(
+      v-model="searchQuery"
+      :placeholder="$t('addBooksSearchPlaceholder')"
+      @keyup-enter="submitSearchQuery"
+    )
+    router-link.edit-yourself(
+      v-show="showEditBar"
+      :to="firstRouteName + '/add-books-edit'"
+    )
+      icon.icon(
+        name="logo"
+        color="var(--border-gray)"
+        :width="34"
+        :height="27"
+      )
+      span.text
+        | {{ $t('editYourself') }}
+      icon.icon(name="right-arrow")
+    add-book-card(
+      v-for="(book, index) in searchResults"
+      :key="index"
+      :book="book"
+      type="search"
+    )
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
-import { BookRecord } from '@/types/Book'
+import { BookRecord } from '../types/Book'
 
+import Icon from '@/components/assets/Icon.vue'
+import EditButton from '@/components/atoms/EditButton.vue'
+import TextInput from '@/components/atoms/TextInput.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
+import AddBookCard from '@/components/molecules/AddBookCard.vue'
+import BookCover from '@/components/atoms/BookCover.vue'
 
 @Component({
-  components: { ModalFrame }
+  components: {
+    Icon,
+    EditButton,
+    TextInput,
+    ModalFrame,
+    AddBookCard,
+    BookCover
+  }
 })
 export default class AddBooksSearch extends Vue {
   public $store!: ExStore
-  searchQuery: string = ''
+  searchQuery = ''
   searchResults: BookRecord[] = []
+  hasSubmittedSearchQuery = false
+
+  get goodSearchResult() {
+    //  検索結果が1件以上 && クエリがタイトルに一致するような検索結果が存在する
+    return (
+      this.searchResults.length > 0 &&
+      this.searchResults.find(result => result.title === this.searchQuery)
+    )
+  }
+
+  get showEditBar() {
+    return this.hasSubmittedSearchQuery && !this.goodSearchResult
+  }
+
+  get firstRouteName() {
+    return this.$route.matched[0].path
+  }
 
   submitSearchQuery() {
     this.$store
-      .dispatch('searchBooksByISBN', { isbn: this.searchQuery })
-      .then((res: BookRecord[]) => (this.searchResults = res))
+      .dispatch('searchBooks', { search: this.searchQuery })
+      .then((res: BookRecord[]) => {
+        this.searchResults = res
+        this.hasSubmittedSearchQuery = true
+      })
+  }
+
+  @Watch('searchQuery')
+  resetHasSubmittedSearchQuery(val) {
+    // searchQuery がリセットされるたびに hasSubmittedSearchQuery もリセットする
+    if (val.length === 0) {
+      this.hasSubmittedSearchQuery = false
+    }
   }
 }
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" scoped>
+.book-cover
+  margin: 20px auto 40px auto
+
+.text-input
+  width: 85%
+  margin: 0 auto  40px auto
+
+.edit-yourself
+  width: 95%
+  margin: auto
+  display: flex
+  padding: 15px 30px
+  border-radius: 8px
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1)
+  .icon
+    margin: auto 0
+  .text
+    margin: auto
+    font-weight: bold
+
+.add-book-card
+  margin: 48px 0
+  position: relative
+  &:not(:last-child)
+    &:before
+      content : ""
+      position: absolute
+      left: calc((100% - 85%) / 2) // 中心
+      bottom: -24px
+      height: 1px
+      width: 85%
+      border-bottom: 2px solid var(--bg-gray)
+</style>

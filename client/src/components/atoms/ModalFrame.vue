@@ -1,6 +1,6 @@
 <template lang="pug">
   .modal-frame-overlay(:class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`")
-    .modal-frame-wrapper(:class="`${$store.getters.viewTypeClass}`")
+    .modal-frame-wrapper(:class="modalClass")
       .modal-frame-close
         router-link.close-link(:to="{ path }" append)
           icon(name="close" :color="closeColor" :width="16")
@@ -25,6 +25,16 @@ export default class ModalFrame extends Vue {
 
   @Prop({ type: String, default: 'var(--text-gray)' })
   private closeColor!: string
+
+  @Prop({ type: Boolean, default: false })
+  private noPadding!: boolean
+
+  get modalClass() {
+    return {
+      [ this.$store.getters.viewTypeClass ]: true,
+      'no-padding': this.noPadding
+    }
+  }
 }
 </script>
 
@@ -66,6 +76,9 @@ export default class ModalFrame extends Vue {
   overflow:
     x: hidden
     y: auto
+
+  .no-padding &
+    padding: 0
 
 .modal-frame-close
   position: relative

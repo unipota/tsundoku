@@ -1,6 +1,10 @@
 <template lang="pug">
   div.book-cover
-    v-lazy-image(v-if="book.coverImageUrl" :src="book.coverImageUrl").cover-image
+    v-lazy-image.cover-image(
+      v-if="book.coverImageUrl.length > 0"
+      :src="book.coverImageUrl"
+    )
+    dummy-book-cover(v-else :height="155")
 </template>
 
 <script lang="ts">
@@ -8,9 +12,12 @@ import VLazyImage from 'v-lazy-image'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { BookRecord } from '../../types/Book'
 
+import DummyBookCover from '../assets/DummyBookCover.vue'
+
 @Component({
   components: {
-    VLazyImage
+    VLazyImage,
+    DummyBookCover
   }
 })
 export default class BookCover extends Vue {

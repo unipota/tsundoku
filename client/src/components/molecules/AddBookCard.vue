@@ -4,7 +4,7 @@
       :class="`${$store.getters.viewTypeClass} ${type}`" 
       v-if="showCard"
     )
-      book-cover(:book="book")
+      book-cover(:url="book.coverImageUrl")
       div.info(:class="`${$store.getters.viewTypeClass}`")
         book-major-info(:book="book" :size="bookMajorInfoSize")
         div.price-buttons-wrapper(:class="`${$store.getters.viewTypeClass}`")

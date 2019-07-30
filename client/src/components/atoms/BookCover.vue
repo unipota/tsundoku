@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.book-cover
+  div.book-cover(:class="{'has-shadow': hasShadow}")
     v-lazy-image.cover-image(
       v-if="url.length > 0"
       :src="url"
@@ -21,18 +21,22 @@ import DummyBookCover from '../assets/DummyBookCover.vue'
 })
 export default class BookCover extends Vue {
   @Prop({ type: String, default: '' })
-  private url!: string
+  private readonly url!: string
+
+  @Prop({ type: Boolean, default: false })
+  private readonly hasShadow!: boolean
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .book-cover
   width: 100px
   height: 140px
   border-radius: 8px
-  box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.2)
   background-color: var(--text-white)
   overflow: hidden
+  &.has-shadow
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
 
 .cover-image
   border-radius: 8px //for safari

@@ -4,7 +4,9 @@
       :class="`${$store.getters.viewTypeClass} ${type}`" 
       v-if="showCard"
     )
-      book-cover(:book="book")
+
+      book-cover(:url="book.coverImageUrl")
+
       div.info(:class="`${$store.getters.viewTypeClass}`")
         book-major-info(:book="book" :size="bookMajorInfoSize")
         div.price-buttons-wrapper(:class="`${$store.getters.viewTypeClass}`")
@@ -96,9 +98,11 @@ export default class AddBookCard extends Vue {
     border-radius: 8px
     &.is-mobile
       width: 300px
+
 .book-cover
   min-width: 96px
   min-height: 149px
+
 .info
   width: 100%
   padding:
@@ -107,36 +111,38 @@ export default class AddBookCard extends Vue {
     bottom: 5px
     left: 20px
   display: grid
+
 .price-buttons-wrapper
   margin: auto 0 0 0
   &.is-desktop
     display: flex
-.price
-  margin:
-    right: 21px
-  font-weight: bold
-  font-size: 20px
-  color: var(--tsundoku-red)
-  min-width: 6rem
-  &.is-mobile
-    text-align: right
-  &.is-desktop
-    text-align: left
-.buttons
-  display: flex
-  width: min-content
-  margin: 0 14px 0 auto
-.add-tsundoku-button-wrapper
-  margin:
-    left: 6px
+
+  .price
+    margin:
+      right: 21px
+    font-weight: bold
+    font-size: 20px
+    color: var(--tsundoku-red)
+    min-width: 6rem
+    &.is-mobile
+      text-align: right
+    &.is-desktop
+      text-align: left
+  .buttons
+    display: flex
+    width: min-content
+    margin: 0 14px 0 auto
+    .add-tsundoku-button-wrapper
+      margin:
+        left: 6px
 
 .transition-card
   &-leave-to
     opacity: 0
     &.search
-      transform: translateX(100%) // 右に消える
+      transform: translateX(100%) // searchCardは右に消える
     &.scan
-      transform: translateY(100%) // 下に消える
+      transform: translateY(100%) // scanCardは下に消える
 
   &-leave-active
     transition: transform 1s $easeInOutQuint, opacity .5s

@@ -20,7 +20,7 @@ export const state = (): S => ({
       id: 'mock0',
       isbn: '9784101800042',
       title: 'いなくなれ、群青',
-      author: '河野裕',
+      author: ['河野裕'],
       totalPages: 318,
       price: 637,
       caption:
@@ -35,7 +35,7 @@ export const state = (): S => ({
       id: 'mock1',
       isbn: '9784832249905',
       title: 'ご注文はうさぎですか？　7',
-      author: 'Koi',
+      author: ['Koi'],
       totalPages: 119,
       price: 884,
       caption: null,
@@ -50,7 +50,7 @@ export const state = (): S => ({
       isbn: '9784839941062',
       title:
         'プログラミングコンテストチャレンジブック第2版 問題解決のアルゴリズム活用力とコーディングテクニッ',
-      author: '秋葉拓哉/岩田陽一',
+      author: ['秋葉拓哉', '岩田陽一'],
       totalPages: 367,
       price: 3542,
       caption:
@@ -66,7 +66,7 @@ export const state = (): S => ({
       isbn: '9784839941062',
       title:
         'プログラミングコンテストチャレンジブック第2版 問題解決のアルゴリズム活用力とコーディングテクニッ',
-      author: '秋葉拓哉/岩田陽一',
+      author: ['秋葉拓哉', '岩田陽一'],
       totalPages: 367,
       price: 3542,
       caption:

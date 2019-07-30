@@ -4,7 +4,8 @@
       | {{ book.title }}
     .book-list-item__author(:class="`is-${size}`")
       icon.icon(name="author")
-      | {{ book.author }}
+      span(v-for="(author, index) in book.author")
+        | {{ author + (index < book.author.length-1 ? ' / ' : '')}}
 </template>
 
 <script lang="ts">
@@ -15,7 +16,7 @@ import { BookRecord } from '../../types/Book'
 import Icon from '../assets/Icon.vue'
 
 @Component({ components: { Icon } })
-export default class BookListItem extends Vue {
+export default class BookMajorInfo extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord
 

@@ -1,9 +1,25 @@
 <template lang="pug">
-  div.add-tsundoku-button-wrapper(:class="'is-' + size" @click="$emit('add-tsundoku')")
-    div.add-tsundoku-button
-      icon.icon-plus(name="plus" :width="iconSize" :height="iconSize" :color="iconColor")
-      span.text
-        | {{ $t('addTsundoku') }}
+  div.add-tsundoku-button-wrapper(
+    :class="`is-${size}`"
+    @click="$emit('add-tsundoku')"
+  )
+    transition(name="transition-button-content" mode="out-in")
+      div.add-tsundoku-button.not-added(v-if="!bookAdded" key="not-added")
+        icon.icon-plus(
+          name="plus"
+          :width="iconPlusSize"
+          :height="iconPlusSize"
+          :color="iconColor"
+        )
+        span.text
+          | {{ $t('addTsundoku') }}
+      div.add-tsundoku-button.added(v-else key="added")
+        icon.icon-check(
+          name="check"
+          :width="iconCheckSize"
+          :height="iconCheckSize"
+          :color="iconColor"
+        )
 </template>
 
 <script lang="ts">
@@ -20,13 +36,27 @@ export default class AddTsundokuButton extends Vue {
   @Prop({ type: String, default: 'large' })
   private readonly size!: ButtonSize
 
-  get iconSize() {
+  @Prop({ type: Boolean, default: false })
+  private readonly bookAdded!: boolean
+
+  get iconPlusSize() {
     switch (this.size) {
       case 'large':
         return 14
         break
       case 'small':
         return 8.2
+        break
+    }
+  }
+
+  get iconCheckSize() {
+    switch (this.size) {
+      case 'large':
+        return 20
+        break
+      case 'small':
+        return 14
         break
     }
   }
@@ -48,7 +78,7 @@ export default class AddTsundokuButton extends Vue {
   .add-tsundoku-button
     margin: 0 auto
     display: flex
-    .icon-plus
+    .icon-plus, .icon-check
       margin: auto 4px auto 0
     .text
       color: var(--tsundoku-red)
@@ -65,4 +95,12 @@ export default class AddTsundokuButton extends Vue {
     border-width: 4px
     .text
       font-size: 22px
+
+.transition-button-content
+  &-enter, &-leave-to
+    opacity: 0
+  &-leave-active
+    transition: opacity .1s
+  &-enter-active
+    transition: opacity .3s
 </style>

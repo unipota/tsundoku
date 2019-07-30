@@ -57,6 +57,15 @@ export default class AddBookCard extends Vue {
 
   addTsundoku() {
     console.log(this.book)
+    api
+      .addNewBook(this.book)
+      .then(res => {
+        console.log(res.data)
+        // TODO: 追加した本のカードは非表示にしたい
+      })
+      .catch(err => {
+        window.alert(this.$t('networkError') + '\n' + err.response)
+      })
   }
 }
 </script>

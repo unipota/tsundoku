@@ -11,7 +11,7 @@ const api = {
     return client.get('api/books')
   },
   addNewBook(book: BookRecord): Promise<AxiosResponse> {
-    return client.post('api/books', book)
+    return client.post('api/books', { data: book })
   },
   getBookDetail(id: number): Promise<AxiosResponse> {
     return client.get(`api/books/${id}`)

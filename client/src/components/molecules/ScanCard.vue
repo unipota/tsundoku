@@ -1,10 +1,12 @@
 <template lang="pug">
   .scan-card
-    book-cover(:book="book")
-    span
-      | {{ book.isbn }}
-    span
-      | {{ book.title }}
+    .cover
+      book-cover(:book="book")
+    div
+      .isbn
+        | {{ book.isbn }}
+      .title
+        | {{ book.title }}
 </template>
 
 <script lang="ts">
@@ -23,5 +25,14 @@ export default class ScanCard extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
+.scan-card
+  display: flex
+  align-items: center
+  height: 160px
+  background: white
+  border-radius: 4px
+  padding: 8px
+.cover
+  flex-shrink: 0
 </style>

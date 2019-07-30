@@ -6,7 +6,7 @@
         .barcode-reader-container
           add-book-scan-barcode-reader(:color="scannerColor")
     .info
-      vue-scroll-snap.cards(horizontal)
+      .cards
         .scan-card-wrap(v-for="book in scannedBooks" :key="book.isbn")
           scan-card(:book="book")
 </template>
@@ -16,7 +16,6 @@ import { Component, Vue } from 'vue-property-decorator'
 import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
 import ScanCard from '@/components/molecules/ScanCard.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
-import VueScrollSnap from 'vue-scroll-snap'
 
 import api from '@/store/general/api'
 
@@ -53,7 +52,6 @@ const stateColorMap: Record<ScanState, string> = {
 
 @Component({
   components: {
-    VueScrollSnap,
     ModalFrame,
     ScanCard,
     AddBookScanBarcodeReader
@@ -254,8 +252,8 @@ export default class AddBooksScan extends Vue {
 
 #crop-area
   position: relative
-  width: 320px
-  height: 180px
+  width: 480px
+  height: 270px
   max-width: 80vw
   max-height: 45vw
   border-radius: 8px
@@ -280,12 +278,17 @@ export default class AddBooksScan extends Vue {
   height: 160px
   width: 100%
   display: flex
-  flex-direction: row
+  flex-flow: row nowrap
+  overflow-y: hidden
   overflow-x: scroll
   align-items: flex-end
+  scroll-snap-points-x: repeat(100%);
+  scroll-snap-type: x mandatory
 
 .scan-card-wrap
   margin: 0 16px
+  scroll-snap-align: center
+  flex-shrink: 0
 
   &:first-child
     margin-left: 0

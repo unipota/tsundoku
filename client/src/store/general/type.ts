@@ -52,11 +52,10 @@ export type RM = {
 // ______________________________________________________
 //
 // actions
-// eslint-disable-next-line
 export interface A {
   searchBooksByISBN: { isbn: string }
+  searchBooks: { search: string }
 }
-// eslint-disable-next-line
-export interface RA {
-  searchBooksByISBN: A['searchBooksByISBN']
+export type RA = {
+  [K in keyof A]: A[K]
 }

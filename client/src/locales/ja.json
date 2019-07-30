@@ -37,6 +37,8 @@
   "currency": "￥",
 
   "addBooksSearchTitle": "ツンドクの追加",
+  "editYourself": "自分で入力する",
+  "addBooksSearchPlaceholder": "検索",
 
   "networkError": "ネットワークエラー"
 }

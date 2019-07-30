@@ -1,14 +1,25 @@
 <template lang="pug">
-  div.add-book-card(:class="`${$store.getters.viewTypeClass} ${type}`")
-    book-cover(:book="book")
-    div.info(:class="`${$store.getters.viewTypeClass}`")
-      book-major-info(:book="book" :size="bookMajorInfoSize")
-      div.price-buttons-wrapper(:class="`${$store.getters.viewTypeClass}`")
-        div.price(:class="`${$store.getters.viewTypeClass}`")
-          | {{ $t('currency') }}{{ book.price.toLocaleString() }}
-        div.buttons
-          component(:is="editButtonComponent" to="/add-books-edit")
-          add-tsundoku-button(size="small" @add-tsundoku="addTsundoku")
+  transition(name="transition-card")
+    div.add-book-card(
+      :class="`${$store.getters.viewTypeClass} ${type}`" 
+      v-if="showCard"
+    )
+      book-cover(:book="book")
+      div.info(:class="`${$store.getters.viewTypeClass}`")
+        book-major-info(:book="book" :size="bookMajorInfoSize")
+        div.price-buttons-wrapper(:class="`${$store.getters.viewTypeClass}`")
+          div.price(:class="`${$store.getters.viewTypeClass}`")
+            | {{ $t('currency') + book.price.toLocaleString() }}
+          div.buttons
+            component(
+              :is="editButtonComponent"
+              to="/add-books-edit"
+            )
+            add-tsundoku-button(
+              size="small"
+              :bookAdded="bookAdded"
+              @add-tsundoku="addTsundoku"
+            )
 </template>
 
 <script lang="ts">
@@ -45,6 +56,9 @@ export default class AddBookCard extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord
 
+  private bookAdded = false
+  private showCard = true
+
   get editButtonComponent() {
     return (
       'edit-button' + (this.$store.state.viewType === 'mobile' ? '' : '-large')
@@ -61,7 +75,10 @@ export default class AddBookCard extends Vue {
       .addNewBook(this.book)
       .then(res => {
         console.log(res.data)
-        // TODO: 追加した本のカードは非表示にしたい
+        this.bookAdded = true // → AddTsundokuButtonがチェックに変わる
+        window.setTimeout(() => {
+          this.showCard = false // → カードが消える
+        }, 800)
       })
       .catch(err => {
         window.alert(this.$t('networkError') + '\n' + err.response)
@@ -112,4 +129,15 @@ export default class AddBookCard extends Vue {
 .add-tsundoku-button-wrapper
   margin:
     left: 6px
+
+.transition-card
+  &-leave-to
+    opacity: 0
+    &.search
+      transform: translateX(100%) // 右に消える
+    &.scan
+      transform: translateY(100%) // 下に消える
+
+  &-leave-active
+    transition: transform 1s $easeInOutQuint, opacity .5s
 </style>

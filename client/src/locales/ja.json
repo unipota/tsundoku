@@ -30,5 +30,15 @@
   "caption": "キャプション",
   "publisher": "出版社",
   "readPages": "読了ページ数",
-  "memo": "メモ"
+  "memo": "メモ",
+
+  "edit": "編集",
+  "addTsundoku": "積む",
+  "currency": "￥",
+
+  "addBooksSearchTitle": "ツンドクの追加",
+  "editYourself": "自分で入力する",
+  "addBooksSearchPlaceholder": "検索",
+
+  "networkError": "ネットワークエラー"
 }

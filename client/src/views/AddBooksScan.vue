@@ -20,16 +20,17 @@ import VueScrollSnap from 'vue-scroll-snap'
 
 import api from '@/store/general/api'
 
-import { BrowserBarcodeReader, BarcodeFormat, DecodeHintType, Result } from '@zxing/library'
-import { BookRecord } from '../types/Book';
+import {
+  BrowserBarcodeReader,
+  BarcodeFormat,
+  DecodeHintType,
+  Result
+} from '@zxing/library'
+import { BookRecord } from '../types/Book'
 
 const codeReader = new BrowserBarcodeReader(
   500,
-  new Map([
-    [DecodeHintType.POSSIBLE_FORMATS, [
-      BarcodeFormat.EAN_13
-    ]],
-  ])
+  new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]])
 )
 
 const stateResetMs = 1000
@@ -44,11 +45,11 @@ interface VideoInputDevice {
 type ScanState = 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
 
 const stateColorMap: Record<ScanState, string> = {
-  'scanning': 'white',
-  'incorrect': 'var(--tsundoku-red)',
-  'scanned': 'var(--succeed-blue)',
-  'known': 'rgba(255, 255, 255, 0.5)',
-  'noresult': 'rgba(255, 255, 255, 0.5)',
+  scanning: 'white',
+  incorrect: 'var(--tsundoku-red)',
+  scanned: 'var(--succeed-blue)',
+  known: 'rgba(255, 255, 255, 0.5)',
+  noresult: 'rgba(255, 255, 255, 0.5)'
 }
 
 @Component({
@@ -80,8 +81,7 @@ export default class AddBooksScan extends Vue {
       const videoInputDevices = await codeReader.listVideoInputDevices()
       console.log(videoInputDevices)
       this.videoInputDevices = videoInputDevices
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
     }
 
@@ -90,16 +90,14 @@ export default class AddBooksScan extends Vue {
       return
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia(
-      {
-        video: {
-          facingMode: {
-            ideal: 'environment'
-          }
-        },
-        audio: false
-      }
-    )
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: {
+          ideal: 'environment'
+        }
+      },
+      audio: false
+    })
     video.srcObject = stream
 
     await this.$nextTick()
@@ -132,8 +130,7 @@ export default class AddBooksScan extends Vue {
         const sy =
           video.videoHeight *
           ((realHeight - anyCropArea.clientHeight) / 2 / realHeight)
-        const sh =
-          video.videoHeight * (anyCropArea.offsetHeight / realHeight)
+        const sh = video.videoHeight * (anyCropArea.offsetHeight / realHeight)
         ctx!!.drawImage(
           video,
           sx,
@@ -149,16 +146,14 @@ export default class AddBooksScan extends Vue {
         const sy =
           video.videoHeight * (anyCropArea.offsetTop / video.clientHeight)
         const sh =
-          video.videoHeight *
-          (anyCropArea.clientHeight / video.clientHeight)
+          video.videoHeight * (anyCropArea.clientHeight / video.clientHeight)
 
         const realWidth =
           video.clientHeight * (video.videoWidth / video.videoHeight)
         const sx =
           video.videoWidth *
           ((realWidth - anyCropArea.clientWidth) / 2 / realWidth)
-        const sw =
-          video.videoWidth * (anyCropArea.offsetWidth / realWidth)
+        const sw = video.videoWidth * (anyCropArea.offsetWidth / realWidth)
         ctx!!.drawImage(
           video,
           sx,
@@ -197,7 +192,10 @@ export default class AddBooksScan extends Vue {
       if (this.stateResetTimeoutId !== 0) {
         window.clearTimeout(this.stateResetTimeoutId)
       }
-      this.stateResetTimeoutId = window.setTimeout(() => this.state = 'scanning', stateResetMs)
+      this.stateResetTimeoutId = window.setTimeout(
+        () => (this.state = 'scanning'),
+        stateResetMs
+      )
     }
   }
 
@@ -293,7 +291,6 @@ export default class AddBooksScan extends Vue {
   &:last-child
     margin-right: 0
     padding-right: 48px
-
 </style>
 
 <style lang="sass">

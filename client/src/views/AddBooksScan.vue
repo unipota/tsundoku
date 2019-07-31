@@ -9,11 +9,20 @@
       carousel.cards(
         :paginationEnabled="false"
         :perPage="1"
-        :scrollPerPage="1"
         :class="$store.getters.viewTypeClass"
       )
-        slide.card-wrap(v-for="book in scannedBooks" :key="book.isbn")
-          add-book-card.card(:book="book" type="scan")
+        slide.card-wrap(
+          v-for="( book, i ) in scannedBooks"
+          :style="getCardWrapStyle(i)"
+          :class="getCardWrapClass(i)"
+          :key="book.isbn"
+        )
+          add-book-card.card(
+            :book="book"
+            type="scan"
+            @to-remove="handleCardToRemove(i)"
+            @remove="handleCardRemove(i)"
+          )
 </template>
 
 <script lang="ts">
@@ -76,6 +85,9 @@ export default class AddBooksScan extends Vue {
   scannedBooks: BookRecord[] = []
 
   state: ScanState = 'scanning'
+
+  toRemoveIndex = -1
+  cardShiftWidth = 0
 
   async mounted() {
     ;(window as any).addByIsbn = (isbn: string) => this.barcodeScanned({ getText() { return isbn } } as any)
@@ -233,6 +245,37 @@ export default class AddBooksScan extends Vue {
     }
   }
 
+  handleCardToRemove(index: number) {
+    this.toRemoveIndex = index
+    const card = document.querySelector('.card-wrap')
+    if (card) {
+      this.cardShiftWidth = card.clientWidth
+    }
+  }
+
+  async handleCardRemove(index: number) {
+    this.toRemoveIndex = -1
+    this.cardShiftWidth = 0
+    await this.$nextTick()
+    this.scannedBooks.splice(index, 1)
+  }
+
+  getCardWrapStyle(index: number) {
+    if (this.toRemoveIndex < 0 || index <= this.toRemoveIndex) {
+      return {}
+    }
+    return {
+      transform: `translateX(-${this.cardShiftWidth}px)`,
+    }
+  }
+
+  getCardWrapClass(index: number) {
+    if (this.toRemoveIndex < 0 || index <= this.toRemoveIndex) {
+      return ''
+    }
+    return 'to-transition'
+  }
+
   get scannerColor() {
     return stateColorMap[this.state]
   }
@@ -329,6 +372,9 @@ $carousel-margin-pc: 40px
       padding: 0 $card-small-margin
 
   border-radius: 8px
+
+  &.to-transition
+    transition: transform 1s $easeInOutQuint
 
 </style>
 

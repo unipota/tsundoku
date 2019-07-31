@@ -61,6 +61,13 @@ export default class AddBookCard extends Vue {
   private bookAdded = false
   private showCard = true
 
+  mounted() {
+    this.showCard = this.type == 'search'
+    if (this.type == 'scan') {
+      this.$nextTick(() => this.showCard = true)
+    }
+  }
+
   get editButtonComponent() {
     return (
       'edit-button' + (this.$store.state.viewType === 'mobile' ? '' : '-large')
@@ -75,20 +82,24 @@ export default class AddBookCard extends Vue {
     return this.$route.matched[0].path
   }
 
-  addTsundoku() {
+  async addTsundoku() {
     console.log(this.book)
-    api
-      .addNewBook(this.book)
-      .then(res => {
-        console.log(res.data)
-        this.bookAdded = true // → AddTsundokuButtonがチェックに変わる
-        window.setTimeout(() => {
-          this.showCard = false // → カードが消える
-        }, 800)
-      })
-      .catch(err => {
-        window.alert(this.$t('networkError') + '\n' + err.response)
-      })
+    try {
+      const res = await api.addNewBook(this.book)
+      console.log(res.data)
+
+      this.bookAdded = true // → AddTsundokuButtonがチェックに変わる
+
+      await new Promise(r => window.setTimeout(r, 800))
+      this.showCard = false // → カードが消える
+      this.$emit('to-remove')
+
+      await new Promise(r => window.setTimeout(r, 1000))
+      this.$emit('remove')
+    }
+    catch (err) {
+      window.alert(this.$t('networkError') + '\n' + err.response)
+    }
   }
 }
 </script>
@@ -145,6 +156,16 @@ export default class AddBookCard extends Vue {
         left: 6px
 
 .transition-card
+  &-enter.scan
+    transform: translateY(100%) // scanCardは下から生える
+    opacity: 0
+
+  &-enter-to.scan
+    opacity: 1
+
+  &-enter-active
+    transition: transform 1s $easeInOutQuint, opacity .5s
+
   &-leave-to
     opacity: 0
     &.search

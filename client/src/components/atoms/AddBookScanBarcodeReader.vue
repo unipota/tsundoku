@@ -33,6 +33,7 @@
       />
       <rect x="12" y="46" width="165" height="5" rx="2.5" :fill="color" />
     </svg>
+    </div>
   </div>
 </template>
 
@@ -46,7 +47,19 @@ export default class AddBooksScanBarcodeReader extends Vue {
 </script>
 
 <style lang="sass">
+.barcode-reader-wrap
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  height: 100%
+
 .barcode-reader
   width: 100%
   height: 100%
+  max-width: 320px
+  max-height: 180px
+  display: flex
+  align-items: center
+  justiry-content: center
 </style>

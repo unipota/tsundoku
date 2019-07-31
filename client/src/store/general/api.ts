@@ -1,18 +1,17 @@
 import axios, { AxiosResponse } from 'axios'
 import { BookRecord } from '@/types/Book'
-import { createApiMock } from './createApiMock'
+// import { createApiMock } from './createApiMock'
 
 const isDev = process.env['NODE_ENV'] === 'development'
 
 const client = axios.create({
-  baseURL: 'https://test.tsun-doku.app/',
+  baseURL: isDev ? '/' : 'https://test.tsun-doku.app/',
   headers: { 'Access-Control-Allow-Origin': '*' }
 })
 
-if (isDev) {
-  createApiMock(client)
-}
-
+// if (isDev) {
+//   createApiMock(client)
+// }
 
 const api = {
   getMyBooks(): Promise<AxiosResponse> {

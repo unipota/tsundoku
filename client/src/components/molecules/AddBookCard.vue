@@ -105,7 +105,7 @@ export default class AddBookCard extends Vue {
     width: 100%
     max-width: 300px
   &.is-desktop
-    width: 600px
+    width: 500px
 
 .book-cover
   min-width: 96px

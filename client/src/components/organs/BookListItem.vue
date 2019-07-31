@@ -1,7 +1,7 @@
 <template lang="pug">
   .book-list-item
     router-link.book-list-item__cover(:to="`${$route.matched[0].path}/book/${book.id}`")
-      book-cover(:book="book")
+      book-cover(:url="book.coverImageUrl" :hasShadow="true")
     .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
       .book-list-item__detail
         book-major-info(:book="book")

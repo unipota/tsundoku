@@ -1,32 +1,42 @@
 <template lang="pug">
-  div.book-cover
-    v-lazy-image(v-if="book.coverImageUrl" :src="book.coverImageUrl").cover-image
+  div.book-cover(:class="{'has-shadow': hasShadow}")
+    v-lazy-image.cover-image(
+      v-if="url.length > 0"
+      :src="url"
+    )
+    dummy-book-cover(v-else)
 </template>
 
 <script lang="ts">
 import VLazyImage from 'v-lazy-image'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { BookRecord } from '../../types/Book'
+
+import DummyBookCover from '../assets/DummyBookCover.vue'
 
 @Component({
   components: {
-    VLazyImage
+    VLazyImage,
+    DummyBookCover
   }
 })
 export default class BookCover extends Vue {
-  @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  @Prop({ type: String, default: '' })
+  private readonly url!: string
+
+  @Prop({ type: Boolean, default: false })
+  private readonly hasShadow!: boolean
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .book-cover
   width: 100px
   height: 140px
   border-radius: 8px
-  box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.2)
   background-color: var(--text-white)
   overflow: hidden
+  &.has-shadow
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
 
 .cover-image
   border-radius: 8px //for safari

@@ -10,6 +10,7 @@
         :paginationEnabled="false"
         :perPage="1"
         :scrollPerPage="1"
+        :class="$store.getters.viewTypeClass"
       )
         slide.card-wrap(v-for="book in scannedBooks" :key="book.isbn")
           add-book-card.card(:book="book" type="scan")
@@ -290,19 +291,27 @@ export default class AddBooksScan extends Vue {
 $card-height: 200px
 $card-margin: 8px
 $card-small-margin: 4px
-$carousel-margin: 24px
+$carousel-margin-sp: 24px
+$carousel-margin-pc: 40px
 
 .cards
   position: absolute
   bottom: 0
   height: $card-height
 
-  width: calc(100% - #{$carousel-margin * 2})
-  margin: 0 $carousel-margin
+  // カルーセルを幅を狭めて表示し、overflow: visibleをカルーセルに指定して横のカードを見せる
+  &.is-desktop
+    width: calc(100% - #{$carousel-margin-pc * 2})
+    margin: 0 $carousel-margin-pc
 
-  @media (max-width: #{300px + $carousel-margin * 2})
-    width: 300px
-    margin: 0 calc(50% - 150px)
+  &.is-mobile
+    width: calc(100% - #{$carousel-margin-sp * 2})
+    margin: 0 $carousel-margin-sp
+
+    @media (max-width: #{300px + $carousel-margin-sp * 2})
+      // 小さいデバイスの場合はカルーセルを300pxで表示し、マージンを調整
+      width: 300px
+      margin: 0 calc(50% - 150px)
 
   overflow: visible
 
@@ -314,8 +323,10 @@ $carousel-margin: 24px
   height: $card-height
 
   padding: 0 $card-margin
-  @media (max-width: #{300px + $carousel-margin * 2})
-    padding: 0 $card-small-margin
+
+  &.is-mobile
+    @media (max-width: #{300px + $carousel-margin-sp * 2})
+      padding: 0 $card-small-margin
 
   border-radius: 8px
 

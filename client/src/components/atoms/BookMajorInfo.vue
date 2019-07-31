@@ -26,6 +26,9 @@ export default class BookMajorInfo extends Vue {
 </script>
 
 <style lang="sass">
+.book-major-info
+  width: 100%
+  overflow: hidden
 .book-list-item__title
   font:
     size: 1.2rem

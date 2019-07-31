@@ -31,8 +31,8 @@ export default class ModalFrame extends Vue {
   @Prop({ type: Boolean, default: false })
   private noPadding!: boolean
 
-  @Prop({ type: String, required: false })
-  private title: string
+  @Prop({ type: String, required: false, default: '' })
+  private title!: string
 
   get modalClass() {
     return {

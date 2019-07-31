@@ -10,6 +10,7 @@
         :paginationEnabled="false"
         :perPage="1"
         :class="$store.getters.viewTypeClass"
+        @page-change="handleCarouselPageChange"
       )
         slide.card-wrap(
           v-for="( book, i ) in scannedBooks"
@@ -20,6 +21,8 @@
           add-book-card.card(
             :book="book"
             type="scan"
+            @appear-start="handleAppearStart"
+            @appear="handleAppear"
             @to-remove="handleCardToRemove(i)"
             @remove="handleCardRemove(i)"
           )
@@ -86,7 +89,12 @@ export default class AddBooksScan extends Vue {
 
   state: ScanState = 'scanning'
 
+  toAddIndex = 0
+  isCardToAppear = false
+  isCardAppearing = false
+
   toRemoveIndex = -1
+
   cardShiftWidth = 0
 
   async mounted() {
@@ -219,6 +227,31 @@ export default class AddBooksScan extends Vue {
     }
   }
 
+  syncronizeCardWidth() {
+    const card = document.querySelector('.cards')
+    if (card) {
+      this.cardShiftWidth = card.clientWidth
+    }
+  }
+
+  async addCard(book: BookRecord) {
+    // 追加直後は追加位置以降のカードを左にずらす
+    this.syncronizeCardWidth()
+    this.isCardToAppear = true
+
+    this.scannedBooks.splice(this.toAddIndex, 0, book)
+    this.$set(this.scannedBooksMap, book.isbn, book)
+    this.isCardToAppear = true
+
+    await this.$nextTick()
+    this.isCardAppearing = true
+    this.isCardToAppear = false
+  }
+
+  deleteCardAt(index: number) {
+    this.scannedBooks.splice(index, 1)
+  }
+
   async barcodeScanned(scanResult: Result) {
     const isbn = scanResult.getText()
     const prefix = isbn.substring(0, 3)
@@ -240,40 +273,59 @@ export default class AddBooksScan extends Vue {
       return
     }
     if (!(isbn in this.scannedBooksMap)) {
-      this.scannedBooks.push(searchResult.data[0])
-      this.$set(this.scannedBooksMap, isbn, searchResult.data[0])
+      this.addCard(searchResult.data[0])
     }
   }
 
+  handleAppearStart() {
+    this.isCardAppearing = true
+  }
+
+  handleAppear() {
+    this.isCardAppearing = false
+  }
+
   handleCardToRemove(index: number) {
+    this.syncronizeCardWidth()
     this.toRemoveIndex = index
-    const card = document.querySelector('.card-wrap')
-    if (card) {
-      this.cardShiftWidth = card.clientWidth
-    }
   }
 
   async handleCardRemove(index: number) {
     this.toRemoveIndex = -1
     this.cardShiftWidth = 0
     await this.$nextTick()
-    this.scannedBooks.splice(index, 1)
+    this.deleteCardAt(index)
+  }
+
+  handleCarouselPageChange(page: number) {
+    console.log(page)
+    this.toAddIndex = page
   }
 
   getCardWrapStyle(index: number) {
-    if (this.toRemoveIndex < 0 || index <= this.toRemoveIndex) {
-      return {}
+    if (this.toRemoveIndex >= 0 && index > this.toRemoveIndex) {
+      // カード削除中は削除位置以降を左にずらす
+      return {
+        transform: `translateX(-${this.cardShiftWidth}px)`,
+      }
     }
-    return {
-      transform: `translateX(-${this.cardShiftWidth}px)`,
+    if (this.isCardToAppear && index > this.toAddIndex) {
+      // カード追加直後は追加位置以降を左にずらす
+      return {
+        transform: `translateX(-${this.cardShiftWidth}px)`,
+      }
     }
+    return {}
   }
 
   getCardWrapClass(index: number) {
-    if (this.toRemoveIndex < 0 || index <= this.toRemoveIndex) {
-      return ''
+    if (this.toRemoveIndex >= 0 && index > this.toRemoveIndex) {
+      return 'to-transition'
     }
-    return 'to-transition'
+    if (this.isCardAppearing && index > this.toAddIndex) {
+      return 'to-transition'
+    }
+      return ''
   }
 
   get scannerColor() {

@@ -3,7 +3,7 @@
     .brand
       icon(name="logo")
     .tab-wrap
-      desktop-tab(:selected-tab="selectedPath")
+      desktop-tab(:selected-tab="selectedPath" :price="price")
     .button-wrap
       router-link(:to="`${firstRouteName}/add-books-search`")
         desktop-nav-button(:text="$t('add_by_searching')")
@@ -36,6 +36,13 @@ export default class DesktopNav extends Vue {
     return this.firstRouteName === ''
       ? 'tsundoku'
       : this.firstRouteName.slice(1)
+  }
+  get price(): number {
+    return this.selectedPath === 'tsundoku'
+      ? this.$store.getters.tsundokuPrice
+      : this.selectedPath === 'kidoku'
+      ? this.$store.getters.kidokuPrice
+      : 0
   }
 }
 </script>

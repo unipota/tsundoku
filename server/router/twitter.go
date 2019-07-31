@@ -29,6 +29,7 @@ type Account struct {
 var (
 	TEMP_CREDENTIAL_KEY     = os.Getenv("TEMP_CREDENTIAL_KEY")
 	TWITTER_CONSUMER_SECRET = os.Getenv("TWITTER_CONSUMER_SECRET")
+	CALLBACK_URL            = os.Getenv("CALLBACK_URL")
 )
 
 type twitterCallbackRequest struct {
@@ -38,7 +39,10 @@ type twitterCallbackRequest struct {
 
 func GetTwitterAuthHandler(c echo.Context) error {
 	config := getTwitterConnect()
-	rt, err := config.RequestTemporaryCredentials(nil, "http://localhost:3000/auth/twitter/callback", nil)
+	if CALLBACK_URL == "" {
+		CALLBACK_URL = "http://127.0.0.1/auth/twitter/callback"
+	}
+	rt, err := config.RequestTemporaryCredentials(nil, CALLBACK_URL, nil)
 	if err != nil {
 		panic(err)
 	}

@@ -4,6 +4,8 @@
       router-link.tab.tsundoku(
         :class="{'selected': selectedPath === 'tsundoku'}"
         :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
+        :style="{width: width['tsundoku']}"
+        ref="tsundoku"
       )
         span.icon.tsundoku
           icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="20" :width="30")
@@ -13,6 +15,8 @@
       router-link.tab.kidoku(
         :class="{'selected': selectedPath === 'kidoku'}"
         :to="{ name: tabs.kidoku.to, hash: $route.hash}"
+        :style="{width: width['kidoku']}"
+        ref="kidoku"
       )
         span.icon.tsundoku
           icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="20" :width="30").icon.kidoku
@@ -22,6 +26,8 @@
       router-link.tab.toukei(
         :class="{'selected': selectedPath === 'toukei'}"
         :to="{ name: tabs.toukei.to }"
+        :style="{width: width['toukei']}"
+        ref="toukei"
       )
         span.icon.toukei
           icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="20" :width="30").icon.toukei
@@ -30,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
 
@@ -61,6 +67,20 @@ export default class MobileTabBar extends Vue {
       to: 'toukei'
     }
   }
+
+  private width = {
+    tsundoku: 0,
+    kidoku: 0,
+    toukei: 0
+  }
+
+  @Watch('selectedPath')
+  onSelectedPathChanged(val: string) {
+    switch(val) {
+      case 'tsundoku':
+        this.$refs[]
+    }
+  }
 }
 </script>
 
@@ -68,7 +88,7 @@ export default class MobileTabBar extends Vue {
 .wrapper
   width: 100%
   background: rgba(255,255,255,0.6)
-  backdrop-filter: blur(2px)
+  backdrop-filter: blur(4px)
   border:
     radius: 32px 32px 0 0
 
@@ -89,6 +109,9 @@ export default class MobileTabBar extends Vue {
       padding:
         top: 12px
         bottom: 12px
+      transition: background-color .3s
+      background:
+        color: transparent
 
       &:not(:last-child)
         margin-right: auto

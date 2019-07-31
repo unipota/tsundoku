@@ -24,16 +24,17 @@ import { Carousel, Slide } from 'vue-carousel'
 
 import api from '@/store/general/api'
 
-import { BrowserBarcodeReader, BarcodeFormat, DecodeHintType, Result } from '@zxing/library'
-import { BookRecord } from '../types/Book';
+import {
+  BrowserBarcodeReader,
+  BarcodeFormat,
+  DecodeHintType,
+  Result
+} from '@zxing/library'
+import { BookRecord } from '../types/Book'
 
 const codeReader = new BrowserBarcodeReader(
   500,
-  new Map([
-    [DecodeHintType.POSSIBLE_FORMATS, [
-      BarcodeFormat.EAN_13
-    ]],
-  ])
+  new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]])
 )
 
 const stateResetMs = 1000
@@ -88,8 +89,7 @@ export default class AddBooksScan extends Vue {
       const videoInputDevices = await codeReader.listVideoInputDevices()
       console.log(videoInputDevices)
       this.videoInputDevices = videoInputDevices
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
       this.setScanState('nodevice')
     }
@@ -99,16 +99,14 @@ export default class AddBooksScan extends Vue {
       return
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia(
-      {
-        video: {
-          facingMode: {
-            ideal: 'environment'
-          }
-        },
-        audio: false
-      }
-    )
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: {
+          ideal: 'environment'
+        }
+      },
+      audio: false
+    })
     video.srcObject = stream
 
     await this.$nextTick()
@@ -149,8 +147,7 @@ export default class AddBooksScan extends Vue {
         const sy =
           video.videoHeight * (anyCropArea.offsetTop / video.clientHeight)
         const sh =
-          video.videoHeight *
-          (anyCropArea.clientHeight / video.clientHeight)
+          video.videoHeight * (anyCropArea.clientHeight / video.clientHeight)
 
         const realWidth =
           video.clientHeight * (video.videoWidth / video.videoHeight)
@@ -202,7 +199,10 @@ export default class AddBooksScan extends Vue {
       if (this.stateResetTimeoutId !== 0) {
         window.clearTimeout(this.stateResetTimeoutId)
       }
-      this.stateResetTimeoutId = window.setTimeout(() => this.state = 'scanning', stateResetMs)
+      this.stateResetTimeoutId = window.setTimeout(
+        () => (this.state = 'scanning'),
+        stateResetMs
+      )
     }
   }
 

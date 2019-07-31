@@ -9,6 +9,8 @@ import Login from './views/Login.vue'
 import Toukei from './views/Toukei.vue'
 import Tsundoku from './views/Tsundoku.vue'
 import UserDetails from './views/UserDetails.vue'
+import Privacy from './views/Privacy.vue'
+import Term from './views/Term.vue'
 import { VueConstructor } from 'vue'
 import { RouteConfig } from 'vue-router'
 
@@ -24,6 +26,8 @@ export type ViewNames =
   | 'bookDetails'
   | 'login'
   | 'user'
+  | 'privacy'
+  | 'term'
   | 'notfound'
 
 type ViewNamesToComponentMap = {
@@ -73,6 +77,8 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
   bookDetails: BookDetails,
   login: Login,
   user: UserDetails,
+  privacy: Privacy,
+  term: Term,
   notfound: NotFound
 }
 

@@ -81,7 +81,7 @@ export default class AddBooksSearch extends Vue {
   }
 
   @Watch('searchQuery')
-  resetHasSubmittedSearchQuery(val) {
+  resetHasSubmittedSearchQuery(val: string) {
     // searchQuery がリセットされるたびに hasSubmittedSearchQuery もリセットする
     if (val.length === 0) {
       this.hasSubmittedSearchQuery = false

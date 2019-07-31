@@ -268,11 +268,17 @@ export default class AddBooksScan extends Vue {
   border-radius: 8px
 
 .barcode-reader-container
+  display: flex
+  align-items: center
+  justify-content: center
+
   position: absolute
   top: 0
   left: 0
+
   width: 100%
   height: 100%
+
   padding: 16px
 
 .info

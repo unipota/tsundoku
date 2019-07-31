@@ -1,7 +1,7 @@
 <template lang="pug">
   transition(name="transition-card")
     div.add-book-card(
-      :class="`${$store.getters.viewTypeClass} ${type}`" 
+      :class="`${$store.getters.viewTypeClass} ${type}`"
       v-if="showCard"
     )
 
@@ -98,10 +98,14 @@ export default class AddBookCard extends Vue {
   display: flex
   padding: 10px
   &.scan
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.3)
+    filter: drop-shadow2px 4px 4px rgba(0, 0, 0, 0.3)
     border-radius: 8px
-    &.is-mobile
-      width: 300px
+    background: white
+  &.is-mobile
+    width: 100%
+    max-width: 300px
+  &.is-desktop
+    width: 600px
 
 .book-cover
   min-width: 96px

@@ -1,21 +1,26 @@
 <template lang="pug">
-  modal-frame(close-color="white" no-padding)
+  modal-frame.add-books-scan(close-color="white" no-padding)
     video#video(autoplay muted playsinline)
     #overlay
       #crop-area
         .barcode-reader-container
           add-book-scan-barcode-reader(:color="scannerColor")
     .info
-      .cards
-        .scan-card-wrap(v-for="book in scannedBooks" :key="book.isbn")
-          scan-card(:book="book")
+      carousel.cards(
+        :paginationEnabled="false"
+        :perPage="1"
+        :scrollPerPage="1"
+      )
+        slide.card-wrap(v-for="book in scannedBooks" :key="book.isbn")
+          add-book-card.card(:book="book" type="scan")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
-import ScanCard from '@/components/molecules/ScanCard.vue'
+import AddBookCard from '@/components/molecules/AddBookCard.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
+import { Carousel, Slide } from 'vue-carousel'
 
 import api from '@/store/general/api'
 
@@ -40,20 +45,23 @@ interface VideoInputDevice {
   label: string
 }
 
-type ScanState = 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
+type ScanState = 'nodevice' | 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
 
 const stateColorMap: Record<ScanState, string> = {
+  'nodevice': 'rgba(255, 255, 255, 0.5)',
   'scanning': 'white',
   'incorrect': 'var(--tsundoku-red)',
   'scanned': 'var(--succeed-blue)',
   'known': 'rgba(255, 255, 255, 0.5)',
-  'noresult': 'rgba(255, 255, 255, 0.5)',
+  'noresult': 'var(--tsundoku-red)',
 }
 
 @Component({
   components: {
+    Carousel,
+    Slide,
     ModalFrame,
-    ScanCard,
+    AddBookCard,
     AddBookScanBarcodeReader
   }
 })
@@ -68,9 +76,11 @@ export default class AddBooksScan extends Vue {
   state: ScanState = 'scanning'
 
   async mounted() {
+    ;(window as any).addByIsbn = (isbn: string) => this.barcodeScanned({ getText() { return isbn } } as any)
     console.log(codeReader)
     if (!codeReader.isMediaDevicesSuported) {
       alert('getUserMedia not supported.')
+      this.setScanState('nodevice')
       return
     }
 
@@ -81,6 +91,7 @@ export default class AddBooksScan extends Vue {
     }
     catch (err) {
       console.error(err)
+      this.setScanState('nodevice')
     }
 
     const video = this.$el.querySelector('video')
@@ -115,7 +126,7 @@ export default class AddBooksScan extends Vue {
 
     const ctx = canvas.getContext('2d')
 
-    const draw = () => {
+    const getDrawArea = () => {
       if (
         video.videoWidth / video.videoHeight <
         video.clientWidth / video.clientHeight
@@ -132,17 +143,8 @@ export default class AddBooksScan extends Vue {
           ((realHeight - anyCropArea.clientHeight) / 2 / realHeight)
         const sh =
           video.videoHeight * (anyCropArea.offsetHeight / realHeight)
-        ctx!!.drawImage(
-          video,
-          sx,
-          sy,
-          sw,
-          sh,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        )
+
+        return [sx, sy, sw, sh]
       } else {
         const sy =
           video.videoHeight * (anyCropArea.offsetTop / video.clientHeight)
@@ -157,28 +159,33 @@ export default class AddBooksScan extends Vue {
           ((realWidth - anyCropArea.clientWidth) / 2 / realWidth)
         const sw =
           video.videoWidth * (anyCropArea.offsetWidth / realWidth)
-        ctx!!.drawImage(
-          video,
-          sx,
-          sy,
-          sw,
-          sh,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        )
+
+        return [sx, sy, sw, sh]
       }
+    }
+
+    const draw = () => {
+      const [sx, sy, sw, sh] = getDrawArea()
+      ctx!!.drawImage(
+        video,
+        sx,
+        sy,
+        sw,
+        sh,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      )
       requestAnimationFrame(draw)
     }
 
-    this.captureIntervalID = window.setInterval(() => {
-      codeReader
-        .decodeFromImageUrl(canvas.toDataURL())
-        .then(result => {
-          this.barcodeScanned(result)
-        })
-        .catch(e => {})
+    this.captureIntervalID = window.setInterval(async () => {
+      try {
+        const scanResult = await codeReader.decodeFromImageUrl(canvas.toDataURL())
+        this.barcodeScanned(scanResult)
+      }
+      catch (_) {}
     }, 500)
     draw()
   }
@@ -191,7 +198,7 @@ export default class AddBooksScan extends Vue {
 
   setScanState(state: ScanState) {
     this.state = state
-    if (state !== 'scanning') {
+    if (state !== 'scanning' && state !== 'nodevice') {
       if (this.stateResetTimeoutId !== 0) {
         window.clearTimeout(this.stateResetTimeoutId)
       }
@@ -219,8 +226,10 @@ export default class AddBooksScan extends Vue {
       this.setScanState('noresult')
       return
     }
-    this.scannedBooks.push(searchResult.data[0])
-    this.$set(this.scannedBooksMap, isbn, searchResult.data[0])
+    if (!(isbn in this.scannedBooksMap)) {
+      this.scannedBooks.push(searchResult.data[0])
+      this.$set(this.scannedBooksMap, isbn, searchResult.data[0])
+    }
   }
 
   get scannerColor() {
@@ -272,34 +281,47 @@ export default class AddBooksScan extends Vue {
   height: 100%
   width: 100%
 
+$card-height: 200px
+$card-margin: 8px
+$card-small-margin: 4px
+$carousel-margin: 24px
+
 .cards
   position: absolute
   bottom: 0
-  height: 160px
-  width: 100%
+  height: $card-height
+
+  width: calc(100% - #{$carousel-margin * 2})
+  margin: 0 $carousel-margin
+
+  @media (max-width: #{300px + $carousel-margin * 2})
+    width: 300px
+    margin: 0 calc(50% - 150px)
+
+  overflow: visible
+
+.card-wrap
   display: flex
-  flex-flow: row nowrap
-  overflow-y: hidden
-  overflow-x: scroll
-  align-items: flex-end
-  scroll-snap-points-x: repeat(100%);
-  scroll-snap-type: x mandatory
+  align-items: center
+  justify-content: center
 
-.scan-card-wrap
-  margin: 0 16px
-  scroll-snap-align: center
-  flex-shrink: 0
+  height: $card-height
 
-  &:first-child
-    margin-left: 0
-    padding-left: 48px
-  &:last-child
-    margin-right: 0
-    padding-right: 48px
+  padding: 0 $card-margin
+  @media (max-width: #{300px + $carousel-margin * 2})
+    padding: 0 $card-small-margin
+
+  border-radius: 8px
 
 </style>
 
 <style lang="sass">
 .barcode-reader-canvas
   border-radius: 16px
+
+.add-books-scan
+  .VueCarousel-wrapper
+    overflow: visible!important
+  .VueCarousel-inner
+    overflow: visible!important
 </style>

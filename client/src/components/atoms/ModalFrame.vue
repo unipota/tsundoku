@@ -32,7 +32,7 @@ export default class ModalFrame extends Vue {
   private noPadding!: boolean
 
   @Prop({ type: String, required: false })
-  private title: string
+  private title!: string
 
   get modalClass() {
     return {
@@ -52,7 +52,7 @@ export default class ModalFrame extends Vue {
   &.is-mobile
     width: 100%
   &.is-desktop
-    width: 526px
+    width: 600px
 
 .modal-frame-wrapper
   position: absolute

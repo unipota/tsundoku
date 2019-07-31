@@ -61,10 +61,16 @@ export default class AddBookCard extends Vue {
   private bookAdded = false
   private showCard = true
 
-  mounted() {
+  async mounted() {
     this.showCard = this.type == 'search'
     if (this.type == 'scan') {
-      this.$nextTick(() => this.showCard = true)
+      this.$emit('to-appear')
+
+      await this.$nextTick()
+      this.showCard = true
+
+      await new Promise(r => window.setTimeout(r, 1000))
+      this.$emit('appear')
     }
   }
 

@@ -13,13 +13,11 @@
           :color="isActive(tab) ? undefined : tabs[tab].inactiveColor"
           :height="48"
         )
-      div.label.label-with-price(v-if="tab !== 'toukei' && isActive(tab)")
-        span.item-label
+      transition-group.label.label-with-price(name="transition-label" mode="out-in" tag="div")
+        span.item-label(key="item-label" :class="{'with-price': tab !== 'toukei' && isActive(tab)}")
           | {{ $t(tab) }}
-        span.price-label
-          | {{ price }}
-      span.label(v-else)
-        | {{ $t(tab) }}
+        span.price-label(v-if="tab !== 'toukei' && isActive(tab)" key="item-price")
+          | {{ price.toLocaleString() }}
 </template>
 
 <script lang="ts">
@@ -103,11 +101,31 @@ export default class DesktopTab extends Vue {
   flex-direction: column
   align-items: flex-start
   .item-label
-    font-size: 0.8rem
+    transition: transform .3s $easeInOutQuint, opacity .3s, font-size .2s
+    &.with-price
+      font-size: 0.8rem
   .price-label
     font-size: 1.2rem
   .price-label::before
     content: '¥'
     display: inline-block
     margin-right: 0.25rem
+
+.transition-label
+  &-enter
+    transform: translateY(24px)
+    opacity: 0
+
+  &-leave-to
+    transform: translateY(24px)
+    opacity: 0
+
+  &-enter-active, &-leave-active
+    transition: transform .3s $easeInOutQuint, opacity .3s
+
+  &-leave-active
+    position: absolute
+
+  &-move
+    transition: transform .3s
 </style>

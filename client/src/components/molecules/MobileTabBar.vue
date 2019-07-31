@@ -1,32 +1,20 @@
 <template lang="pug">
-  div.wrapper
-    div.tab-bar
-      router-link.tab.tsundoku(
-        :class="{'selected': selectedPath === 'tsundoku'}"
-        :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
+  .wrapper
+    .tab-bar
+      router-link.tab(
+        v-for="tab in tabs"
+        :key="tab.name"
+        :class="{'selected': selectedPath === tab.name, [tab.name]: true}"
+        :to="{ name: tab.to, hash: $route.hash}"
       )
-        span.icon.tsundoku
-          icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="20" :width="30")
-        span.label(v-if="selectedPath === 'tsundoku'")
-          | {{ $t('tsundoku') }}
-
-      router-link.tab.kidoku(
-        :class="{'selected': selectedPath === 'kidoku'}"
-        :to="{ name: tabs.kidoku.to, hash: $route.hash}"
-      )
-        span.icon.tsundoku
-          icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="20" :width="30").icon.kidoku
-        span.label(v-if="selectedPath === 'kidoku'")
-          | {{ $t('kidoku') }}
-
-      router-link.tab.toukei(
-        :class="{'selected': selectedPath === 'toukei'}"
-        :to="{ name: tabs.toukei.to }"
-      )
-        span.icon.toukei
-          icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="20" :width="30").icon.toukei
-        span.label(v-if="selectedPath === 'toukei'")
-          | {{ $t('toukei') }}
+        span.icon(:class="[tab.name]")
+          icon(
+            :name="tab.name" 
+            :color="selectedPath === tab.name ? undefined: `var(--${tab.inactiveColor})`"
+            :height="20"
+            :width="30")
+        span.label(v-if="selectedPath === tab.name")
+          | {{ $t(tab.name) }}
 </template>
 
 <script lang="ts">
@@ -50,15 +38,18 @@ export default class MobileTabBar extends Vue {
   private tabs = {
     tsundoku: {
       name: 'tsundoku',
-      to: 'tsundoku'
+      to: 'tsundoku',
+      inactiveColor: 'tsundoku-red-bg'
     },
     kidoku: {
       name: 'kidoku',
-      to: 'kidoku'
+      to: 'kidoku',
+      inactiveColor: 'kidoku-blue-bg'
     },
     toukei: {
       name: 'toukei',
-      to: 'toukei'
+      to: 'toukei',
+      inactiveColor: 'toukei-black-bg'
     }
   }
 }
@@ -68,7 +59,7 @@ export default class MobileTabBar extends Vue {
 .wrapper
   width: 100%
   background: rgba(255,255,255,0.6)
-  backdrop-filter: blur(2px)
+  backdrop-filter: blur(4px)
   border:
     radius: 32px 32px 0 0
 
@@ -82,13 +73,16 @@ export default class MobileTabBar extends Vue {
 
     .tab
       display: flex
-      width: max-content
-      height: max-content
+      // width: max-content
+      // height: max-content
       border-radius: 44px
       cursor: pointer
       padding:
         top: 12px
         bottom: 12px
+      transition: background-color .3s, width .5s
+      background:
+        color: transparent
 
       &:not(:last-child)
         margin-right: auto
@@ -120,6 +114,7 @@ export default class MobileTabBar extends Vue {
           left: 0
 
       .label
+        white-space: nowrap
         margin:
           top: auto
           right: 0

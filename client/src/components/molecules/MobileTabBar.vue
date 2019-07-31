@@ -1,42 +1,24 @@
 <template lang="pug">
-  div.wrapper
-    div.tab-bar
-      router-link.tab.tsundoku(
-        :class="{'selected': selectedPath === 'tsundoku'}"
-        :to="{ name: tabs.tsundoku.to, hash: $route.hash}"
-        :style="{width: width['tsundoku']}"
-        ref="tsundoku"
+  .wrapper
+    .tab-bar
+      router-link.tab(
+        v-for="tab in tabs"
+        :key="tab.name"
+        :class="{'selected': selectedPath === tab.name, [tab.name]: true}"
+        :to="{ name: tab.to, hash: $route.hash}"
       )
-        span.icon.tsundoku
-          icon(name="tsundoku" :color="selectedPath === 'tsundoku' ? undefined: 'var(--tsundoku-red-bg)'" :height="20" :width="30")
-        span.label(v-if="selectedPath === 'tsundoku'")
-          | {{ $t('tsundoku') }}
-
-      router-link.tab.kidoku(
-        :class="{'selected': selectedPath === 'kidoku'}"
-        :to="{ name: tabs.kidoku.to, hash: $route.hash}"
-        :style="{width: width['kidoku']}"
-        ref="kidoku"
-      )
-        span.icon.tsundoku
-          icon(name="kidoku" :color="selectedPath==='kidoku' ? undefined: 'var(--kidoku-blue-bg)'" :height="20" :width="30").icon.kidoku
-        span.label(v-if="selectedPath === 'kidoku'")
-          | {{ $t('kidoku') }}
-
-      router-link.tab.toukei(
-        :class="{'selected': selectedPath === 'toukei'}"
-        :to="{ name: tabs.toukei.to }"
-        :style="{width: width['toukei']}"
-        ref="toukei"
-      )
-        span.icon.toukei
-          icon(name="toukei" :color="selectedPath==='toukei' ? undefined: 'var(--toukei-black-bg)'" :height="20" :width="30").icon.toukei
-        span.label(v-if="selectedPath === 'toukei'")
-          | {{ $t('toukei') }}
+        span.icon(:class="[tab.name]")
+          icon(
+            :name="tab.name" 
+            :color="selectedPath === tab.name ? undefined: `var(--${tab.inactiveColor})`"
+            :height="20"
+            :width="30")
+        span.label(v-if="selectedPath === tab.name")
+          | {{ $t(tab.name) }}
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
 
@@ -56,29 +38,18 @@ export default class MobileTabBar extends Vue {
   private tabs = {
     tsundoku: {
       name: 'tsundoku',
-      to: 'tsundoku'
+      to: 'tsundoku',
+      inactiveColor: 'tsundoku-red-bg'
     },
     kidoku: {
       name: 'kidoku',
-      to: 'kidoku'
+      to: 'kidoku',
+      inactiveColor: 'kidoku-blue-bg'
     },
     toukei: {
       name: 'toukei',
-      to: 'toukei'
-    }
-  }
-
-  private width = {
-    tsundoku: 0,
-    kidoku: 0,
-    toukei: 0
-  }
-
-  @Watch('selectedPath')
-  onSelectedPathChanged(val: string) {
-    switch(val) {
-      case 'tsundoku':
-        this.$refs[]
+      to: 'toukei',
+      inactiveColor: 'toukei-black-bg'
     }
   }
 }
@@ -102,14 +73,14 @@ export default class MobileTabBar extends Vue {
 
     .tab
       display: flex
-      width: max-content
-      height: max-content
+      // width: max-content
+      // height: max-content
       border-radius: 44px
       cursor: pointer
       padding:
         top: 12px
         bottom: 12px
-      transition: background-color .3s
+      transition: background-color .3s, width .5s
       background:
         color: transparent
 
@@ -143,6 +114,7 @@ export default class MobileTabBar extends Vue {
           left: 0
 
       .label
+        white-space: nowrap
         margin:
           top: auto
           right: 0

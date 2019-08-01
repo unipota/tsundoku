@@ -102,8 +102,9 @@ export default class AddBookCard extends Vue {
 
       await new Promise(r => window.setTimeout(r, 1000))
       this.$emit('remove')
-    }
-    catch (err) {
+
+      this.$store.dispatch('getMyBooks')
+    } catch (err) {
       window.alert(this.$t('networkError') + '\n' + err.response)
     }
   }

@@ -9,7 +9,7 @@ const client = axios.create({
 })
 
 const api = {
-  getMyBooks(): Promise<AxiosResponse> {
+  getMyBooks(): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/books')
   },
   addNewBook(book: BookRecord): Promise<AxiosResponse> {

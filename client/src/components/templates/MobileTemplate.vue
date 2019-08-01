@@ -1,5 +1,6 @@
 <template lang="pug">
   .view-mobile(:class="{ 'modal-shown': $route.meta.isModal }")
+    .modal-overlay
     portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
@@ -94,6 +95,23 @@ export default class MobileTemplate extends Vue {
 .modal-wrap
   position: fixed
   z-index: 3000
+
+.modal-overlay
+  position: fixed
+  top: 0
+  bottom: 0
+  z-index: 2999
+  background-color: rgba(0, 0, 0, 0.5)
+
+  width: 100vw
+  height: 100vh
+
+  pointer-events: none
+
+  transition: opacity .5s $easeInOutQuint
+  opacity: 0
+  .modal-shown &
+    opacity: 1
 
 .transition-floating-button
   &-enter, &-leave-to

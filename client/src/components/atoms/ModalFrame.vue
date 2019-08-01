@@ -45,10 +45,13 @@ export default class ModalFrame extends Vue {
   }
 
   handleClickOutside() {
-    if (this.path === '../') {
+    let path = this.path
+    while (path.startsWith('../')) {
       this.$router.back()
-    } else {
-      // this.$router.push(this.$route.path + '/' + this.path)
+      path = path.substring(2)
+    }
+    if (path !== '') {
+      this.$router.push(this.$route.path + '/' + this.path)
     }
   }
 }

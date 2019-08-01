@@ -113,16 +113,13 @@ export default class AddBooksScan extends Vue {
 
   async mounted() {
     ;(window as any).addByIsbn = (isbn: string) => this.barcodeScanned({ getText() { return isbn } } as any)
-    console.log(codeReader)
     if (!codeReader.isMediaDevicesSuported) {
-      alert('getUserMedia not supported.')
       this.setScanState('nodevice')
       return
     }
 
     try {
       const videoInputDevices = await codeReader.listVideoInputDevices()
-      console.log(videoInputDevices)
       this.videoInputDevices = videoInputDevices
     } catch (err) {
       console.error(err)
@@ -225,7 +222,6 @@ export default class AddBooksScan extends Vue {
   beforeDestroy() {
     codeReader.reset()
     clearInterval(this.captureIntervalID)
-    console.log('Reset')
   }
 
   setScanState(state: ScanState) {
@@ -318,7 +314,6 @@ export default class AddBooksScan extends Vue {
   }
 
   handleCarouselPageChange(page: number) {
-    console.log(page)
     this.toAddIndex = page
   }
 

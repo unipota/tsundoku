@@ -40,16 +40,23 @@ export default class DesktopTemplate extends Vue {
 <style lang="sass" scoped>
 .view-desktop
   display: flex
+
 .nav-wrap
   width: 320px
   padding: 24px
   flex-shrink: 0
+
+  transition: filter 0.5s $easeInOutQuint
+  .modal-shown &
+    filter: blur(8px)
+
 .content-wrap
   width: 100%
   padding:
     top: 24px
     bottom: 24px
 
+.nav-wrap, .content-wrap
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
     filter: blur(8px)

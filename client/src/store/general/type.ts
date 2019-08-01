@@ -15,6 +15,7 @@ export interface S {
   showMobileTabBar: boolean
   showDesktopNav: boolean
   booksMap: Record<string, BookRecord>
+  useMockBooksMap: boolean
 }
 // ______________________________________________________
 //
@@ -45,6 +46,7 @@ export interface M {
   setShowMobileTopBar: boolean
   setShowMobileTabBar: boolean
   setShowDesktopNav: boolean
+  setBooksMap: BookRecord[]
 }
 export type RM = {
   [K in keyof M]: M[K]
@@ -53,6 +55,7 @@ export type RM = {
 //
 // actions
 export interface A {
+  getMyBooks: {}
   searchBooksByISBN: { isbn: string }
   searchBooks: { search: string }
 }

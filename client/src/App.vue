@@ -50,6 +50,7 @@ export default class App extends Vue {
     this.setLocale()
     window.addEventListener('resize', this.handleResizeWindow)
     window.addEventListener('orientationchange', this.handleResizeWindow)
+    this.$store.dispatch('getMyBooks')
   }
 }
 </script>

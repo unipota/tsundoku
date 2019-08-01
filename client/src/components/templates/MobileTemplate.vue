@@ -9,7 +9,7 @@
     .bottom-bar-wrap
       mobile-tab-bar(v-if="$store.state.showMobileTabBar")
     transition(name="transition-floating-button")
-      floating-add-tsundoku-button(v-show="selectedPath === 'tsundoku'")
+      floating-add-tsundoku-button.tsundoku-button(v-show="selectedPath === 'tsundoku'")
 </template>
 
 <script lang="ts">
@@ -79,16 +79,17 @@ export default class MobileTemplate extends Vue {
     bottom: 90px
   -webkit-overflow-scrolling: touch
 
-  transition: filter 0.5s $easeInOutQuint
-  .modal-shown &
-    filter: blur(8px)
-
 .bottom-bar-wrap
   position: fixed
   z-index: 1000
   bottom: 0
   bottom: env(safe-area-inset-bottom)
   width: 100%
+
+.top-bar-wrap, .content-wrap, .bottom-bar-wrap, .tsundoku-button
+  transition: filter 0.5s $easeInOutQuint
+  .modal-shown &
+    filter: blur(8px)
 
 .modal-wrap
   position: fixed

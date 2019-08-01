@@ -6,6 +6,18 @@
         .barcode-reader-container
           add-book-scan-barcode-reader(:color="scannerColor")
     .info
+      .scan-message.scan-message--error(v-if="state === 'nodevice'")
+        | {{ $t('scan_error_no_device') }}
+      .scan-message.scan-message--error(v-else-if="state === 'incorrect'")
+        | {{ $t('scan_error_not_book') }}
+      .scan-message(v-else-if="searchingCount >= 1")
+        | {{ $t('scan_message_searching') }}
+      .scan-message(v-else-if="state === 'scanned'")
+        | {{ $t('scan_message_searched') }}
+      .scan-message(v-else-if="state === 'known'")
+        | {{ $t('scan_message_known') }}
+      .scan-message(v-else-if="scannedBooks.length === 0")
+        | {{ $t('scan_message_scanning') }}
       carousel.cards(
         :paginationEnabled="false"
         :perPage="1"
@@ -15,7 +27,7 @@
         slide.card-wrap(
           v-for="( book, i ) in scannedBooks"
           :style="getCardWrapStyle(i)"
-          :class="getCardWrapClass(i)"
+          :class="`${$store.getters.viewTypeClass} ${getCardWrapClass(i)}`"
           :key="book.isbn"
         )
           add-book-card.card(
@@ -50,7 +62,7 @@ const codeReader = new BrowserBarcodeReader(
   new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]])
 )
 
-const stateResetMs = 1000
+const stateResetMs = 2000
 
 interface VideoInputDevice {
   deviceId: string
@@ -89,6 +101,8 @@ export default class AddBooksScan extends Vue {
 
   state: ScanState = 'scanning'
 
+  searchingCount = 0
+
   toAddIndex = 0
   isCardToAppear = false
   isCardAppearing = false
@@ -99,16 +113,13 @@ export default class AddBooksScan extends Vue {
 
   async mounted() {
     ;(window as any).addByIsbn = (isbn: string) => this.barcodeScanned({ getText() { return isbn } } as any)
-    console.log(codeReader)
     if (!codeReader.isMediaDevicesSuported) {
-      alert('getUserMedia not supported.')
       this.setScanState('nodevice')
       return
     }
 
     try {
       const videoInputDevices = await codeReader.listVideoInputDevices()
-      console.log(videoInputDevices)
       this.videoInputDevices = videoInputDevices
     } catch (err) {
       console.error(err)
@@ -211,7 +222,6 @@ export default class AddBooksScan extends Vue {
   beforeDestroy() {
     codeReader.reset()
     clearInterval(this.captureIntervalID)
-    console.log('Reset')
   }
 
   setScanState(state: ScanState) {
@@ -266,7 +276,13 @@ export default class AddBooksScan extends Vue {
     }
 
     this.setScanState('scanned')
+
+    // 競合するかも?
+    this.searchingCount += 1
+    await this.$nextTick()
     const searchResult = await api.searchBooksByISBN(isbn)
+    await this.$nextTick()
+    this.searchingCount -= 1
 
     if (searchResult.data.length !== 1) {
       this.setScanState('noresult')
@@ -298,7 +314,6 @@ export default class AddBooksScan extends Vue {
   }
 
   handleCarouselPageChange(page: number) {
-    console.log(page)
     this.toAddIndex = page
   }
 
@@ -379,34 +394,70 @@ export default class AddBooksScan extends Vue {
 
 .info
   position: relative
+  display: flex
+  flex-flow: column nowrap
+  align-items: center
   top: 0
   height: 100%
   width: 100%
+  padding-top: 24px    // .modal-frame-topの高さ分
+
+.scan-message
+  display: flex
+  align-items: center
+  justify-content: center
+
+  width: 86%
+  max-width: 400px
+
+  margin:
+    top: 32px
+    left: 16px
+    bottom: 0
+    right: 16px
+
+  padding: 16px 32px
+
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+
+  color: white
+  font:
+    weight: bold
+
+  &--error
+    background: $tsundoku-red-bg
+
 
 $card-height: 200px
-$card-margin: 8px
+$card-margin-lg: 16px
+$card-margin-sm: 8px
+$card-margin-pc: 8px
 $card-small-margin: 4px
+$carousel-width-sp-sm: 300px
+$carousel-width-breakpoint-sp: 500px
 $carousel-margin-sp: 24px
-$carousel-margin-pc: 40px
+$carousel-margin-pc: 48px
 
 .cards
   position: absolute
+  left: 0
   bottom: 0
   height: $card-height
 
   // カルーセルを幅を狭めて表示し、overflow: visibleをカルーセルに指定して横のカードを見せる
   &.is-desktop
-    width: calc(100% - #{$carousel-margin-pc * 2})
-    margin: 0 $carousel-margin-pc
+    width: calc(100% - #{$carousel-margin-pc * 2} + #{$card-margin-pc * 2})
+    margin: 0 $carousel-margin-pc - $card-margin-pc
 
   &.is-mobile
-    width: calc(100% - #{$carousel-margin-sp * 2})
-    margin: 0 $carousel-margin-sp
+    // モバイルの場合はカルーセルを300pxで表示し、マージンを調整
+    width: $carousel-width-sp-sm + $card-margin-lg * 2
+    margin: 0 calc(50% - #{$carousel-width-sp-sm / 2})
 
-    @media (max-width: #{300px + $carousel-margin-sp * 2})
-      // 小さいデバイスの場合はカルーセルを300pxで表示し、マージンを調整
-      width: 300px
-      margin: 0 calc(50% - 150px)
+    @media (max-width: #{$carousel-width-breakpoint-sp})
+      width: $carousel-width-sp-sm + $card-margin-sm * 2
 
   overflow: visible
 
@@ -417,11 +468,13 @@ $carousel-margin-pc: 40px
 
   height: $card-height
 
-  padding: 0 $card-margin
+  &.is-desktop
+    padding: 0 $card-margin-pc
 
   &.is-mobile
-    @media (max-width: #{300px + $carousel-margin-sp * 2})
-      padding: 0 $card-small-margin
+    padding: 0 $card-margin-lg
+    @media (max-width: #{$carousel-width-breakpoint-sp})
+      padding: 0 $card-margin-sm
 
   border-radius: 8px
 

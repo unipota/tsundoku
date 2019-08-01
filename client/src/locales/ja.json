@@ -20,6 +20,13 @@
   "add_by_searching": "検索して積む",
   "add_by_scanning": "スキャンして積む",
 
+  "scan_message_scanning": "バーコードをスキャンしてください",
+  "scan_message_searching": "検索しています…",
+  "scan_message_searched": "発見しました!",
+  "scan_message_known": "すでに検索した本です",
+  "scan_error_not_book": "97から始まるバーコードをスキャンしてください　",
+  "scan_error_no_device": "カメラを使用できません",
+
   "remaining": "残り",
 
   "isbn": "ISBN",

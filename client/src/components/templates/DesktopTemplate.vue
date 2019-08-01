@@ -1,9 +1,9 @@
 <template lang="pug">
-  .view-desktop
+  .view-desktop(:class="{ 'modal-shown': $route.meta.isModal }")
     portal-target.modal-wrap(name="modalView")
     .nav-wrap
       desktop-nav(v-if="$store.state.showDesktopNav")
-    .view-wrap
+    .content-wrap
       // keep-alive だと複数存在する同名のポータルでハマるのでとりあえず無効化
       routerView
 </template>
@@ -44,9 +44,13 @@ export default class DesktopTemplate extends Vue {
   width: 320px
   padding: 24px
   flex-shrink: 0
-.view-wrap
+.content-wrap
   width: 100%
   padding:
     top: 24px
     bottom: 24px
+
+  transition: filter 0.5s $easeInOutQuint
+  .modal-shown &
+    filter: blur(8px)
 </style>

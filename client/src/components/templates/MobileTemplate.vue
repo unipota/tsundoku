@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  .view-mobile(:class="{ 'modal-shown': $route.meta.isModal }")
     portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
@@ -78,6 +78,10 @@ export default class MobileTemplate extends Vue {
     top: 64px
     bottom: 90px
   -webkit-overflow-scrolling: touch
+
+  transition: filter 0.5s $easeInOutQuint
+  .modal-shown &
+    filter: blur(8px)
 
 .bottom-bar-wrap
   position: fixed

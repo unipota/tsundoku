@@ -1,5 +1,8 @@
 <template lang="pug">
-  .modal-frame-overlay(:class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`")
+  .modal-frame-overlay(
+    :class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`"
+    v-click-outside="handleClickOutside"
+    )
     .modal-frame-wrapper(:class="modalClass")
       .modal-frame-top
         .title(v-if="title")
@@ -38,6 +41,14 @@ export default class ModalFrame extends Vue {
     return {
       [this.$store.getters.viewTypeClass]: true,
       'no-padding': this.noPadding
+    }
+  }
+
+  handleClickOutside() {
+    if (this.path === '../') {
+      this.$router.back()
+    } else {
+      // this.$router.push(this.$route.path + '/' + this.path)
     }
   }
 }

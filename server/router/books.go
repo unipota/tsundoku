@@ -178,7 +178,7 @@ func book2BookRecord(book model.Book) BookRecord {
 	return BookRecord{
 		ID:            book.ID.String(),
 		ISBN:          book.ISBN,
-		Title:         book.ISBN,
+		Title:         book.Title,
 		Author:        strings.Split(book.Author, ","),
 		TotalPages:    book.TotalPages,
 		Price:         book.Price,
@@ -193,7 +193,7 @@ func book2BookRecord(book model.Book) BookRecord {
 func book2BookDetail(book model.Book) BookDetail {
 	bookDetail := BookDetail{
 		ID:            book.ID.String(),
-		ISBN:          book.ISBN,
+		ISBN:          book.Title,
 		Title:         book.ISBN,
 		Author:        strings.Split(book.Author, ","),
 		TotalPages:    book.TotalPages,

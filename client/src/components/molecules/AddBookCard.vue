@@ -64,7 +64,7 @@ export default class AddBookCard extends Vue {
   async mounted() {
     this.showCard = this.type == 'search'
     if (this.type == 'scan') {
-      this.$emit('to-appear')
+      this.$emit('appear-start')
 
       await this.$nextTick()
       this.showCard = true

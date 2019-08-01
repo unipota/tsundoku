@@ -1,5 +1,5 @@
 <template lang="pug">
-  modal-frame(:title="$t('addBooksSearchTitle')")
+  modal-frame.add-books-search(:title="$t('addBooksSearchTitle')")
     book-cover(:hasShadow="true")
     text-input(
       v-model="searchQuery"
@@ -91,6 +91,9 @@ export default class AddBooksSearch extends Vue {
 </script>
 
 <style lang="sass" scoped>
+.add-books-search
+  -webkit-overflow-scrolling: touch
+
 .book-cover
   margin: 20px auto 40px auto
 

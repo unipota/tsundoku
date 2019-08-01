@@ -6,6 +6,12 @@
   "add_by_searching": "Add books by searching",
   "add_by_scanning": "Add books by scan barcode",
 
+  "scan_message_scanning": "Scan barcode to add",
+  "scan_message_searching": "Seaching...",
+  "scan_message_searched": "Book found!",
+  "scan_message_known": "The book is already searched.",
+  "scan_error_not_book": "Scan barcode starts with '97'",
+
   "remaining": "remaining",
 
   "isbn": "ISBN",

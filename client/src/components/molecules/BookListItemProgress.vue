@@ -4,13 +4,13 @@
       | {{ progressPercentStr }}
       .book-list-item-progress__progress-bar
         progress-bar(:progress="progressRatio")
-    .book-list-item-progress__price
-      span.book-list-item-progress__price_remaining_label
-        | {{ $t('remaining') }}
-      span.book-list-item-progress__price_remaining
-        | {{ remainingPrice }}
-      span.book-list-item-progress__price_total
-        | {{ book.price.toLocaleString() }}
+    //- .book-list-item-progress__price
+      //- span.book-list-item-progress__price_remaining_label
+      //-   | {{ $t('remaining') }}
+      //- span.book-list-item-progress__price_remaining
+      //-   | {{ remainingPrice }}
+      //- span.book-list-item-progress__price_total
+      //-   | {{ book.price.toLocaleString() }}
 </template>
 
 <script lang="ts">

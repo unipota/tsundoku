@@ -25,7 +25,7 @@ export default class BookMajorInfo extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .book-major-info
   width: 100%
   overflow: hidden
@@ -34,7 +34,6 @@ export default class BookMajorInfo extends Vue {
     size: 1.2rem
     weight: bold
   width: 100%
-  margin-bottom: 8px
   overflow: hidden
   &.is-small
     font:

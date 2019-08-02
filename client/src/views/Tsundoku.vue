@@ -48,9 +48,23 @@ export default class Tsundoku extends Vue {
 
 .list-item-container
   margin:
-    top: 1rem
+    top: 1.5rem
   padding:
-    bottom: 1rem
+    bottom: 1.5rem
   width: 100%
-  border-bottom: 2px solid var(--border-gray)
+  position: relative
+
+  &:not(:last-child)::after
+    content: ''
+    display: block
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    margin: auto
+    width: calc(100% - 36px)
+    height: 2px
+    border:
+      radius: 9999vw
+    background: var(--border-gray)
 </style>

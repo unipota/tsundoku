@@ -25,10 +25,10 @@ export default class IconBookmark extends Vue {
   @Prop({ type: String, default: 'var(--border-gray)' })
   private color!: string
 
-  @Prop({ type: Number, default: 21 })
+  @Prop({ type: Number, default: 32 })
   private height!: number
 
-  @Prop({ type: Number, default: 13 })
+  @Prop({ type: Number, default: 32 })
   private width!: number
 }
 </script>

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2017",
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
@@ -15,7 +15,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom", "es6", "dom.iterable", "scripthost"]
   },
   "include": [
     "src/**/*.ts",

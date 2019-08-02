@@ -71,15 +71,21 @@ interface VideoInputDevice {
   label: string
 }
 
-type ScanState = 'nodevice' | 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
+type ScanState =
+  | 'nodevice'
+  | 'scanning'
+  | 'incorrect'
+  | 'scanned'
+  | 'known'
+  | 'noresult'
 
 const stateColorMap: Record<ScanState, string> = {
-  'nodevice': 'rgba(255, 255, 255, 0.5)',
-  'scanning': 'white',
-  'incorrect': 'var(--tsundoku-red)',
-  'scanned': 'var(--succeed-blue)',
-  'known': 'rgba(255, 255, 255, 0.5)',
-  'noresult': 'var(--tsundoku-red)',
+  nodevice: 'rgba(255, 255, 255, 0.5)',
+  scanning: 'white',
+  incorrect: 'var(--tsundoku-red)',
+  scanned: 'var(--succeed-blue)',
+  known: 'rgba(255, 255, 255, 0.5)',
+  noresult: 'var(--tsundoku-red)'
 }
 
 @Component({
@@ -112,7 +118,12 @@ export default class AddBooksScan extends Vue {
   cardShiftWidth = 0
 
   async mounted() {
-    ;(window as any).addByIsbn = (isbn: string) => this.barcodeScanned({ getText() { return isbn } } as any)
+    ;(window as any).addByIsbn = (isbn: string) =>
+      this.barcodeScanned({
+        getText() {
+          return isbn
+        }
+      } as any)
     if (!codeReader.isMediaDevicesSuported) {
       this.setScanState('nodevice')
       return
@@ -171,8 +182,7 @@ export default class AddBooksScan extends Vue {
         const sy =
           video.videoHeight *
           ((realHeight - anyCropArea.clientHeight) / 2 / realHeight)
-        const sh =
-          video.videoHeight * (anyCropArea.offsetHeight / realHeight)
+        const sh = video.videoHeight * (anyCropArea.offsetHeight / realHeight)
 
         return [sx, sy, sw, sh]
       } else {
@@ -186,8 +196,7 @@ export default class AddBooksScan extends Vue {
         const sx =
           video.videoWidth *
           ((realWidth - anyCropArea.clientWidth) / 2 / realWidth)
-        const sw =
-          video.videoWidth * (anyCropArea.offsetWidth / realWidth)
+        const sw = video.videoWidth * (anyCropArea.offsetWidth / realWidth)
 
         return [sx, sy, sw, sh]
       }
@@ -195,26 +204,17 @@ export default class AddBooksScan extends Vue {
 
     const draw = () => {
       const [sx, sy, sw, sh] = getDrawArea()
-      ctx!!.drawImage(
-        video,
-        sx,
-        sy,
-        sw,
-        sh,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      )
+      ctx!!.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
       requestAnimationFrame(draw)
     }
 
     this.captureIntervalID = window.setInterval(async () => {
       try {
-        const scanResult = await codeReader.decodeFromImageUrl(canvas.toDataURL())
+        const scanResult = await codeReader.decodeFromImageUrl(
+          canvas.toDataURL()
+        )
         this.barcodeScanned(scanResult)
-      }
-      catch (_) {}
+      } catch (_) {}
     }, 500)
     draw()
   }
@@ -321,13 +321,13 @@ export default class AddBooksScan extends Vue {
     if (this.toRemoveIndex >= 0 && index > this.toRemoveIndex) {
       // カード削除中は削除位置以降を左にずらす
       return {
-        transform: `translateX(-${this.cardShiftWidth}px)`,
+        transform: `translateX(-${this.cardShiftWidth}px)`
       }
     }
     if (this.isCardToAppear && index > this.toAddIndex) {
       // カード追加直後は追加位置以降を左にずらす
       return {
-        transform: `translateX(-${this.cardShiftWidth}px)`,
+        transform: `translateX(-${this.cardShiftWidth}px)`
       }
     }
     return {}
@@ -340,7 +340,7 @@ export default class AddBooksScan extends Vue {
     if (this.isCardAppearing && index > this.toAddIndex) {
       return 'to-transition'
     }
-      return ''
+    return ''
   }
 
   get scannerColor() {
@@ -418,9 +418,9 @@ export default class AddBooksScan extends Vue {
 
   padding: 16px 32px
 
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.1)
+  backdrop-filter: blur(8px)
+  border-radius: 12px
 
   color: white
   font:
@@ -480,7 +480,6 @@ $carousel-margin-pc: 48px
 
   &.to-transition
     transition: transform 1s $easeInOutQuint
-
 </style>
 
 <style lang="sass">

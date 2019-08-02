@@ -1,15 +1,25 @@
 <template lang="pug">
   .book-list-item
-    router-link.book-list-item__cover(:to="`${$route.matched[0].path}/book/${book.id}`")
-      book-cover(:url="book.coverImageUrl" :hasShadow="true")
-    .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
-      .book-list-item__detail
-        book-major-info(:book="book")
-      .book-list-item__price(v-if="kidoku")
-        span.book-list-item__total-price
-          | {{ book.price.toLocaleString() }}
-      .book-list-item__progress(v-else)
-        book-list-item-progress(:book="book")
+    .book-list-item__body
+      router-link.book-list-item__cover(:to="`${$route.matched[0].path}/book/${book.id}`")
+        book-cover(:url="book.coverImageUrl" :hasShadow="true")
+      .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
+        .book-list-item__icon
+          icon(name="right-arrow")
+        .book-list-item__detail
+          book-major-info(:book="book")
+        .book-list-item__price(v-if="kidoku")
+          span.book-list-item__total-price.kidoku
+            | {{ book.price.toLocaleString() }}
+          span.book-list-item__time-ago
+            | 4日前
+        .book-list-item__price(v-else)
+          span.book-list-item__total-price.tsundoku
+            | {{ book.price.toLocaleString() }}
+          span.book-list-item__time-ago
+            | 4日前
+    .book-list-item__progress(v-if="!kidoku")
+      book-list-item-progress-container(:book="book")
 </template>
 
 <script lang="ts">
@@ -17,13 +27,15 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { BookRecord } from '../../types/Book'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
-import BookListItemProgress from '@/components/molecules/BookListItemProgress.vue'
+import BookListItemProgressContainer from '@/components/molecules/BookListItemProgressContainer.vue'
+import Icon from '@/components/assets/Icon.vue'
 
 @Component({
   components: {
     BookCover,
     BookMajorInfo,
-    BookListItemProgress
+    BookListItemProgressContainer,
+    Icon
   }
 })
 export default class BookListItem extends Vue {
@@ -35,8 +47,8 @@ export default class BookListItem extends Vue {
 }
 </script>
 
-<style lang="sass">
-.book-list-item
+<style lang="sass" scoped>
+.book-list-item__body
   position: relative
   align-items: center
   width: 100%
@@ -52,29 +64,32 @@ export default class BookListItem extends Vue {
   margin-right: 16px
 
 .book-list-item__info
-  position: absolute
-  top: 0
-  left: 80px
+  position: relative
   z-index: -1
+  margin-left: 80px
+
+  display: flex
+  flex-flow: column
+  align-items: flex-start
+  just-content: space-between
 
   width: calc(100% - 80px)
   height: 100%
 
-  padding: 16px 16px 16px 28px
+  padding: 16px
   border-radius: 8px
   background-color: $bg-suppressed-gray
+
+  &.is-desktop
+    padding:
+      top: 12px
+      right: 12px
+      bottom: 12px
+      left: calc(12px + 5%)
 
   &.is-mobile
     padding:
       left: calc(20px + 5%)
-
-  &.is-desktop
-    display: flex
-    justify-content: space-between
-
-  &.is-mobile
-    display: flex
-    flex-flow: column
 
 .book-list-item__detail
   width: 100%
@@ -89,7 +104,6 @@ export default class BookListItem extends Vue {
     size: 1.2rem
     weight: bold
   width: 100%
-  margin-bottom: 8px
   overflow: hidden
 
   display: -webkit-box
@@ -122,20 +136,31 @@ export default class BookListItem extends Vue {
       shrink: 1
 
 .book-list-item__price
-  width: 140px
-  text-align: right
-  flex:
-    basis: 140px
-    grow: 0
-    shrink: 1
-  align-self: flex-end
+  display: flex
+  flex-flow: column
 
 .book-list-item__total-price
-  color: $kidoku-blue
   font:
     weight: bold
-    size: 1.1rem
+    size: 1.4rem
+  line-height: 1.4rem
+
+  &.tsundoku
+    color: var(--tsundoku-red)
+
+  &.kidoku
+    color: var(--kidoku-blue)
+
   &::before
     content: '¥'
-    margin: 0 0.25rem
+    margin:
+      right: 0.25rem
+
+.book-list-item__time-ago
+  color: var(--text-gray)
+
+.book-list-item__icon
+  position: absolute
+  right: 16px
+  bottom: 14px
 </style>

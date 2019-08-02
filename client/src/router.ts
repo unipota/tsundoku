@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import AddBooksSearch from './views/AddBooksSearch.vue'
 import AddBooksScan from './views/AddBooksScan.vue'
+import AddBooksEdit from './views/AddBooksEdit.vue'
 import BookDetails from './views/BookDetails.vue'
 import Kidoku from './views/Kidoku.vue'
 import NotFound from './views/NotFound.vue'
@@ -23,6 +24,7 @@ export type ViewNames =
   | 'toukei'
   | 'addBooksSearch'
   | 'addBooksScan'
+  | 'addBooksEdit'
   | 'bookDetails'
   | 'login'
   | 'user'
@@ -77,6 +79,7 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
   toukei: Toukei,
   addBooksSearch: AddBooksSearch,
   addBooksScan: AddBooksScan,
+  addBooksEdit: AddBooksEdit,
   bookDetails: BookDetails,
   login: Login,
   user: UserDetails,
@@ -88,6 +91,7 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
 const modalSubTree: ViewDeclaration[] = [
   { view: 'addBooksSearch', meta: { isModal: true } },
   { view: 'addBooksScan', meta: { isModal: true } },
+  { view: 'addBooksEdit', meta: { isModal: true } },
   { view: 'bookDetails', path: 'book/:id', meta: { isModal: true } }
 ]
 

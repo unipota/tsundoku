@@ -1,5 +1,5 @@
 <template lang="pug">
-  .body
+  .record-read-pages-button
     icon(name="bookmark" color="white" :width="18" :height="18")
     span.label
       | {{$t('record')}}
@@ -16,7 +16,7 @@ export default class RecordReadPagesButton extends Vue {}
 </script>
 
 <style lang="sass" scoped>
-.body
+.record-read-pages-button
   cursor: pointer
   display: flex
   align-items: center
@@ -29,6 +29,8 @@ export default class RecordReadPagesButton extends Vue {}
     right: 12px
 
 .label
+  margin:
+    left: 2px
   font:
     weight: bold
     size: 1rem

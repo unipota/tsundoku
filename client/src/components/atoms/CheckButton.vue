@@ -1,5 +1,5 @@
 <template lang="pug">
-  .body
+  .check-button
     icon(name="check" color="white" :width="19" :height="14")
 </template>
 
@@ -14,7 +14,7 @@ export default class CheckButton extends Vue {}
 </script>
 
 <style lang="sass" scoped>
-.body
+.check-button
   cursor: pointer
   display: flex
   align-items: center

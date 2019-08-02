@@ -56,6 +56,7 @@ import {
   Result
 } from '@zxing/library'
 import { BookRecord } from '../types/Book'
+import { ExStore } from 'vuex'
 
 const codeReader = new BrowserBarcodeReader(
   500,
@@ -98,6 +99,8 @@ const stateColorMap: Record<ScanState, string> = {
   }
 })
 export default class AddBooksScan extends Vue {
+  $store!: ExStore
+
   videoInputDevices: VideoInputDevice[] = []
   captureIntervalID = 0
   stateResetTimeoutId = 0
@@ -280,7 +283,9 @@ export default class AddBooksScan extends Vue {
     // 競合するかも?
     this.searchingCount += 1
     await this.$nextTick()
-    const searchResult = await api.searchBooksByISBN(isbn)
+    const searchResult = await this.$store.dispatch('searchBooksByISBN', {
+      isbn
+    })
     await this.$nextTick()
     this.searchingCount -= 1
 

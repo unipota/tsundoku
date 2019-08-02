@@ -38,7 +38,8 @@ interface ViewDeclaration {
   view: ViewNames
   path?: string
   children?: ViewDeclaration[]
-  meta?: Object
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  meta?: Record<string, any>
 }
 
 const toRoutesObject = (
@@ -64,7 +65,7 @@ const toRoutesObject = (
         children: route.children
           ? toRoutesObject(route.children, componentMap, path, name)
           : undefined,
-        meta: route.meta? route.meta: {}
+        meta: route.meta ? route.meta : {}
       }
     }
   )

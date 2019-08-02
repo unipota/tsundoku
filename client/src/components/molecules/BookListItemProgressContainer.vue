@@ -1,5 +1,5 @@
 <template lang="pug">
-  .body
+  .book-list-item-progress-container
     .progress-wrap
       book-list-item-progress(:book="book")
     .record-read-pages-button-wrap
@@ -26,12 +26,15 @@ export default class BookListItemProgressContainer extends Vue {
 </script>
 
 <style lang="sass" scoped>
-.body
+.book-list-item-progress-container
   display: flex
   align-items: center
   flex-wrap: nowrap
   margin:
     top: 4px
+  padding:
+    left: 4px
+    right: 4px
 
 .progress-wrap
   margin-right: 8px
@@ -42,8 +45,8 @@ export default class BookListItemProgressContainer extends Vue {
 
 .record-read-pages-button-wrap
   margin-right: 8px
-  flex-shrink: -1
+  flex-shrink: 0
 
 .check-button-wrap
-  flex-shrink: -1
+  flex-shrink: 0
 </style>

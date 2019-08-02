@@ -1,7 +1,7 @@
 <template lang="pug">
   .book-list-item
-    .book-list-item__body
-      router-link.book-list-item__cover(:to="`${$route.matched[0].path}/book/${book.id}`")
+    router-link.book-list-item__body(:to="`${$route.matched[0].path}/book/${book.id}`")
+      .book-list-item__cover
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
       .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
         .book-list-item__icon
@@ -49,6 +49,7 @@ export default class BookListItem extends Vue {
 
 <style lang="sass" scoped>
 .book-list-item__body
+  display: block
   position: relative
   align-items: center
   width: 100%

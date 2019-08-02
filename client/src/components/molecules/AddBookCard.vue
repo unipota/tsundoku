@@ -30,7 +30,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import { BookRecord } from '../../types/Book'
-import api from '../../store/general/api'
 import AddTsundokuButton from '../atoms/AddTsundokuButton.vue'
 import BookCover from '../atoms/BookCover.vue'
 import BookMajorInfo from '../atoms/BookMajorInfo.vue'

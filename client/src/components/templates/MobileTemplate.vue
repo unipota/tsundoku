@@ -70,14 +70,15 @@ export default class MobileTemplate extends Vue {
 
 .content-wrap
   position: relative
+  padding:
+    top: 64px
+    bottom: 90px
+
+.view-mobile
   overflow:
     x: hidden
     y: scroll
   width: 100vw
-  height: 100vh
-  padding:
-    top: 64px
-    bottom: 90px
   -webkit-overflow-scrolling: touch
 
 .bottom-bar-wrap

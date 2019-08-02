@@ -33,7 +33,6 @@
       />
       <rect x="12" y="46" width="165" height="5" rx="2.5" :fill="color" />
     </svg>
-    </div>
   </div>
 </template>
 

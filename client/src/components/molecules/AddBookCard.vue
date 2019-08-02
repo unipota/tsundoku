@@ -16,6 +16,7 @@
             component(
               :is="editButtonComponent"
               :to="firstRouteName + '/add-books-edit'"
+              :book="book"
             )
             add-tsundoku-button(
               size="small"
@@ -29,7 +30,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import { BookRecord } from '../../types/Book'
-import api from '../../store/general/api'
 import AddTsundokuButton from '../atoms/AddTsundokuButton.vue'
 import BookCover from '../atoms/BookCover.vue'
 import BookMajorInfo from '../atoms/BookMajorInfo.vue'
@@ -91,7 +91,9 @@ export default class AddBookCard extends Vue {
   async addTsundoku() {
     console.log(this.book)
     try {
-      const res = await api.addNewBook(this.book)
+      const res = await this.$store.dispatch('addNewBook', {
+        book: this.book
+      })
       console.log(res.data)
 
       this.bookAdded = true // → AddTsundokuButtonがチェックに変わる
@@ -122,8 +124,10 @@ export default class AddBookCard extends Vue {
   &.is-mobile
     width: 100%
     max-width: 300px
-  &.is-desktop
+  &.scan.is-desktop
     width: 500px
+  &.search.is-desktop
+    width: 100%
 
 .book-cover
   min-width: 96px

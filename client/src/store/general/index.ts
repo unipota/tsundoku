@@ -16,7 +16,7 @@ export const state = (): S => ({
   showMobileTabBar: true,
   showDesktopNav: true,
   booksMap: {},
-  useMockBooksMap: true // 開発用
+  useMockBooksMap: false // 開発用
 })
 // ______________________________________________________
 //
@@ -201,6 +201,18 @@ export const actions: Actions<S, A, G, M> = {
     console.log(search)
     return new Promise((resolve, reject) => {
       api.searchBooks(search).then(result => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
+  },
+  addNewBook({}, { book }): Promise<BookRecord[]> {
+    console.log(book)
+    return new Promise((resolve, reject) => {
+      api.addNewBook(book).then(result => {
         if (result.data) {
           resolve(result.data)
         } else {

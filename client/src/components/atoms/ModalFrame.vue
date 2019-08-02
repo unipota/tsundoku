@@ -46,13 +46,17 @@ export default class ModalFrame extends Vue {
 
   handleClickOutside() {
     let path = this.path
+    let backCount = 0
     while (path.startsWith('../')) {
-      this.$router.back()
-      path = path.substring(2)
+      path = path.substring(3)
+      backCount += 1
     }
-    if (path !== '') {
-      this.$router.push(this.$route.path + '/' + this.path)
-    }
+    const splitted = this.$route.path.split('/')
+    const pathLength = splitted.length
+    const base = splitted.slice(0, pathLength - Math.min(backCount, pathLength))
+    base.push(path)
+
+    this.$router.push(base.join('/'))
   }
 }
 </script>
@@ -89,13 +93,17 @@ export default class ModalFrame extends Vue {
 
 .modal-frame-body
   padding:
-    top: 48px
     left: 24px
     right: 24px
   height: calc(100% - 30px - 24px) // .modal-frame-close の高さとborder-radiusの分を引いた
   overflow:
     x: hidden
     y: auto
+
+  .is-desktop &
+    padding-top: 48px
+  .is-mobile &
+    padding-top: 24px
 
   .no-padding &
     padding: 0

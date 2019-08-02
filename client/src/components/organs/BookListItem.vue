@@ -62,7 +62,7 @@ export default class BookListItem extends Vue {
 
   padding: 16px 16px 16px 28px
   border-radius: 8px
-  // background-color: $bg-suppressed-gray
+  background-color: $bg-suppressed-gray
 
   &.is-mobile
     padding:

@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  .scroller
     portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
@@ -69,14 +69,15 @@ export default class MobileTemplate extends Vue {
 
 .content-wrap
   position: relative
+  padding:
+    top: 64px
+    bottom: 90px
+
+.scroller
   overflow:
     x: hidden
     y: scroll
   width: 100vw
-  height: 100vh
-  padding:
-    top: 64px
-    bottom: 90px
   -webkit-overflow-scrolling: touch
 
 .bottom-bar-wrap

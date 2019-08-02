@@ -89,13 +89,17 @@ export default class ModalFrame extends Vue {
 
 .modal-frame-body
   padding:
-    top: 48px
     left: 24px
     right: 24px
   height: calc(100% - 30px - 24px) // .modal-frame-close の高さとborder-radiusの分を引いた
   overflow:
     x: hidden
     y: auto
+
+  .is-desktop &
+    padding-top: 48px
+  .is-mobile &
+    padding-top: 24px
 
   .no-padding &
     padding: 0

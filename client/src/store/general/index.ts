@@ -208,6 +208,18 @@ export const actions: Actions<S, A, G, M> = {
         }
       })
     })
+  },
+  addNewBook({}, { book }): Promise<BookRecord[]> {
+    console.log(book)
+    return new Promise((resolve, reject) => {
+      api.addNewBook(book).then(result => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
   }
 }
 

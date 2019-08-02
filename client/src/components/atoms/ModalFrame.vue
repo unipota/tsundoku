@@ -55,6 +55,7 @@ export default class ModalFrame extends Vue {
     const pathLength = splitted.length
     const base = splitted.slice(0, pathLength - Math.min(backCount, pathLength))
     base.push(path)
+
     this.$router.push(base.join('/'))
   }
 }

@@ -67,19 +67,22 @@ export default class AddBooksSearch extends Vue {
   }
 
   async onAddTsundoku() {
-    await api.addNewBook({
-      id: '',
-      isbn: '',
-      title: this.title,
-      author: [this.author],
-      totalPages: parseInt(this.totalPages),
-      price: parseInt(this.price),
-      caption: null,
-      publisher: '',
-      coverImageUrl: '',
-      readPages: 0,
-      memo: ''
+    await this.$store.dispatch('addNewBook', {
+      book: {
+        id: '',
+        isbn: '',
+        title: this.title,
+        author: [this.author],
+        totalPages: parseInt(this.totalPages),
+        price: parseInt(this.price),
+        caption: null,
+        publisher: '',
+        coverImageUrl: this.coverImageUrl,
+        readPages: 0,
+        memo: ''
+      }
     })
+    await this.$store.dispatch('getMyBooks')
     this.$router.push('/')
   }
 }

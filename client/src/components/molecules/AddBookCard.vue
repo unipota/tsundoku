@@ -92,7 +92,9 @@ export default class AddBookCard extends Vue {
   async addTsundoku() {
     console.log(this.book)
     try {
-      const res = await api.addNewBook(this.book)
+      const res = await this.$store.dispatch('addNewBook', {
+        book: this.book
+      })
       console.log(res.data)
 
       this.bookAdded = true // → AddTsundokuButtonがチェックに変わる

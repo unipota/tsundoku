@@ -27,7 +27,7 @@ export default class EditButtonLarge extends Vue {
       path: this.to,
       query: {
         ...this.book,
-        author: this.book.author.join('/')
+        author: this.book.author ? this.book.author.join('/') : ''
       }
     }
   }

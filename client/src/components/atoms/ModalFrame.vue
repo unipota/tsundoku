@@ -110,13 +110,20 @@ export default class ModalFrame extends Vue {
   display: flex
   justify-content: flex-end
   z-index: 10
-  padding:
-    right: 24px
+  height: 34px
   .title
     margin: auto
     font-size: 22px
     font-weight: bold
   .close-link
+    cursor: pointer
+    position: absolute
+    right: 18px
+    top: 50%
+    transform: translateY(-50%)
+    width: 48px
+    height: 48px
+    padding: 12px
     display: flex
     .close-icon
       margin: auto

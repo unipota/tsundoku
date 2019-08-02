@@ -47,6 +47,9 @@ export default class Kidoku extends Vue {
     right: 5%
 
 .list-item-container
-  margin: 1rem 0
+  margin:
+    top: 1.5rem
+  padding:
+    bottom: 1.5rem
   width: 100%
 </style>

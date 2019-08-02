@@ -4,16 +4,16 @@
       router-link.tab(
         v-for="tab in tabs"
         :key="tab.name"
-        :class="{'selected': selectedPath === tab.name, [tab.name]: true}"
         :to="{ name: tab.to, hash: $route.hash}"
+        :class="{'selected': selectedPath === tab.name, [tab.name]: true}"
       )
-        span.icon(:class="[tab.name]")
+        span.icon(:class="[tab.name]" key="icon")
           icon(
             :name="tab.name" 
             :color="selectedPath === tab.name ? undefined: `var(--${tab.inactiveColor})`"
             :height="20"
             :width="30")
-        span.label(v-if="selectedPath === tab.name")
+        span.label(v-if="selectedPath === tab.name" key="label")
           | {{ $t(tab.name) }}
 </template>
 
@@ -73,6 +73,7 @@ export default class MobileTabBar extends Vue {
 
     .tab
       display: flex
+      position: relative
       // width: max-content
       // height: max-content
       border-radius: 44px
@@ -80,7 +81,7 @@ export default class MobileTabBar extends Vue {
       padding:
         top: 12px
         bottom: 12px
-      transition: background-color .3s, width .5s
+      transition: background-color .5s, width .5s
       background:
         color: transparent
 

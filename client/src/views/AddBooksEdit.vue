@@ -3,7 +3,10 @@
     :title="$t('addBooksSearchTitle')"
     :class="$store.getters.viewTypeClass"
   )
-    book-cover(:hasShadow="true")
+    book-cover(
+      :hasShadow="true"
+      :url="coverImageUrl"
+    )
     add-books-edit-input.edit-input(
       :label="$t('title')"
       v-model="title"
@@ -53,6 +56,15 @@ export default class AddBooksSearch extends Vue {
   private author = ''
   private price = ''
   private totalPages = ''
+  private coverImageUrl = ''
+
+  mounted() {
+    this.title = this.$route.query.title
+    this.author = this.$route.query.author
+    this.price = this.$route.query.price
+    this.totalPages = this.$route.query.totalPages
+    this.coverImageUrl = this.$route.query.coverImageUrl
+  }
 
   async onAddTsundoku() {
     await api.addNewBook({

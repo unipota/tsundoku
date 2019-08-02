@@ -16,6 +16,7 @@
             component(
               :is="editButtonComponent"
               :to="firstRouteName + '/add-books-edit'"
+              :book="book"
             )
             add-tsundoku-button(
               size="small"

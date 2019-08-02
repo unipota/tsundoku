@@ -1,5 +1,6 @@
 <template lang="pug">
-  .scroller
+  .view-mobile(:class="{ 'modal-shown': $route.meta.isModal }")
+    .modal-overlay
     portal-target.modal-wrap(name="modalView")
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
@@ -9,7 +10,7 @@
     .bottom-bar-wrap
       mobile-tab-bar(v-if="$store.state.showMobileTabBar")
     transition(name="transition-floating-button")
-      floating-add-tsundoku-button(v-show="selectedPath === 'tsundoku'")
+      floating-add-tsundoku-button.tsundoku-button(v-show="selectedPath === 'tsundoku'")
 </template>
 
 <script lang="ts">
@@ -73,7 +74,7 @@ export default class MobileTemplate extends Vue {
     top: 64px
     bottom: 90px
 
-.scroller
+.view-mobile
   overflow:
     x: hidden
     y: scroll
@@ -87,9 +88,31 @@ export default class MobileTemplate extends Vue {
   bottom: env(safe-area-inset-bottom)
   width: 100%
 
+.top-bar-wrap, .content-wrap, .bottom-bar-wrap, .tsundoku-button
+  transition: filter 0.5s $easeInOutQuint
+  .modal-shown &
+    filter: blur(8px)
+
 .modal-wrap
   position: fixed
   z-index: 3000
+
+.modal-overlay
+  position: fixed
+  top: 0
+  bottom: 0
+  z-index: 2999
+  background-color: rgba(0, 0, 0, 0.5)
+
+  width: 100vw
+  height: 100vh
+
+  pointer-events: none
+
+  transition: opacity .5s $easeInOutQuint
+  opacity: 0
+  .modal-shown &
+    opacity: 1
 
 .transition-floating-button
   &-enter, &-leave-to

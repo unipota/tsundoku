@@ -38,6 +38,8 @@ interface ViewDeclaration {
   view: ViewNames
   path?: string
   children?: ViewDeclaration[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  meta?: Record<string, any>
 }
 
 const toRoutesObject = (
@@ -62,7 +64,8 @@ const toRoutesObject = (
         component: componentMap[route.view],
         children: route.children
           ? toRoutesObject(route.children, componentMap, path, name)
-          : undefined
+          : undefined,
+        meta: route.meta ? route.meta : {}
       }
     }
   )
@@ -83,9 +86,9 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
 }
 
 const modalSubTree: ViewDeclaration[] = [
-  { view: 'addBooksSearch' },
-  { view: 'addBooksScan' },
-  { view: 'bookDetails', path: 'book/:id' }
+  { view: 'addBooksSearch', meta: { isModal: true } },
+  { view: 'addBooksScan', meta: { isModal: true } },
+  { view: 'bookDetails', path: 'book/:id', meta: { isModal: true } }
 ]
 
 const routes: ViewDeclaration[] = [

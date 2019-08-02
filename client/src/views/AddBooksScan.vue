@@ -1,22 +1,51 @@
 <template lang="pug">
-  modal-frame(close-color="white" no-padding)
+  modal-frame.add-books-scan(close-color="white" no-padding)
     video#video(autoplay muted playsinline)
     #overlay
       #crop-area
         .barcode-reader-container
           add-book-scan-barcode-reader(:color="scannerColor")
     .info
-      vue-scroll-snap.cards(horizontal)
-        .scan-card-wrap(v-for="book in scannedBooks" :key="book.isbn")
-          scan-card(:book="book")
+      .scan-message.scan-message--error(v-if="state === 'nodevice'")
+        | {{ $t('scan_error_no_device') }}
+      .scan-message.scan-message--error(v-else-if="state === 'incorrect'")
+        | {{ $t('scan_error_not_book') }}
+      .scan-message(v-else-if="searchingCount >= 1")
+        | {{ $t('scan_message_searching') }}
+      .scan-message(v-else-if="state === 'scanned'")
+        | {{ $t('scan_message_searched') }}
+      .scan-message(v-else-if="state === 'known'")
+        | {{ $t('scan_message_known') }}
+      .scan-message(v-else-if="scannedBooks.length === 0")
+        | {{ $t('scan_message_scanning') }}
+      carousel.cards(
+        :paginationEnabled="false"
+        :perPage="1"
+        :class="$store.getters.viewTypeClass"
+        @page-change="handleCarouselPageChange"
+      )
+        slide.card-wrap(
+          v-for="( book, i ) in scannedBooks"
+          :style="getCardWrapStyle(i)"
+          :class="`${$store.getters.viewTypeClass} ${getCardWrapClass(i)}`"
+          :key="book.isbn"
+        )
+          add-book-card.card(
+            :book="book"
+            type="scan"
+            @appear-start="handleAppearStart"
+            @appear="handleAppear"
+            @to-remove="handleCardToRemove(i)"
+            @remove="handleCardRemove(i)"
+          )
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
-import ScanCard from '@/components/molecules/ScanCard.vue'
+import AddBookCard from '@/components/molecules/AddBookCard.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
-import VueScrollSnap from 'vue-scroll-snap'
+import { Carousel, Slide } from 'vue-carousel'
 
 import api from '@/store/general/api'
 
@@ -33,7 +62,7 @@ const codeReader = new BrowserBarcodeReader(
   new Map([[DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]]])
 )
 
-const stateResetMs = 1000
+const stateResetMs = 2000
 
 interface VideoInputDevice {
   deviceId: string
@@ -42,21 +71,23 @@ interface VideoInputDevice {
   label: string
 }
 
-type ScanState = 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
+type ScanState = 'nodevice' | 'scanning' | 'incorrect' | 'scanned' | 'known' | 'noresult'
 
 const stateColorMap: Record<ScanState, string> = {
-  scanning: 'white',
-  incorrect: 'var(--tsundoku-red)',
-  scanned: 'var(--succeed-blue)',
-  known: 'rgba(255, 255, 255, 0.5)',
-  noresult: 'rgba(255, 255, 255, 0.5)'
+  'nodevice': 'rgba(255, 255, 255, 0.5)',
+  'scanning': 'white',
+  'incorrect': 'var(--tsundoku-red)',
+  'scanned': 'var(--succeed-blue)',
+  'known': 'rgba(255, 255, 255, 0.5)',
+  'noresult': 'var(--tsundoku-red)',
 }
 
 @Component({
   components: {
-    VueScrollSnap,
+    Carousel,
+    Slide,
     ModalFrame,
-    ScanCard,
+    AddBookCard,
     AddBookScanBarcodeReader
   }
 })
@@ -70,19 +101,29 @@ export default class AddBooksScan extends Vue {
 
   state: ScanState = 'scanning'
 
+  searchingCount = 0
+
+  toAddIndex = 0
+  isCardToAppear = false
+  isCardAppearing = false
+
+  toRemoveIndex = -1
+
+  cardShiftWidth = 0
+
   async mounted() {
-    console.log(codeReader)
+    ;(window as any).addByIsbn = (isbn: string) => this.barcodeScanned({ getText() { return isbn } } as any)
     if (!codeReader.isMediaDevicesSuported) {
-      alert('getUserMedia not supported.')
+      this.setScanState('nodevice')
       return
     }
 
     try {
       const videoInputDevices = await codeReader.listVideoInputDevices()
-      console.log(videoInputDevices)
       this.videoInputDevices = videoInputDevices
     } catch (err) {
       console.error(err)
+      this.setScanState('nodevice')
     }
 
     const video = this.$el.querySelector('video')
@@ -115,7 +156,7 @@ export default class AddBooksScan extends Vue {
 
     const ctx = canvas.getContext('2d')
 
-    const draw = () => {
+    const getDrawArea = () => {
       if (
         video.videoWidth / video.videoHeight <
         video.clientWidth / video.clientHeight
@@ -130,18 +171,10 @@ export default class AddBooksScan extends Vue {
         const sy =
           video.videoHeight *
           ((realHeight - anyCropArea.clientHeight) / 2 / realHeight)
-        const sh = video.videoHeight * (anyCropArea.offsetHeight / realHeight)
-        ctx!!.drawImage(
-          video,
-          sx,
-          sy,
-          sw,
-          sh,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        )
+        const sh =
+          video.videoHeight * (anyCropArea.offsetHeight / realHeight)
+
+        return [sx, sy, sw, sh]
       } else {
         const sy =
           video.videoHeight * (anyCropArea.offsetTop / video.clientHeight)
@@ -153,29 +186,35 @@ export default class AddBooksScan extends Vue {
         const sx =
           video.videoWidth *
           ((realWidth - anyCropArea.clientWidth) / 2 / realWidth)
-        const sw = video.videoWidth * (anyCropArea.offsetWidth / realWidth)
-        ctx!!.drawImage(
-          video,
-          sx,
-          sy,
-          sw,
-          sh,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        )
+        const sw =
+          video.videoWidth * (anyCropArea.offsetWidth / realWidth)
+
+        return [sx, sy, sw, sh]
       }
+    }
+
+    const draw = () => {
+      const [sx, sy, sw, sh] = getDrawArea()
+      ctx!!.drawImage(
+        video,
+        sx,
+        sy,
+        sw,
+        sh,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      )
       requestAnimationFrame(draw)
     }
 
-    this.captureIntervalID = window.setInterval(() => {
-      codeReader
-        .decodeFromImageUrl(canvas.toDataURL())
-        .then(result => {
-          this.barcodeScanned(result)
-        })
-        .catch(e => {})
+    this.captureIntervalID = window.setInterval(async () => {
+      try {
+        const scanResult = await codeReader.decodeFromImageUrl(canvas.toDataURL())
+        this.barcodeScanned(scanResult)
+      }
+      catch (_) {}
     }, 500)
     draw()
   }
@@ -183,12 +222,11 @@ export default class AddBooksScan extends Vue {
   beforeDestroy() {
     codeReader.reset()
     clearInterval(this.captureIntervalID)
-    console.log('Reset')
   }
 
   setScanState(state: ScanState) {
     this.state = state
-    if (state !== 'scanning') {
+    if (state !== 'scanning' && state !== 'nodevice') {
       if (this.stateResetTimeoutId !== 0) {
         window.clearTimeout(this.stateResetTimeoutId)
       }
@@ -197,6 +235,31 @@ export default class AddBooksScan extends Vue {
         stateResetMs
       )
     }
+  }
+
+  syncronizeCardWidth() {
+    const card = document.querySelector('.cards')
+    if (card) {
+      this.cardShiftWidth = card.clientWidth
+    }
+  }
+
+  async addCard(book: BookRecord) {
+    // 追加直後は追加位置以降のカードを左にずらす
+    this.syncronizeCardWidth()
+    this.isCardToAppear = true
+
+    this.scannedBooks.splice(this.toAddIndex, 0, book)
+    this.$set(this.scannedBooksMap, book.isbn, book)
+    this.isCardToAppear = true
+
+    await this.$nextTick()
+    this.isCardAppearing = true
+    this.isCardToAppear = false
+  }
+
+  deleteCardAt(index: number) {
+    this.scannedBooks.splice(index, 1)
   }
 
   async barcodeScanned(scanResult: Result) {
@@ -213,14 +276,71 @@ export default class AddBooksScan extends Vue {
     }
 
     this.setScanState('scanned')
+
+    // 競合するかも?
+    this.searchingCount += 1
+    await this.$nextTick()
     const searchResult = await api.searchBooksByISBN(isbn)
+    await this.$nextTick()
+    this.searchingCount -= 1
 
     if (searchResult.data.length !== 1) {
       this.setScanState('noresult')
       return
     }
-    this.scannedBooks.push(searchResult.data[0])
-    this.$set(this.scannedBooksMap, isbn, searchResult.data[0])
+    if (!(isbn in this.scannedBooksMap)) {
+      this.addCard(searchResult.data[0])
+    }
+  }
+
+  handleAppearStart() {
+    this.isCardAppearing = true
+  }
+
+  handleAppear() {
+    this.isCardAppearing = false
+  }
+
+  handleCardToRemove(index: number) {
+    this.syncronizeCardWidth()
+    this.toRemoveIndex = index
+  }
+
+  async handleCardRemove(index: number) {
+    this.toRemoveIndex = -1
+    this.cardShiftWidth = 0
+    await this.$nextTick()
+    this.deleteCardAt(index)
+  }
+
+  handleCarouselPageChange(page: number) {
+    this.toAddIndex = page
+  }
+
+  getCardWrapStyle(index: number) {
+    if (this.toRemoveIndex >= 0 && index > this.toRemoveIndex) {
+      // カード削除中は削除位置以降を左にずらす
+      return {
+        transform: `translateX(-${this.cardShiftWidth}px)`,
+      }
+    }
+    if (this.isCardToAppear && index > this.toAddIndex) {
+      // カード追加直後は追加位置以降を左にずらす
+      return {
+        transform: `translateX(-${this.cardShiftWidth}px)`,
+      }
+    }
+    return {}
+  }
+
+  getCardWrapClass(index: number) {
+    if (this.toRemoveIndex >= 0 && index > this.toRemoveIndex) {
+      return 'to-transition'
+    }
+    if (this.isCardAppearing && index > this.toAddIndex) {
+      return 'to-transition'
+    }
+      return ''
   }
 
   get scannerColor() {
@@ -252,48 +372,124 @@ export default class AddBooksScan extends Vue {
 
 #crop-area
   position: relative
-  width: 320px
-  height: 180px
+  width: 480px
+  height: 270px
   max-width: 80vw
   max-height: 45vw
   border-radius: 8px
 
 .barcode-reader-container
+  display: flex
+  align-items: center
+  justify-content: center
+
   position: absolute
   top: 0
   left: 0
+
   width: 100%
   height: 100%
+
   padding: 16px
 
 .info
   position: relative
+  display: flex
+  flex-flow: column nowrap
+  align-items: center
   top: 0
   height: 100%
   width: 100%
+  padding-top: 24px    // .modal-frame-topの高さ分
+
+.scan-message
+  display: flex
+  align-items: center
+  justify-content: center
+
+  width: 86%
+  max-width: 400px
+
+  margin:
+    top: 32px
+    left: 16px
+    bottom: 0
+    right: 16px
+
+  padding: 16px 32px
+
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+
+  color: white
+  font:
+    weight: bold
+
+  &--error
+    background: $tsundoku-red-bg
+
+
+$card-height: 200px
+$card-margin-lg: 16px
+$card-margin-sm: 8px
+$card-margin-pc: 8px
+$card-small-margin: 4px
+$carousel-width-sp-sm: 300px
+$carousel-width-breakpoint-sp: 500px
+$carousel-margin-sp: 24px
+$carousel-margin-pc: 48px
 
 .cards
   position: absolute
+  left: 0
   bottom: 0
-  height: 160px
-  width: 100%
+  height: $card-height
+
+  // カルーセルを幅を狭めて表示し、overflow: visibleをカルーセルに指定して横のカードを見せる
+  &.is-desktop
+    width: calc(100% - #{$carousel-margin-pc * 2} + #{$card-margin-pc * 2})
+    margin: 0 $carousel-margin-pc - $card-margin-pc
+
+  &.is-mobile
+    // モバイルの場合はカルーセルを300pxで表示し、マージンを調整
+    width: $carousel-width-sp-sm + $card-margin-lg * 2
+    margin: 0 calc(50% - #{$carousel-width-sp-sm / 2})
+
+    @media (max-width: #{$carousel-width-breakpoint-sp})
+      width: $carousel-width-sp-sm + $card-margin-sm * 2
+
+  overflow: visible
+
+.card-wrap
   display: flex
-  flex-direction: row
-  overflow-x: scroll
-  align-items: flex-end
+  align-items: center
+  justify-content: center
 
-.scan-card-wrap
-  margin: 0 16px
+  height: $card-height
 
-  &:first-child
-    margin-left: 0
-    padding-left: 48px
-  &:last-child
-    margin-right: 0
-    padding-right: 48px
+  &.is-desktop
+    padding: 0 $card-margin-pc
+
+  &.is-mobile
+    padding: 0 $card-margin-lg
+    @media (max-width: #{$carousel-width-breakpoint-sp})
+      padding: 0 $card-margin-sm
+
+  border-radius: 8px
+
+  &.to-transition
+    transition: transform 1s $easeInOutQuint
+
 </style>
 
 <style lang="sass">
 .barcode-reader-canvas
   border-radius: 16px
+
+.add-books-scan
+  .VueCarousel-wrapper
+    overflow: visible!important
+  .VueCarousel-inner
+    overflow: visible!important
 </style>

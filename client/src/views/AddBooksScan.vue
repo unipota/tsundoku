@@ -47,8 +47,6 @@ import AddBookCard from '@/components/molecules/AddBookCard.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import { Carousel, Slide } from 'vue-carousel'
 
-import api from '@/store/general/api'
-
 import {
   BrowserBarcodeReader,
   BarcodeFormat,
@@ -121,12 +119,13 @@ export default class AddBooksScan extends Vue {
   cardShiftWidth = 0
 
   async mounted() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(window as any).addByIsbn = (isbn: string) =>
       this.barcodeScanned({
         getText() {
           return isbn
         }
-      } as any)
+      } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
     if (!codeReader.isMediaDevicesSuported) {
       this.setScanState('nodevice')
       return
@@ -166,6 +165,7 @@ export default class AddBooksScan extends Vue {
     canvas.height = cropArea.clientHeight
     canvas.classList.add('barcode-reader-canvas')
     cropArea.appendChild(canvas)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const anyCropArea = cropArea as any
 
     const ctx = canvas.getContext('2d')
@@ -207,7 +207,10 @@ export default class AddBooksScan extends Vue {
 
     const draw = () => {
       const [sx, sy, sw, sh] = getDrawArea()
-      ctx!!.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
+      if (!ctx) {
+        return
+      }
+      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
       requestAnimationFrame(draw)
     }
 

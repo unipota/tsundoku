@@ -33,8 +33,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
-import api from '@/store/general/api'
-
 import Icon from '@/components/assets/Icon.vue'
 import AddTsundokuButton from '@/components/atoms/AddTsundokuButton.vue'
 import AddBooksEditInput from '@/components/molecules/AddBooksEditInput.vue'
@@ -59,11 +57,21 @@ export default class AddBooksSearch extends Vue {
   private coverImageUrl = ''
 
   mounted() {
-    this.title = this.$route.query.title
-    this.author = this.$route.query.author
-    this.price = this.$route.query.price
-    this.totalPages = this.$route.query.totalPages
-    this.coverImageUrl = this.$route.query.coverImageUrl
+    if (typeof this.$route.query.title === 'string') {
+      this.title = this.$route.query.title
+    }
+    if (typeof this.$route.query.author === 'string') {
+      this.author = this.$route.query.author
+    }
+    if (typeof this.$route.query.price === 'string') {
+      this.price = this.$route.query.price
+    }
+    if (typeof this.$route.query.totalPages === 'string') {
+      this.totalPages = this.$route.query.totalPages
+    }
+    if (typeof this.$route.query.coverImageUrl === 'string') {
+      this.coverImageUrl = this.$route.query.coverImageUrl
+    }
   }
 
   async onAddTsundoku() {

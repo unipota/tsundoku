@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
 import { BookRecord } from '@/types/Book'
-// import { createApiMock } from './createApiMock'
 
 const isDev = process.env['NODE_ENV'] === 'development'
 
@@ -9,12 +8,8 @@ const client = axios.create({
   headers: { 'Access-Control-Allow-Origin': '*' }
 })
 
-// if (isDev) {
-//   createApiMock(client)
-// }
-
 const api = {
-  getMyBooks(): Promise<AxiosResponse> {
+  getMyBooks(): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/books')
   },
   addNewBook(book: BookRecord): Promise<AxiosResponse> {

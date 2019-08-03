@@ -3,7 +3,7 @@
     .book-list-item__title(:class="`is-${size}`")
       | {{ book.title }}
     .book-list-item__author(:class="`is-${size}`")
-      icon.icon(name="author")
+      icon.icon(name="author" color="currentColor")
       span(v-for="(author, index) in book.author")
         | {{ author + (index < book.author.length-1 ? ' / ' : '')}}
 </template>
@@ -54,6 +54,8 @@ export default class BookMajorInfo extends Vue {
   overflow: hidden
   white-space: nowrap
   text-overflow: ellipsis
+  padding:
+    left: 4px
   .icon
     margin:
       right: 7px

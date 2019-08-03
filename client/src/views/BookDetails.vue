@@ -34,12 +34,16 @@ import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 })
 export default class BookDetails extends Vue {
   public $store!: ExStore
+  private lastBook: BookRecord // モーダル閉じるときのエラー対策
 
-  public async mounted() {}
+  public async mounted() {
+    this.lastBook = this.book
+  }
 
   get book(): BookRecord {
     const bookId = this.$route.params['id']
-    return this.$store.getters.getBookById(bookId)
+    const book = this.$store.getters.getBookById(bookId)
+    return book || this.lastBook
   }
 
   get headerBgStyle() {

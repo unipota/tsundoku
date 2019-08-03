@@ -8,8 +8,10 @@
         :height="100"
       )
     .message-container
-      .message
+      .message(v-if="name === 'tsundoku'")
         | {{ $t('noTsundoku') }}
+      .message(v-else)
+        | {{ $t('noKidoku') }}
       .message(v-if="name === 'tsundoku'")
         | {{ $t('addBooksFromHere') }}
 </template>

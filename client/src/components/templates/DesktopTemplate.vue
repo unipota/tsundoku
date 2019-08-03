@@ -53,6 +53,7 @@ export default class DesktopTemplate extends Vue {
 
 .content-wrap
   width: 100%
+  min-height: 100vh
   padding:
     top: 24px
     bottom: 24px
@@ -82,5 +83,4 @@ export default class DesktopTemplate extends Vue {
   transition: filter .5s $easeInOutQuint
   .modal-shown &
     filter: blur(8px)
-
 </style>

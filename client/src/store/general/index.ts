@@ -220,6 +220,18 @@ export const actions: Actions<S, A, G, M> = {
         }
       })
     })
+  },
+  async deleteBook({}, { id }): Promise<BookRecord[]> {
+    console.log(id)
+    return new Promise((resolve, reject) => {
+      api.deleteBook(id).then(result => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
   }
 }
 

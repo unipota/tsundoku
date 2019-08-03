@@ -18,10 +18,12 @@
     add-books-edit-input.edit-input(
       :label="$t('price')"
       v-model="price"
+      type="number"
     )
     add-books-edit-input.edit-input(
       :label="$t('totalPages')"
       v-model="totalPages"
+      type="number"
     )
     .add-button-container
       add-tsundoku-button(

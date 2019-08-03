@@ -61,7 +61,7 @@ export default class MobileTemplate extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .top-bar-wrap
   position: fixed
   z-index: 1000
@@ -91,7 +91,7 @@ export default class MobileTemplate extends Vue {
 .top-bar-wrap, .content-wrap, .bottom-bar-wrap, .tsundoku-button
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
-    filter: blur(8px)
+    filter: blur(4px)
 
 .modal-wrap
   position: fixed

@@ -49,5 +49,9 @@
   "editYourself": "自分で入力する",
   "addBooksSearchPlaceholder": "検索",
 
+  "noTsundoku": "ツンドクがありません",
+  "noKidoku": "キドクがありません",
+  "addBooksFromHere": "新しく本を積むにはこちら",
+
   "networkError": "ネットワークエラー"
 }

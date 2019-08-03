@@ -4,7 +4,9 @@
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
     .view-header-container
     .view
-      .list-item-container(v-for="book in books")
+      .empty(v-if="books.length === 0")
+        books-empty(name="tsundoku")
+      .list-item-container(v-else v-for="book in books")
         book-list-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
@@ -16,11 +18,13 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
+import BooksEmpty from '@/components/molecules/BooksEmpty.vue'
 import BookListItem from '@/components/organs/BookListItem.vue'
 
 @Component({
   components: {
     PriceDisplay,
+    BooksEmpty,
     BookListItem
   }
 })

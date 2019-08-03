@@ -28,7 +28,7 @@ export interface G {
   books: BookRecord[]
   tsundokuBooks: BookRecord[]
   kidokuBooks: BookRecord[]
-  getBookById: (bookId: string) => BookRecord
+  getBookById: (bookId: string) => BookRecord | undefined
   tsundokuPrice: number
   kidokuPrice: number
 }

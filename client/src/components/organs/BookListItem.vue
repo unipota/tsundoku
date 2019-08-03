@@ -54,6 +54,7 @@ export default class BookListItem extends Vue {
   align-items: center
   width: 100%
   height: 160px
+  color: var(--text-black)
 
 .book-list-item__cover
   position: absolute

@@ -43,17 +43,22 @@ export default class DesktopTemplate extends Vue {
   display: flex
 
 .nav-wrap
+  position: fixed
+  left: 0
+  top: 0
   width: 320px
   padding: 24px
   flex-shrink: 0
 
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
-    filter: blur(8px)
+    filter: blur(4px)
 
 .content-wrap
   width: 100%
   min-height: 100vh
+  margin:
+    left: 320px
   padding:
     top: 24px
     bottom: 24px
@@ -76,6 +81,7 @@ export default class DesktopTemplate extends Vue {
 
   transition: opacity .5s $easeInOutQuint
   opacity: 0
+
   .modal-shown &
     opacity: 1
 

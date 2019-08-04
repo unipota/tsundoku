@@ -61,7 +61,7 @@ export default class MobileTemplate extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .top-bar-wrap
   position: fixed
   z-index: 1000
@@ -73,6 +73,9 @@ export default class MobileTemplate extends Vue {
   padding:
     top: 64px
     bottom: 90px
+
+  .modal-shown &
+    position: fixed //スクロールさせない
 
 .view-mobile
   overflow:
@@ -88,10 +91,10 @@ export default class MobileTemplate extends Vue {
   bottom: env(safe-area-inset-bottom)
   width: 100%
 
-.top-bar-wrap, .content-wrap, .bottom-bar-wrap, .tsundoku-button
+.top-bar-wrap, .content-wrap, .tsundoku-button
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
-    filter: blur(8px)
+    filter: blur(4px)
 
 .modal-wrap
   position: fixed

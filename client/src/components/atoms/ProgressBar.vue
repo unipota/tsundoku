@@ -11,7 +11,7 @@ export default class ProgressBar extends Vue {
   @Prop({ type: Number, required: true }) private progress!: number
 
   get validatedProgress() {
-    return Math.min(1, Math.max(0, this.progress))
+    return Math.min(1, Math.max(0.02, this.progress))
   }
 
   get progressStyle() {

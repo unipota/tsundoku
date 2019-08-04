@@ -5,6 +5,7 @@
     text-input(
       with-clear-button
       :value="value"
+      :type="type"
       @input="handleInput"
     )
 </template>
@@ -21,6 +22,7 @@ import TextInput from '@/components/atoms/TextInput.vue'
 export default class AddBooksSearch extends Vue {
   @Prop(String) label!: string
   @Prop(String) value!: string
+  @Prop({ type: String, default: 'text' }) type!: string
 
   handleInput(value: string) {
     this.$emit('input', value)

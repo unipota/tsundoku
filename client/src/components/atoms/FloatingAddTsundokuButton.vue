@@ -1,7 +1,7 @@
 <template lang="pug">
   transition-group.floating-add-tsundoku-button(
-    :class="{'is-active': active}" 
-    name="transition-button" 
+    :class="{'is-active': active}"
+    name="transition-button"
     tag="div"
     v-click-outside="handleClickOutside")
     .button-search(@click="openSearchModal" key="search" v-show="active")
@@ -56,7 +56,7 @@ export default class FloatingAddTsundokuButton extends Vue {
 
   openEditModal() {
     this.active = false
-    this.$router.push(`${this.firstRouteName}/edit`)
+    this.$router.push(`${this.firstRouteName}/add-books-edit`)
   }
 
   get firstRouteName() {

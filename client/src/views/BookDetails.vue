@@ -34,7 +34,7 @@ import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 })
 export default class BookDetails extends Vue {
   public $store!: ExStore
-  private lastBook: BookRecord // モーダル閉じるときのエラー対策
+  private lastBook!: BookRecord // モーダル閉じるときのエラー対策
 
   public async mounted() {
     this.lastBook = this.book

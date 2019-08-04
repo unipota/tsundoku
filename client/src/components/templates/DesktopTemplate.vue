@@ -56,6 +56,7 @@ export default class DesktopTemplate extends Vue {
 
 .content-wrap
   width: 100%
+  min-height: 100vh
   margin:
     left: 320px
   padding:

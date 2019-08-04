@@ -3,6 +3,7 @@
   input(
     type="text"
     :value="value"
+    :type="type"
     :placeholder="placeholder"
     @input="$emit('input', $event.target.value)"
     @keyup.enter="$emit('keyup-enter')"
@@ -30,6 +31,7 @@ export default class TextInput extends Vue {
   @Prop({ type: String, default: '' }) value!: string
   @Prop({ type: String, default: '' }) placeholder!: string
   @Prop({ type: Boolean, default: false }) withClearButton!: boolean
+  @Prop({ type: String, default: 'text' }) type!: string
 }
 </script>
 

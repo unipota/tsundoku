@@ -17,7 +17,7 @@ export const state = (): S => ({
   showMobileTabBar: true,
   showDesktopNav: true,
   booksMap: {},
-  useMockBooksMap: false // 開発用
+  useMockBooksMap: true // 開発用
 })
 // ______________________________________________________
 //

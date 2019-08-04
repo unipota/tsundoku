@@ -113,7 +113,11 @@ export default class BookDetails extends Vue {
   width: 100%
 
 .info
-  margin: 16px
+  margin:
+    top: 12px
+    left: 16px
+    right: 32px
+    bottom: 16px
   position: relative
 
   color: white

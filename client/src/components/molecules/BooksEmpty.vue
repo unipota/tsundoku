@@ -92,8 +92,8 @@ export default class BooksEmpty extends Vue {
 
   .is-mobile &
     display: flex
-    align-items: end
-    justify-content: end
+    align-items: flex-end
+    justify-content: flex-end
 
     bottom: 140px
     max-width: 120px

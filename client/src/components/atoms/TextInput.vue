@@ -9,13 +9,13 @@
     @keyup.enter="$emit('keyup-enter')"
   )
   .close(@click="$emit('input', '')")
-    icon(
-      v-if="withClearButton"
-      name="close"
-      color="var(--text-gray)"
-      :height="16"
-    )
-
+    transition(name="transition-close")
+      icon(
+        v-if="withClearButton && value"
+        name="close"
+        color="var(--text-gray)"
+        :height="16"
+      )
 </template>
 
 <script lang="ts">
@@ -35,7 +35,7 @@ export default class TextInput extends Vue {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .text-input
   display: flex
   align-items: center
@@ -63,4 +63,11 @@ export default class TextInput extends Vue {
   opacity: 0.75
   &:hover
     opacity: 1
+
+.transition-close
+  &-enter, &-leave-to
+    opacity: 0
+
+  &-enter-active, &-leave-active
+    transition: opacity .3s
 </style>

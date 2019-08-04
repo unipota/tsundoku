@@ -2,13 +2,14 @@
   .list-controller
     .text-input-wrap
       text-input(
-        v-model="filterText" 
-        placeholder="タイトルや著者でフィルター"
+        :value="filterText" 
+        @input="handleInput"
+        placeholder="タイトルや著者など"
         withClearButton)
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import TextInput from '@/components/atoms/TextInput.vue'
 
@@ -16,7 +17,12 @@ import TextInput from '@/components/atoms/TextInput.vue'
   components: { TextInput }
 })
 export default class ListController extends Vue {
-  filterText: string = ''
+  @Prop({ type: String, required: true })
+  private filterText: string = ''
+
+  handleInput(value: string) {
+    this.$emit('update:filterText', value)
+  }
 }
 </script>
 
@@ -28,4 +34,6 @@ export default class ListController extends Vue {
     right: 16px
 
 .text-input-wrap
+  max-width: 480px
+  margin: auto
 </style>

@@ -93,6 +93,10 @@ input[type="text"], input[type="number"]
   outline: none
   background: none
 
+// fix placeholder position for iOS safari
+input::-webkit-input-placeholder
+  line-height: 1.4rem
+  
 // reset link styles
 a
   color: inherit

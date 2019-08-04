@@ -3,6 +3,7 @@
     portal(to="priceDisplay")
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
     .view-header-container
+      list-controller
     .view
       .list-item-container(v-for="book in books")
         book-list-item(:book="book")
@@ -16,11 +17,13 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
+import ListController from '@/components/molecules/ListController.vue'
 import BookListItem from '@/components/organs/BookListItem.vue'
 
 @Component({
   components: {
     PriceDisplay,
+    ListController,
     BookListItem
   }
 })

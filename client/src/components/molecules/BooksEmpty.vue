@@ -47,6 +47,7 @@ export default class BooksEmpty extends Vue {
   align-items: center
   justify-content: center
   flex-direction: column
+  position: relative
 
   width: 100%
 

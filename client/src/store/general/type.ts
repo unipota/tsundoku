@@ -59,6 +59,7 @@ export interface A {
   searchBooksByISBN: { isbn: string }
   searchBooks: { search: string }
   addNewBook: { book: BookRecord }
+  deleteBook: { id: string }
 }
 export type RA = {
   [K in keyof A]: A[K]

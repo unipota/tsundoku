@@ -3,9 +3,9 @@
     .progress-wrap
       book-list-item-progress(:book="book")
     .record-read-pages-button-wrap
-      record-read-pages-button
+      record-read-pages-button(@click="handleClickRecord")
     .check-button-wrap
-      check-button
+      check-button(@click="handleClickCheck")
 </template>
 
 <script lang="ts">
@@ -19,9 +19,16 @@ import CheckButton from '@/components/atoms/CheckButton.vue'
 @Component({
   components: { BookListItemProgress, RecordReadPagesButton, CheckButton }
 })
-export default class BookListItemProgressContainer extends Vue {
+export default class BookListItemProgressController extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord
+
+  handleClickRecord(e: MouseEvent) {
+    this.$emit('click-record', e)
+  }
+  handleClickCheck(e: MouseEvent) {
+    this.$emit('click-check', e)
+  }
 }
 </script>
 

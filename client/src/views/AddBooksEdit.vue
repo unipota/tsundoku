@@ -103,19 +103,21 @@ export default class AddBooksSearch extends Vue {
   -webkit-overflow-scrolling: touch
 
 .book-cover
-  margin: 20px auto 40px auto
+  margin: 20px auto 40px
 
 .edit-input
-  width: 85%
 
   .is-desktop &
-    margin: 0 auto 40px auto
+    width: 85%
+    margin: 0 auto 40px
   .is-mobile &
-    margin: 0 auto 30px auto
+    margin: 0 auto 30px
 
 .add-button-container
   display: flex
   justify-content: flex-end
-  width: 85%
   margin: 2rem auto
+
+  .is-desktop &
+    width: 85%
 </style>

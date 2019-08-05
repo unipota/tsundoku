@@ -54,7 +54,7 @@ export default class BookListItem extends Vue {
   popoverActive: boolean = false
 
   handleClickRecord() {
-    this.popoverActive = true
+    // this.popoverActive = true
   }
   handleClickCheck() {
     console.log('check')

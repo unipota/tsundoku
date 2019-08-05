@@ -2,7 +2,7 @@
   .tsundoku
     portal(to="priceDisplay")
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
-    .view-header-container
+    .view-header-container(v-if="books.length !== 0")
       list-controller(:filterText.sync="filterText")
     .view
       .empty(v-if="books.length === 0")

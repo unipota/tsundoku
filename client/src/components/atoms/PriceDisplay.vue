@@ -32,9 +32,7 @@ export default class PriceDisplay extends Vue {
   tweenedPriceNumberObject = { price: 0 }
 
   get priceWithDelimiter(): string {
-    return `${
-      this.tsundoku && this.tweenedPriceNumberObject.price !== 0 ? '-' : ''
-    }${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString()}`
+    return `${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString()}`
   }
 
   get bodyStyle() {

@@ -6,6 +6,14 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
+import { createDecorator } from 'vue-class-component'
+
+const Meta = createDecorator((options, key) => {
+  if (!options.methods) {
+    return
+  }
+  options['metaInfo'] = options.methods[key]
+})
 
 const MobileTemplate = () => import('@/components/templates/MobileTemplate.vue')
 const DesktopTemplate = () =>
@@ -43,6 +51,17 @@ export default class App extends Vue {
     this.$store.commit('setLocale', 'ja') // 今のところは日本語のみにしておく
   }
 
+  @Meta
+  metaInfo() {
+    return {
+      title: 'ツンドク',
+      htmlAttrs: {},
+      bodyAttrs: {
+        class: [this.$route.meta.isModal ? 'scroll-fix' : '']
+      }
+    }
+  }
+
   mounted() {
     this.$nextTick(() => {
       this.handleResizeWindow()
@@ -58,7 +77,4 @@ export default class App extends Vue {
 <style lang="sass">
 @import '@/style/global.sass'
 @import '@/style/reset.sass'
-
-#app
-  height: 100vh
 </style>

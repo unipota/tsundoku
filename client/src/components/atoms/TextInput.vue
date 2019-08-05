@@ -54,6 +54,8 @@ export default class TextInput extends Vue {
   color: var(--text-black)
   &::placeholder
     color: var(--text-gray)
+    font:
+      weight: bold
 
 .close
   display: flex

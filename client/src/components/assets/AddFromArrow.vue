@@ -1,5 +1,6 @@
 <template functional>
   <svg
+    v-if="props.arrowType === 'mobile-portrait'"
     width="100%"
     height="100%"
     viewBox="0 0 56 60"
@@ -12,13 +13,32 @@
       fill-opacity="0.3"
     />
   </svg>
+  <svg
+    v-else-if="props.arrowType === 'mobile-landscape'"
+    width="100%"
+    height="100%"
+    viewBox="0 0 238 43"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M1.89557 31.1365C0.656893 31.7465 0.147222 33.2451 0.757184 34.4838C1.36715 35.7224 2.86576 36.2321 4.10443 35.6221L1.89557 31.1365ZM235.953 35.7772C237.277 35.386 238.034 33.9954 237.642 32.6713L231.267 11.0933C230.876 9.76919 229.485 9.01291 228.161 9.40412C226.837 9.79532 226.081 11.1859 226.472 12.51L232.139 31.6904L212.959 37.3572C211.634 37.7484 210.878 39.1389 211.269 40.4631C211.661 41.7872 213.051 42.5435 214.375 42.1523L235.953 35.7772ZM4.10443 35.6221C85.4456 -4.43283 160.584 -4.38022 234.05 35.5758L236.439 31.1834C161.416 -9.61976 84.5543 -9.56729 1.89557 31.1365L4.10443 35.6221Z"
+      fill="#FF8372"
+      fill-opacity="0.3"
+    />
+  </svg>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component
-export default class DummyBookCover extends Vue {}
+export default class DummyBookCover extends Vue {
+  @Prop({ type: String, required: true }) arrowType!:
+    | 'mobile-portrait'
+    | 'mobile-landscape'
+    | 'desktop'
+}
 </script>
 
 <style lang="sass"></style>

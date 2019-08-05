@@ -12,21 +12,31 @@
         | {{ $t('noTsundoku') }}
       .message(v-else)
         | {{ $t('noKidoku') }}
-      .message(v-if="name === 'tsundoku'")
+      .message(v-if="name === 'tsundoku' && $store.state.viewType === 'mobile'")
         | {{ $t('addBooksFromHere') }}
-    .arrow-container
-      add-from-arrow-mobile(v-if="$store.state.viewType === 'mobile'")
+      .message(v-if="name === 'tsundoku' && $store.state.viewType === 'desktop'")
+        | {{ $t('addBooksFromSidebar') }}
+    .arrow-container--mobile.arrow-container--mobile--portrait
+      add-from-arrow(
+        arrow-type="mobile-portrait"
+        v-if="name === 'tsundoku' && $store.state.viewType === 'mobile'"
+      )
+    .arrow-container--mobile.arrow-container--mobile--landscape
+      add-from-arrow(
+        arrow-type="mobile-landscape"
+        v-if="name === 'tsundoku' && $store.state.viewType === 'mobile'"
+      )
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import Icon from '@/components/assets/Icon.vue'
-import AddFromArrowMobile from '@/components/assets/AddFromArrowMobile.vue'
+import AddFromArrow from '@/components/assets/AddFromArrow.vue'
 
 @Component({
   components: {
     Icon,
-    AddFromArrowMobile
+    AddFromArrow
   }
 })
 export default class BooksEmpty extends Vue {
@@ -87,23 +97,41 @@ export default class BooksEmpty extends Vue {
     size: 1rem
   color: $text-gray
 
-.arrow-container
+.arrow-container--mobile
   position: absolute
-
+  display: none
   .is-mobile &
-    display: flex
-    align-items: flex-end
-    justify-content: flex-end
+    display: block
 
-    bottom: 140px
-    max-width: 120px
+  bottom: 60px
+  max-width: 120px
+  right: 0
+  height: calc(50vw - 110px)
+  width: calc(50vw - 110px)
+
+  @media(min-height: 600px)
+    bottom: 0
+    top: calc(50% + 21vh)
+    transform: translateY(-50%)
+
+  &.arrow-container--mobile--portrait
+    display: none
+    @media(orientation: portrait)
+      display: block
+
+  &.arrow-container--mobile--landscape
+    display: none
     @media(orientation: landscape)
-      display: none
-    @media(min-height: 600px)
-      bottom: 0
-      top: calc(50% + 21vh)
-      transform: translateY(-50%)
-    right: 20px
-    height: calc(50vw - 110px)
-    width: calc(50vw - 110px)
+      display: block
+      bottom: 10px
+      max-width: 100vw
+      right: 60px
+      height: calc(50% - 40px)
+      width: calc(50% - 160px)
+
+.arrow-container--desktop
+  position: absolute
+  display: none
+  .is-desktop &
+    display: block
 </style>

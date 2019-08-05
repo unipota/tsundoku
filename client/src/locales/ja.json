@@ -52,6 +52,7 @@
   "noTsundoku": "ツンドクがありません",
   "noKidoku": "キドクがありません",
   "addBooksFromHere": "新しく積むにはこちら",
+  "addBooksFromSidebar": "サイドバーから積んでみましょう",
 
   "networkError": "ネットワークエラー"
 }

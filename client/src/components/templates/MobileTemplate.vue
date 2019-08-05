@@ -1,7 +1,8 @@
 <template lang="pug">
   .view-mobile(:class="{ 'modal-shown': $route.meta.isModal }")
-    .modal-overlay
+    portal-target.popover-wrap(name="popoverView")
     portal-target.modal-wrap(name="modalView")
+    .modal-overlay
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
     .content-wrap(ref="scrollContainer")
@@ -62,6 +63,9 @@ export default class MobileTemplate extends Vue {
 </script>
 
 <style lang="sass" scoped>
+.view-mobile
+  width: 100vw
+
 .top-bar-wrap
   position: fixed
   z-index: 1000
@@ -73,16 +77,6 @@ export default class MobileTemplate extends Vue {
   padding:
     top: 64px
     bottom: 90px
-
-  .modal-shown &
-    position: fixed //スクロールさせない
-
-.view-mobile
-  overflow:
-    x: hidden
-    y: scroll
-  width: 100vw
-  -webkit-overflow-scrolling: touch
 
 .bottom-bar-wrap
   position: fixed
@@ -96,9 +90,16 @@ export default class MobileTemplate extends Vue {
   .modal-shown &
     filter: blur(4px)
 
+.popover-wrap
+  position: fixed
+  z-index: 4000
+
 .modal-wrap
   position: fixed
   z-index: 3000
+  width: 100%
+  height: 100%
+  pointer-events: none
 
 .modal-overlay
   position: fixed
@@ -114,8 +115,10 @@ export default class MobileTemplate extends Vue {
 
   transition: opacity .5s $easeInOutQuint
   opacity: 0
+
   .modal-shown &
     opacity: 1
+    pointer-events: auto
 
 .transition-floating-button
   &-enter, &-leave-to

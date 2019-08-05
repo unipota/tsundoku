@@ -1,20 +1,32 @@
 @import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c:400,700&display=swap&subset=japanese')
 @import url('https://cdn.jsdelivr.net/npm/yakuhanjp@3.2.0/dist/css/yakuhanrp.min.css')
 
+html
+  --tsundoku-red: #{$tsundoku-red}
+  --tsundoku-red-bg: #{$tsundoku-red-bg}
+  --kidoku-blue: #{$kidoku-blue}
+  --kidoku-blue-bg: #{$kidoku-blue-bg}
+  --toukei-black: #{$toukei-black}
+  --toukei-black-bg: #{$toukei-black-bg}
+  --succeed-blue: #{$succeed-blue}
+  --danger-red: #{$danger-red}
+  --text-black: #{$text-black}
+  --text-gray: #{$text-gray}
+  --text-white: #{$text-white}
+  --border-gray: #{$border-gray}
+  --bg-gray: #{$bg-gray}
+  --bg-suppressed-gray: #{$bg-suppressed-gray}
+
+body
+  &.scroll-fix
+    overflow: hidden
+
 #app
   font-family: YakuHanRP, 'M PLUS Rounded 1c', -apple-system, 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
-  color: #2c3e50
   scroll-behavior: smooth
-
-#nav
-  padding: 30px
-  a
-    font-weight: bold
-    color: #2c3e50
-    &.router-link-exact-active
-      color: #42b983
+  color: var(--text-black)
 
 .pointer
   cursor: pointer
@@ -24,6 +36,6 @@
     &.translate-y
       transform: translateY(100%)
     &.translate-x
-      transform: translateX(-100%)      
+      transform: translateX(-100%)
   &-enter-active, &-leave-active
     transition: transform .5s $easeInOutQuint

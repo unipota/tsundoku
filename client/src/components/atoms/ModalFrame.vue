@@ -56,17 +56,20 @@ export default class ModalFrame extends Vue {
     const base = splitted.slice(0, pathLength - Math.min(backCount, pathLength))
     base.push(path)
 
-    this.$router.push(base.join('/'))
+    this.$nextTick(() => {
+      this.$router.push(base.join('/'))
+    })
   }
 }
 </script>
 
 <style lang="sass" scoped>
 .modal-frame-overlay
-  position: fixed
+  position: absolute
   bottom: 0
   height: 100%
   z-index: 10
+  pointer-events: auto
   &.is-mobile
     width: 100%
   &.is-desktop

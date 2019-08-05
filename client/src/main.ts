@@ -5,9 +5,11 @@ import store from './store'
 import i18n from './i18n'
 import PortalVue from 'portal-vue'
 import vClickOutside from 'v-click-outside'
+import VueMeta from 'vue-meta'
 
 Vue.use(PortalVue)
 Vue.use(vClickOutside)
+Vue.use(VueMeta)
 
 Vue.config.productionTip = false
 

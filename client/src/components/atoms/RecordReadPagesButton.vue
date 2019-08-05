@@ -1,5 +1,5 @@
 <template lang="pug">
-  .record-read-pages-button
+  .record-read-pages-button(@click="handleClick")
     icon(name="bookmark" color="white" :width="18" :height="18")
     span.label
       | {{$t('record')}}
@@ -12,7 +12,11 @@ import Icon from '@/components/assets/Icon.vue'
 @Component({
   components: { Icon }
 })
-export default class RecordReadPagesButton extends Vue {}
+export default class RecordReadPagesButton extends Vue {
+  handleClick(e: MouseEvent) {
+    this.$emit('click', e)
+  }
+}
 </script>
 
 <style lang="sass" scoped>

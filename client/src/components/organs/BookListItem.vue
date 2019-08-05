@@ -19,23 +19,29 @@
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-container(:book="book")
+      book-list-item-progress-controller(
+        :book="book" @click-record="handleClickRecord" @click-check="handleClickCheck")
+    portal(to="popoverView" v-if="popoverActive")
+      book-progress-popover(:book="book")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { BookRecord } from '../../types/Book'
+
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
-import BookListItemProgressContainer from '@/components/molecules/BookListItemProgressContainer.vue'
+import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 import Icon from '@/components/assets/Icon.vue'
+import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
 
 @Component({
   components: {
     BookCover,
     BookMajorInfo,
-    BookListItemProgressContainer,
-    Icon
+    BookListItemProgressController,
+    Icon,
+    BookProgressPopover
   }
 })
 export default class BookListItem extends Vue {
@@ -44,10 +50,19 @@ export default class BookListItem extends Vue {
 
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
+
+  popoverActive: boolean = false
+
+  handleClickRecord() {
+    // this.popoverActive = true
+  }
+  handleClickCheck() {
+    console.log('check')
+  }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 .book-list-item__body
   display: block
   position: relative
@@ -73,7 +88,7 @@ export default class BookListItem extends Vue {
   display: flex
   flex-flow: column
   align-items: flex-start
-  just-content: space-between
+  justify-content: space-between
 
   width: calc(100% - 80px)
   height: 100%
@@ -97,7 +112,6 @@ export default class BookListItem extends Vue {
   width: 100%
   margin-right: 4px
   flex:
-    basis: 100%
     grow: 1
     shrink: 1
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-  .check-button
+  .check-button(@click="handleClick")
     icon(name="check" color="white" :width="19" :height="14")
 </template>
 
@@ -10,7 +10,11 @@ import Icon from '@/components/assets/Icon.vue'
 @Component({
   components: { Icon }
 })
-export default class CheckButton extends Vue {}
+export default class CheckButton extends Vue {
+  handleClick(e: MouseEvent) {
+    this.$emit('click', e)
+  }
+}
 </script>
 
 <style lang="sass" scoped>

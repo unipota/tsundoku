@@ -22,7 +22,7 @@
       book-list-item-progress-controller(
         :book="book" @click-record="handleClickRecord" @click-check="handleClickCheck")
     portal(to="popoverView" v-if="popoverActive")
-      book-progress-popover(:book="book")
+      book-progress-popover(:book="book" @close="closePopover")
 </template>
 
 <script lang="ts">
@@ -54,10 +54,13 @@ export default class BookListItem extends Vue {
   popoverActive: boolean = false
 
   handleClickRecord() {
-    // this.popoverActive = true
+    this.popoverActive = true
   }
   handleClickCheck() {
     console.log('check')
+  }
+  closePopover() {
+    this.popoverActive = false
   }
 }
 </script>

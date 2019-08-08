@@ -1,26 +1,43 @@
 <template lang="pug">
   .wrapper
     .tab-bar
-      router-link.tab(
-        v-for="tab in tabs"
-        :key="tab.name"
-        :to="{ name: tab.to, hash: $route.hash}"
-        :class="{'selected': selectedPath === tab.name, [tab.name]: true}"
-      )
-        span.icon(:class="[tab.name]" key="icon")
-          icon(
-            :name="tab.name" 
-            :color="selectedPath === tab.name ? undefined: `var(--${tab.inactiveColor})`"
-            :height="20"
-            :width="30")
-        span.label(v-if="selectedPath === tab.name" key="label")
-          | {{ $t(tab.name) }}
+      .tab-body(v-for="(tab, index) in tabs"
+          :ref="tab.name"
+          :key="tab.name"
+          :style="{width: tab.width}")
+        router-link(:to="{ name: tab.to, hash: $route.hash}")
+          transition-group.tab(name="transition-tab" tag="div"
+            :class="{'selected': selectedPath === tab.name, [tab.name]: true}")
+            div.icon(:class="[tab.name]" key="icon")
+              icon(
+                :name="tab.name" 
+                :color="selectedPath === tab.name ? undefined: `var(--${tab.inactiveColor})`"
+                :height="20"
+                :width="30"
+                key="icon")
+            span.label(v-if="selectedPath === tab.name" key="label")
+              | {{ $t(tab.name) }}
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
+
+interface TabProps {
+  name: string
+  to: string
+  inactiveColor: string
+  width: string
+}
+
+interface Tabs {
+  tsundoku: TabProps
+  kidoku: TabProps
+  toukei: TabProps
+}
+
+type TabNames = keyof Tabs
 
 @Component({
   components: { Icon }
@@ -34,23 +51,40 @@ export default class MobileTabBar extends Vue {
       ? 'tsundoku'
       : this.firstRouteName.slice(1)
   }
+  get tabStyle() {
+    return {}
+  }
 
-  private tabs = {
+  private tabs: Tabs = {
     tsundoku: {
       name: 'tsundoku',
       to: 'tsundoku',
-      inactiveColor: 'tsundoku-red-bg'
+      inactiveColor: 'tsundoku-red-bg',
+      width: ''
     },
     kidoku: {
       name: 'kidoku',
       to: 'kidoku',
-      inactiveColor: 'kidoku-blue-bg'
+      inactiveColor: 'kidoku-blue-bg',
+      width: ''
     },
     toukei: {
       name: 'toukei',
       to: 'toukei',
-      inactiveColor: 'toukei-black-bg'
+      inactiveColor: 'toukei-black-bg',
+      width: ''
     }
+  }
+
+  @Watch('selectedPath')
+  onChangeTab(toTab: TabNames, fromTab: TabNames) {
+    this.tabs[toTab].width = ''
+    this.tabs[fromTab].width = ''
+    this.$nextTick(() => {
+      const elements = this.$refs[toTab] as Element[]
+      const el = elements[0]
+      this.tabs[toTab].width = el.clientWidth + 'px'
+    })
   }
 }
 </script>
@@ -58,7 +92,7 @@ export default class MobileTabBar extends Vue {
 <style lang="sass" scoped>
 .wrapper
   width: 100%
-  background: rgba(255,255,255,0.6)
+  background: rgba(255,255,255,0.8)
   backdrop-filter: blur(4px)
   border:
     radius: 32px 32px 0 0
@@ -66,27 +100,28 @@ export default class MobileTabBar extends Vue {
   .tab-bar
     padding: 8px 36px
     display: flex
+    justify-content: space-around
     width: auto
     max-width: 375px - (18px * 2)
     margin: auto
     box-sizing: content-box
 
+    .tab-body
+      transition: width .2s linear
+
     .tab
       display: flex
       position: relative
-      // width: max-content
-      // height: max-content
       border-radius: 44px
       cursor: pointer
       padding:
         top: 12px
+        left: 12px
+        right: 12px
         bottom: 12px
       transition: background-color .5s, width .5s
       background:
         color: transparent
-
-      &:not(:last-child)
-        margin-right: auto
 
       &.selected
         padding:
@@ -107,12 +142,11 @@ export default class MobileTabBar extends Vue {
           background-color: $toukei-black-bg
 
       .icon
+        width: 30px
+        height: 20px
         display: flex
-        margin:
-          top: auto
-          right: auto
-          bottom: auto
-          left: 0
+        justify-content: center
+        align-items: center
 
       .label
         white-space: nowrap
@@ -124,4 +158,17 @@ export default class MobileTabBar extends Vue {
         font:
           size: 16px
           weight: bold
+
+.transition-tab
+  &-enter, &-leave-to
+    opacity: 0
+
+  &-enter-active, &-leave-active
+    transition: opacity .5s
+
+  &-leave-active
+    position: absolute
+
+  &-move
+    transition: transform .6s $easeInOutQuint
 </style>

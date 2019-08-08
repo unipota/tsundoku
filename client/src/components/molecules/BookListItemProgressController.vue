@@ -5,7 +5,7 @@
     .record-read-pages-button-wrap
       record-read-pages-button(@click="handleClickRecord")
     .check-button-wrap
-      check-button(@click="handleClickCheck")
+      kidoku-button(@click="handleClickCheck")
 </template>
 
 <script lang="ts">
@@ -14,10 +14,10 @@ import { BookRecord } from '../../types/Book'
 
 import BookListItemProgress from '@/components/molecules/BookListItemProgress.vue'
 import RecordReadPagesButton from '@/components/atoms/RecordReadPagesButton.vue'
-import CheckButton from '@/components/atoms/CheckButton.vue'
+import KidokuButton from '@/components/atoms/KidokuButton.vue'
 
 @Component({
-  components: { BookListItemProgress, RecordReadPagesButton, CheckButton }
+  components: { BookListItemProgress, RecordReadPagesButton, KidokuButton }
 })
 export default class BookListItemProgressController extends Vue {
   @Prop({ type: Object, required: true })

@@ -19,11 +19,11 @@
     "vue-i18n": "^8.12.0",
     "vue-meta": "^2.2.1",
     "vue-property-decorator": "^8.2.1",
-    "vue-router": "^3.0.7",
+    "vue-router": "^3.1.1",
     "vuex": "^3.1.1"
   },
   "devDependencies": {
-    "@kazupon/vue-i18n-loader": "^0.3.0",
+    "@kazupon/vue-i18n-loader": "^0.4.1",
     "@tweenjs/tween.js": "^17.4.0",
     "@types/webpack": "^4.32.1",
     "@vue/cli-plugin-babel": "^3.10.0",

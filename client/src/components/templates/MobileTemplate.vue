@@ -65,6 +65,7 @@ export default class MobileTemplate extends Vue {
 <style lang="sass" scoped>
 .view-mobile
   width: 100vw
+  min-height: 100vh
 
 .top-bar-wrap
   position: fixed

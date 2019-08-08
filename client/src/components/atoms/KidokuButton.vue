@@ -1,6 +1,6 @@
 <template lang="pug">
   .check-button(@click="handleClick")
-    icon(name="check" color="white" :width="19" :height="14")
+    icon(name="kidoku" color="white" :width="19" :height="14")
 </template>
 
 <script lang="ts">
@@ -10,7 +10,7 @@ import Icon from '@/components/assets/Icon.vue'
 @Component({
   components: { Icon }
 })
-export default class CheckButton extends Vue {
+export default class KidokuButton extends Vue {
   handleClick(e: MouseEvent) {
     this.$emit('click', e)
   }

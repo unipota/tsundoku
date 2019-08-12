@@ -79,9 +79,7 @@ export default class Tsundoku extends Vue {
       .map(book => book.id)
   }
   get filteredBooks() {
-    return this.filteredIds.map((id: string) =>
-      this.books.find(book => book.id === id)
-    )
+    return this.filteredIds.map((id: string) => this.$store.state.booksMap[id])
   }
   get isEmpty() {
     return this.books.length === 0

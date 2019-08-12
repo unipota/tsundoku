@@ -8,14 +8,14 @@
         router-link(:to="{ name: tab.to, hash: $route.hash}")
           transition-group.tab(name="transition-tab" tag="div"
             :class="{'selected': selectedPath === tab.name, [tab.name]: true}")
-            div.icon(:class="[tab.name]" key="icon")
+            .icon(:class="[tab.name]" key="icon")
               icon(
                 :name="tab.name" 
                 :color="selectedPath === tab.name ? undefined: `var(--${tab.inactiveColor})`"
                 :height="20"
                 :width="30"
                 key="icon")
-            span.label(v-if="selectedPath === tab.name" key="label")
+            .label(v-if="selectedPath === tab.name" key="label")
               | {{ $t(tab.name) }}
 </template>
 
@@ -165,6 +165,7 @@ export default class MobileTabBar extends Vue {
 
   &-enter-active, &-leave-active
     transition: opacity .5s
+    transform: translateX(10px)
 
   &-leave-active
     position: absolute

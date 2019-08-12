@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { throttle } from 'lodash'
 
 import Icon from '@/components/assets/Icon.vue'
@@ -26,15 +26,20 @@ import Icon from '@/components/assets/Icon.vue'
 })
 export default class ProgressKnob extends Vue {
   @Prop({ type: Number, required: true })
-  private readonly progressRatio!: number
+  private readonly editedReadPages!: number
 
-  moveX: number = 0
+  @Prop({ type: Number, required: true })
+  private readonly totalPages!: number
+
+  moveX: number = 0 //TODO
   isDrugging: boolean = false
   currentMouseX: number = 0
   progressBarWidth: number = 0
 
   mounted() {
     this.getProgressBarWidth()
+    this.moveX =
+      this.progressBarWidth * (this.editedReadPages / this.totalPages)
   }
 
   getProgressBarWidth() {
@@ -43,11 +48,11 @@ export default class ProgressKnob extends Vue {
 
   get positionByRatio() {
     return {
-      transform: `translateX(-50%) translateX(${this.knobPosX}px)`
+      transform: `translateX(-50%) translateX(${this.limitedPosX}px)`
     }
   }
 
-  get knobPosX() {
+  get limitedPosX() {
     return Math.min(Math.max(this.moveX, 0), this.progressBarWidth)
   }
 
@@ -95,6 +100,19 @@ export default class ProgressKnob extends Vue {
 
   handleMouseleave() {
     this.isDrugging = false
+  }
+
+  @Watch('editedReadPages')
+  onChangeEditedReadPages(value: number) {
+    this.moveX = this.progressBarWidth * (value / this.totalPages)
+  }
+
+  @Watch('limitedPosX')
+  onChangeMoveX(value: number) {
+    this.$emit(
+      'update:editedReadPages',
+      Math.round((value / this.progressBarWidth) * this.totalPages)
+    )
   }
 }
 </script>

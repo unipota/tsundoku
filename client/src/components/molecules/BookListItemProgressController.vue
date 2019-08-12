@@ -2,18 +2,22 @@
   .book-list-item-progress-controller
     .book-list-item-progress-container
       .progress-wrap
-        book-list-item-progress(:book="book" :edit="recordActive")
+        book-list-item-progress(
+          :readPages="readPages"
+          :totalPages="totalPages"
+          :edit="recordActive" 
+          :editedReadPages.sync="editedReadPages")
       .record-read-pages-button-wrap
         record-read-pages-button(@click.stop="handleClickRecord" :active="recordActive")
       .check-button-wrap
         kidoku-button(@click="handleClickCheck")
-    .progress-input-wrap(v-if="recordActive")
-      progress-input(:totalPages="book.totalPages" :readPages.sync="editedReadPages" @close="deactive")
+    .progress-input-wrap(v-show="recordActive")
+      progress-input(:totalPages="totalPages" v-model="editedReadPages" @cancel="handleCancel")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { BookRecord } from '../../types/Book'
+import { ExStore } from 'vuex'
 
 import BookListItemProgress from '@/components/molecules/BookListItemProgress.vue'
 import RecordReadPagesButton from '@/components/atoms/RecordReadPagesButton.vue'
@@ -29,20 +33,37 @@ import ProgressInput from '@/components/atoms/ProgressInput.vue'
   }
 })
 export default class BookListItemProgressController extends Vue {
-  @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  @Prop({ type: String, required: true })
+  private id!: string
+
+  @Prop({ type: Number, required: true })
+  private readPages!: number
+
+  @Prop({ type: Number, required: true })
+  private totalPages!: number
+
+  public $store!: ExStore
 
   recordActive: boolean = false
-  editedReadPages: number = this.book.readPages
+  editedReadPages: number = this.readPages
 
   handleClickRecord() {
-    this.recordActive = !this.recordActive
+    if (!this.recordActive) {
+      this.recordActive = true
+    } else {
+      this.$store.commit('updateBookReadPages', {
+        id: this.id,
+        readPages: this.editedReadPages
+      })
+      this.recordActive = false
+    }
   }
 
   handleClickCheck() {}
 
-  deactive() {
+  handleCancel() {
     this.recordActive = false
+    this.editedReadPages = this.readPages
   }
 }
 </script>

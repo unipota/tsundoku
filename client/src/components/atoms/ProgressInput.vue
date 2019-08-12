@@ -4,20 +4,21 @@
       input.current-price(
         type="text"
         :value="readPages"
+        @paste.prevent=""
         @keypress="isNumber($event)"
-        @input="$emit('update:readPages', validateNumber($event.target.value))"
+        @input="$emit('input', validateNumber($event.target.value))"
         @keydown.up.prevent="handleUpKey"
         @keydown.down.prevent="handleDownKey")
       span.price-total
         | /{{totalPages}}p
-    .close-button(@click.stop="handleClose")
+    .close-button(@click.stop="handleCancel")
       .icon-wrap
         icon(name="close" color="white" :width="12" :height="12")
       span キャンセル
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Model, Prop } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
 
@@ -25,14 +26,14 @@ import Icon from '@/components/assets/Icon.vue'
   components: { Icon }
 })
 export default class ProgressInput extends Vue {
+  @Model('input', { type: Number })
+  private readonly readPages!: number
+
   @Prop({ type: Number, required: true })
   private readonly totalPages!: number
 
-  @Prop({ type: Number, required: true })
-  private readonly readPages!: number
-
-  handleClose() {
-    this.$emit('close')
+  handleCancel() {
+    this.$emit('cancel')
   }
 
   isNumber(e: KeyboardEvent) {
@@ -57,11 +58,11 @@ export default class ProgressInput extends Vue {
   }
 
   handleUpKey() {
-    this.$emit('update:readPages', this.limitationNumber(this.readPages + 1))
+    this.$emit('input', this.limitationNumber(this.readPages + 1))
   }
 
   handleDownKey() {
-    this.$emit('update:readPages', this.limitationNumber(this.readPages - 1))
+    this.$emit('input', this.limitationNumber(this.readPages - 1))
   }
 }
 </script>
@@ -110,7 +111,7 @@ export default class ProgressInput extends Vue {
   border:
     radius: 9999vw
   background:
-    color: var(--kidoku-blue-bg)
+    color: var(--text-gray)
   cursor: pointer
 
   span

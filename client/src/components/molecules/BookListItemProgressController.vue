@@ -23,6 +23,7 @@ import BookListItemProgress from '@/components/molecules/BookListItemProgress.vu
 import RecordReadPagesButton from '@/components/atoms/RecordReadPagesButton.vue'
 import KidokuButton from '@/components/atoms/KidokuButton.vue'
 import ProgressInput from '@/components/atoms/ProgressInput.vue'
+import { BookRecord } from '../../types/Book'
 
 @Component({
   components: {

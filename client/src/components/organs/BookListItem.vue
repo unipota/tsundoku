@@ -7,7 +7,7 @@
         .book-list-item__icon
           icon(name="right-arrow")
         .book-list-item__detail
-          book-major-info(:book="book")
+          book-major-info(:title="book.title" :authors="book.author")
         .book-list-item__price(v-if="kidoku")
           span.book-list-item__total-price.kidoku
             | {{ book.price.toLocaleString() }}
@@ -15,25 +15,22 @@
             | 4日前
         .book-list-item__price(v-else)
           span.book-list-item__total-price.tsundoku
-            | {{ book.price.toLocaleString() }}
+            | {{ remainingPrice.toLocaleString() }}/{{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-controller(
-        :book="book" @click-record="handleClickRecord" @click-check="handleClickCheck")
-    portal(to="popoverView" v-if="popoverActive")
-      book-progress-popover(:book="book")
+      book-list-item-progress-controller(:id="book.id" :readPages="book.readPages" :totalPages="book.totalPages")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { BookRecord } from '../../types/Book'
 
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 import Icon from '@/components/assets/Icon.vue'
 import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
+import { BookRecord } from '../../types/Book'
 
 @Component({
   components: {
@@ -46,23 +43,21 @@ import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
 })
 export default class BookListItem extends Vue {
   @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  private book: BookRecord
 
-  @Prop({ type: Boolean, default: false })
-  private kidoku!: boolean
-
-  popoverActive: boolean = false
-
-  handleClickRecord() {
-    // this.popoverActive = true
-  }
-  handleClickCheck() {
-    console.log('check')
+  get remainingPrice(): string {
+    return `${Math.round(
+      (1 - this.book.readPages / this.book.totalPages) * this.book.price
+    ).toLocaleString()}`
   }
 }
 </script>
 
 <style lang="sass">
+.book-list-item
+  max-width: 700px
+  margin: auto
+
 .book-list-item__body
   display: block
   position: relative
@@ -70,6 +65,7 @@ export default class BookListItem extends Vue {
   width: 100%
   height: 160px
   color: var(--text-black)
+  user-select: none
 
 .book-list-item__cover
   position: absolute

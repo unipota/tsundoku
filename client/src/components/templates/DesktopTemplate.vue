@@ -53,7 +53,7 @@ export default class DesktopTemplate extends Vue {
 
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
-    filter: blur(1px)
+    // filter: blur(1px)
 
 .content-wrap
   width: 100%
@@ -82,6 +82,7 @@ export default class DesktopTemplate extends Vue {
   background-color: rgba(0, 0, 0, 0.5)
   width: 100vw
   height: 100vh
+  backdrop-filter: blur(4px)
 
   pointer-events: none
 
@@ -95,5 +96,5 @@ export default class DesktopTemplate extends Vue {
 .nav-wrap, .content-wrap
   transition: filter .5s $easeInOutQuint
   .modal-shown &
-    filter: blur(1px)
+    // filter: blur(1px)
 </style>

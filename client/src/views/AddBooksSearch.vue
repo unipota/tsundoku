@@ -5,7 +5,9 @@
       v-model="searchQuery"
       :placeholder="$t('addBooksSearchPlaceholder')"
       @keyup-enter="submitSearchQuery"
+      withClearButton
     )
+      icon(name="search" color="var(--text-gray)" :width="18" :height="18")
     router-link.edit-yourself(
       v-show="showEditBar"
       :to="firstRouteName + '/add-books-edit'"

@@ -1,5 +1,7 @@
 <template lang="pug">
 .text-input
+  .icon-wrap
+    slot
   input(
     type="text"
     :value="value"
@@ -50,12 +52,20 @@ export default class TextInput extends Vue {
   width: 100%
   height: 100%
   flex: 100% 1 1
-  font-size: 1rem
+  font:
+    weight: bold
+    size: 1rem
   color: var(--text-black)
   &::placeholder
     color: var(--text-gray)
     font:
       weight: bold
+
+.icon-wrap
+  display: flex
+  align-items: center
+  justify-content: center
+  transform: translateX(-6px)
 
 .close
   display: flex

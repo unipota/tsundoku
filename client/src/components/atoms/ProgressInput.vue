@@ -1,0 +1,97 @@
+<template lang="pug">
+  .progress-input
+    .price-wrap
+      input.current-price(type="text" :value="currentPages")
+      span.price-total
+        | /{{totalPages}}p
+    .close-button(@click.stop="handleClose")
+      .icon-wrap
+        icon(name="close" color="white" :width="12" :height="12")
+      span キャンセル
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+import Icon from '@/components/assets/Icon.vue'
+
+@Component({
+  components: { Icon }
+})
+export default class ProgressInput extends Vue {
+  @Prop({ type: Number, required: true })
+  private readonly totalPages!: number
+
+  currentPages: number = 0
+
+  handleClose() {
+    this.$emit('close')
+  }
+}
+</script>
+
+<style lang="sass" scoped>
+.progress-input
+  display: flex
+  align-items: center
+  padding:
+    top: 8px
+    right: 4px
+
+.price-wrap
+  margin:
+    right: 8px
+
+.price-total
+  font:
+    weight: bold
+  color: var(--kidoku-blue)
+  margin:
+    left: 4px
+
+.current-price
+  text-align: right
+  height: 28px
+  max-width: 80px
+  background: var(--bg-gray)
+  border:
+    radius: 8px
+  padding:
+    right: 8px
+    left: 8px
+  font:
+    size: 1rem
+    weight: bold
+  color: var(--text-gray)
+
+.close-button
+  display: inline-flex
+  align-items: center
+  height: 28px
+  width: 116px
+  padding:
+    left: 4px
+  border:
+    radius: 9999vw
+  background:
+    color: var(--kidoku-blue-bg)
+  cursor: pointer
+
+  span
+    user-select: none
+    color: white
+    font:
+      size: 0.9rem
+      weight: bold
+
+.icon-wrap
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 24px
+  height: 24px
+  margin:
+    right: 2px
+  border:
+    radius: 9999vw
+</style>

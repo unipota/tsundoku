@@ -22,7 +22,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
   components: {}
 })
 export default class IconBookmark extends Vue {
-  @Prop({ type: String, default: 'var(--border-gray)' })
+  @Prop({ type: String, default: 'currentColor' })
   private color!: string
 
   @Prop({ type: Number, default: 32 })

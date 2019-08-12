@@ -19,10 +19,7 @@
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-controller(
-        :book="book" @click-record="handleClickRecord" @click-check="handleClickCheck")
-    portal(to="popoverView" v-if="popoverActive")
-      book-progress-popover(:book="book" @close="closePopover")
+      book-list-item-progress-controller(:book="book")
 </template>
 
 <script lang="ts">
@@ -50,22 +47,14 @@ export default class BookListItem extends Vue {
 
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
-
-  popoverActive: boolean = false
-
-  handleClickRecord() {
-    this.popoverActive = true
-  }
-  handleClickCheck() {
-    console.log('check')
-  }
-  closePopover() {
-    this.popoverActive = false
-  }
 }
 </script>
 
 <style lang="sass">
+.book-list-item
+  max-width: 700px
+  margin: auto
+
 .book-list-item__body
   display: block
   position: relative
@@ -73,6 +62,7 @@ export default class BookListItem extends Vue {
   width: 100%
   height: 160px
   color: var(--text-black)
+  user-select: none
 
 .book-list-item__cover
   position: absolute

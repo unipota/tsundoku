@@ -1,30 +1,29 @@
 <template lang="pug">
   .book-list-item
-    router-link.book-list-item__body(:to="`${$route.matched[0].path}/book/${book.id}`")
+    router-link.book-list-item__body(:to="`${$route.matched[0].path}/book/${id}`")
       .book-list-item__cover
-        book-cover(:url="book.coverImageUrl" :hasShadow="true")
+        book-cover(:url="coverImageUrl" :hasShadow="true")
       .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
         .book-list-item__icon
           icon(name="right-arrow")
         .book-list-item__detail
-          book-major-info(:book="book")
+          book-major-info(:title="title" :authors="author")
         .book-list-item__price(v-if="kidoku")
           span.book-list-item__total-price.kidoku
-            | {{ book.price.toLocaleString() }}
+            | {{ price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
         .book-list-item__price(v-else)
           span.book-list-item__total-price.tsundoku
-            | {{ book.price.toLocaleString() }}
+            | {{ remainingPrice.toLocaleString() }}/{{ price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-controller(:book="book")
+      book-list-item-progress-controller(:id="id" :readPages="readPages" :totalPages="totalPages")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { BookRecord } from '../../types/Book'
 
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
@@ -42,11 +41,35 @@ import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
   }
 })
 export default class BookListItem extends Vue {
-  @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  @Prop({ type: String, required: true })
+  private id!: string
+
+  @Prop({ type: Number, required: true })
+  private price!: number
+
+  @Prop({ type: String, required: true })
+  private title!: string
+
+  @Prop({ type: Array, required: true })
+  private author!: string[]
+
+  @Prop({ type: Number, required: true })
+  private readPages!: number
+
+  @Prop({ type: Number, required: true })
+  private totalPages!: number
+
+  @Prop({ type: String, required: true })
+  private coverImageUrl!: string
 
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
+
+  get remainingPrice(): string {
+    return `${Math.round(
+      (1 - this.readPages / this.totalPages) * this.price
+    ).toLocaleString()}`
+  }
 }
 </script>
 

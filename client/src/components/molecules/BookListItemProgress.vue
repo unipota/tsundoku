@@ -4,13 +4,12 @@
       .book-list-item-progress__progress-bar
         progress-bar(:progress="progressRatio")
         .book-list-item-progress__progress-knob(v-if="edit")
-          progress-knob(:progressRatio="progressRatio")
+          progress-knob(:editedReadPages.sync="syncedEditedReadPages" :totalPages="totalPages")
       | {{ progressPercentStr }}
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { BookRecord } from '../../types/Book'
+import { Vue, Component, Prop, PropSync } from 'vue-property-decorator'
 
 import ProgressBar from '@/components/atoms/ProgressBar.vue'
 import ProgressKnob from '@/components/atoms/ProgressKnob.vue'
@@ -22,22 +21,23 @@ import ProgressKnob from '@/components/atoms/ProgressKnob.vue'
   }
 })
 export default class BookListItemProgress extends Vue {
-  @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  @Prop({ type: Number, required: true })
+  private readPages!: number
+
+  @Prop({ type: Number, required: true })
+  private totalPages!: number
 
   @Prop({ type: Boolean, default: false })
   private edit!: false
 
+  @PropSync('editedReadPages', { type: Number })
+  private syncedEditedReadPages!: number
+
   get progressRatio(): number {
-    return this.book.readPages / this.book.totalPages
+    return this.readPages / this.totalPages
   }
   get progressPercentStr(): string {
-    return `${Math.round((this.book.readPages / this.book.totalPages) * 100)}%`
-  }
-  get remainingPrice(): string {
-    return `${Math.round(
-      (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    ).toLocaleString()}`
+    return `${Math.round((this.readPages / this.totalPages) * 100)}%`
   }
 }
 </script>

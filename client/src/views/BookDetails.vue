@@ -4,10 +4,10 @@
       .header
         .header-bg(:style="headerBgStyle")
           .info-bg
-            book-major-info(:book="book")
+            book-major-info(:title="book.title" :authors="book.author")
         .header-fade
         .info
-          book-major-info(:book="book")
+          book-major-info(:title="book.title" :authors="book.author")
       .cover-wrap
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
       .controller

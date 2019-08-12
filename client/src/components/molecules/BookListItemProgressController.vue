@@ -8,7 +8,7 @@
       .check-button-wrap
         kidoku-button(@click="handleClickCheck")
     .progress-input-wrap(v-if="recordActive")
-      progress-input(:totalPages="book.totalPages" @close="deactive")
+      progress-input(:totalPages="book.totalPages" :readPages.sync="editedReadPages" @close="deactive")
 </template>
 
 <script lang="ts">
@@ -33,6 +33,7 @@ export default class BookListItemProgressController extends Vue {
   private book!: BookRecord
 
   recordActive: boolean = false
+  editedReadPages: number = this.book.readPages
 
   handleClickRecord() {
     this.recordActive = !this.recordActive

@@ -26,6 +26,7 @@
   "devDependencies": {
     "@kazupon/vue-i18n-loader": "^0.4.1",
     "@tweenjs/tween.js": "^17.4.0",
+    "@types/dom-inputevent": "^1.0.5",
     "@types/lodash": "^4.14.136",
     "@types/webpack": "^4.32.1",
     "@vue/cli-plugin-babel": "^3.10.0",

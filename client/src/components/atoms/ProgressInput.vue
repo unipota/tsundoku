@@ -1,7 +1,13 @@
 <template lang="pug">
   .progress-input
     .price-wrap
-      input.current-price(type="text" :value="currentPages")
+      input.current-price(
+        type="text"
+        :value="readPages"
+        @keypress="isNumber($event)"
+        @input="$emit('update:readPages', validateNumber($event.target.value))"
+        @keydown.up.prevent="handleUpKey"
+        @keydown.down.prevent="handleDownKey")
       span.price-total
         | /{{totalPages}}p
     .close-button(@click.stop="handleClose")
@@ -22,10 +28,40 @@ export default class ProgressInput extends Vue {
   @Prop({ type: Number, required: true })
   private readonly totalPages!: number
 
-  currentPages: number = 0
+  @Prop({ type: Number, required: true })
+  private readonly readPages!: number
 
   handleClose() {
     this.$emit('close')
+  }
+
+  isNumber(e: KeyboardEvent) {
+    const charCode = e.which ? e.which : e.keyCode
+    if (
+      (charCode > 31 && (charCode < 48 || charCode > 57)) ||
+      this.readPages === this.totalPages
+    ) {
+      e.preventDefault()
+    } else {
+      return true
+    }
+  }
+
+  validateNumber(value: string) {
+    console.log(value)
+    return this.limitationNumber(Number(value))
+  }
+
+  limitationNumber(value: number): number {
+    return Math.min(Math.max(value, 0), this.totalPages)
+  }
+
+  handleUpKey() {
+    this.$emit('update:readPages', this.limitationNumber(this.readPages + 1))
+  }
+
+  handleDownKey() {
+    this.$emit('update:readPages', this.limitationNumber(this.readPages - 1))
   }
 }
 </script>

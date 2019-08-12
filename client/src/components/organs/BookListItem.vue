@@ -1,25 +1,25 @@
 <template lang="pug">
   .book-list-item
-    router-link.book-list-item__body(:to="`${$route.matched[0].path}/book/${id}`")
+    router-link.book-list-item__body(:to="`${$route.matched[0].path}/book/${book.id}`")
       .book-list-item__cover
-        book-cover(:url="coverImageUrl" :hasShadow="true")
+        book-cover(:url="book.coverImageUrl" :hasShadow="true")
       .book-list-item__info(:class="`${$store.getters.viewTypeClass}`")
         .book-list-item__icon
           icon(name="right-arrow")
         .book-list-item__detail
-          book-major-info(:title="title" :authors="author")
+          book-major-info(:title="book.title" :authors="book.author")
         .book-list-item__price(v-if="kidoku")
           span.book-list-item__total-price.kidoku
-            | {{ price.toLocaleString() }}
+            | {{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
         .book-list-item__price(v-else)
           span.book-list-item__total-price.tsundoku
-            | {{ remainingPrice.toLocaleString() }}/{{ price.toLocaleString() }}
+            | {{ remainingPrice.toLocaleString() }}/{{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-controller(:id="id" :readPages="readPages" :totalPages="totalPages")
+      book-list-item-progress-controller(:id="book.id" :readPages="book.readPages" :totalPages="book.totalPages")
 </template>
 
 <script lang="ts">
@@ -30,6 +30,7 @@ import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 import Icon from '@/components/assets/Icon.vue'
 import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
+import { BookRecord } from '../../types/Book'
 
 @Component({
   components: {
@@ -41,33 +42,12 @@ import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
   }
 })
 export default class BookListItem extends Vue {
-  @Prop({ type: String, required: true })
-  private id!: string
-
-  @Prop({ type: Number, required: true })
-  private price!: number
-
-  @Prop({ type: String, required: true })
-  private title!: string
-
-  @Prop({ type: Array, required: true })
-  private author!: string[]
-
-  @Prop({ type: Number, required: true })
-  private readPages!: number
-
-  @Prop({ type: Number, required: true })
-  private totalPages!: number
-
-  @Prop({ type: String, required: true })
-  private coverImageUrl!: string
-
-  @Prop({ type: Boolean, default: false })
-  private kidoku!: boolean
+  @Prop({ type: Object, required: true })
+  private book: BookRecord
 
   get remainingPrice(): string {
     return `${Math.round(
-      (1 - this.readPages / this.totalPages) * this.price
+      (1 - this.book.readPages / this.book.totalPages) * this.book.price
     ).toLocaleString()}`
   }
 }

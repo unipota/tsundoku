@@ -13,7 +13,7 @@
         v-else 
         v-for="book in books"
         :key="book.id")
-        book-list-item(v-bind="book")
+        book-list-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
         router-view

@@ -2,16 +2,16 @@
   .tsundoku
     portal(to="priceDisplay")
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
-    .view-header-container(v-if="books.length !== 0")
+    .view-header-container(v-if="!isEmpty")
       list-controller(:filterText.sync="filterText")
     transition-group.view(
       tag="div" 
       name="transition-item")
-      .empty(v-if="books.length === 0")
+      .empty(v-if="isEmpty" key="empty")
         books-empty(name="tsundoku")
       .list-item-container(
-        v-else 
-        v-for="book in books"
+        v-else
+        v-for="book in filteredBooks"
         :key="book.id")
         book-list-item(:book="book")
     portal(to="modalView")
@@ -82,6 +82,9 @@ export default class Tsundoku extends Vue {
     return this.filteredIds.map((id: string) =>
       this.books.find(book => book.id === id)
     )
+  }
+  get isEmpty() {
+    return this.books.length === 0
   }
 }
 </script>

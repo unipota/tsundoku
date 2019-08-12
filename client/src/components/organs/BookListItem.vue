@@ -19,7 +19,7 @@
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-controller(:id="book.id" :readPages="book.readPages" :totalPages="book.totalPages")
+      book-list-item-progress-controller(:book="book")
 </template>
 
 <script lang="ts">
@@ -43,7 +43,10 @@ import { BookRecord } from '../../types/Book'
 })
 export default class BookListItem extends Vue {
   @Prop({ type: Object, required: true })
-  private book: BookRecord
+  private book!: BookRecord
+
+  @Prop({ type: Boolean, default: false })
+  private kidoku!: boolean
 
   get remainingPrice(): string {
     return `${Math.round(

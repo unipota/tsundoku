@@ -8,7 +8,7 @@
       book-cover(:url="book.coverImageUrl")
 
       div.info(:class="`${$store.getters.viewTypeClass}`")
-        book-major-info(:book="book" :size="bookMajorInfoSize")
+        book-major-info(:title="book.title" :authors="book.author" :size="bookMajorInfoSize")
         div.price-buttons-wrapper(:class="`${$store.getters.viewTypeClass}`")
           div.price(:class="`${$store.getters.viewTypeClass}`")
             | {{ $t('currency') + book.price.toLocaleString() }}

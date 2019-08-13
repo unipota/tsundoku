@@ -11,9 +11,9 @@
         books-empty(name="tsundoku")
       .list-item-container(
         v-else
-        v-for="bookId in filteredIds"
-        :key="bookId")
-        book-list-item(:bookId="bookId")
+        v-for="book in filteredBooks"
+        :key="book.id")
+        book-list-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
         router-view
@@ -79,7 +79,7 @@ export default class Tsundoku extends Vue {
       .map(book => book.id)
   }
   get filteredBooks() {
-    return this.filteredIds.map((id: string) => this.$store.state.booksMap[id])
+    return this.books.filter(book => this.filteredIds.includes(book.id))
   }
   get isEmpty() {
     return this.books.length === 0

@@ -6,7 +6,7 @@
           :progress="progressRatio" 
           :edit="edit" 
           :editedProgress="editedProgressRatio" 
-          @mounted="progressBarWidth = $event.width")
+          @mounted="progressBarWidth = $event.width - 4")
         .book-list-item-progress__progress-knob(v-if="edit")
           progress-knob(
             :editedReadPages.sync="syncedEditedReadPages" 

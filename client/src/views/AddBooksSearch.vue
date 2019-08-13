@@ -6,6 +6,7 @@
       :placeholder="$t('addBooksSearchPlaceholder')"
       @keyup-enter="submitSearchQuery"
       withClearButton
+      focus
     )
       icon(name="search" color="var(--text-gray)" :width="18" :height="18")
     router-link.edit-yourself(

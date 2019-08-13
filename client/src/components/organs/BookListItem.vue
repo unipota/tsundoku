@@ -9,17 +9,17 @@
         .book-list-item__detail
           book-major-info(:title="book.title" :authors="book.author")
         .book-list-item__price(v-if="kidoku")
-          span.book-list-item__total-price.kidoku
+          span.book-list-item__total-price.book-list-item__currency-symbol.kidoku
             | {{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
         .book-list-item__price(v-else)
-          .book-list-item__total-price.tsundoku
-            tweened-number(:num="remainingPrice")
-              //- template(v-slot="slotProps")
-              //-   | {{slotProps.num}}
-                //- | {{ remainingPrice.toLocaleString() }}
-            span
+          span
+            span.book-list-item__remaining-price.tsundoku
+              span.small
+                | 残り
+              tweened-number.book-list-item__currency-symbol(:num="remainingPrice")
+            span.book-list-item__total-price.tsundoku
               | /{{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
@@ -161,22 +161,38 @@ export default class BookListItem extends Vue {
   display: flex
   flex-flow: column
 
-.book-list-item__total-price
+.book-list-item__remaining-price
   font:
     weight: bold
     size: 1.4rem
+  color: var(--tsundoku-red)
+
+  .small
+    font:
+      size: 1rem
+    color: var(--tsundoku-red-fade60)
+    margin:
+      right: 8px
+
+.book-list-item__total-price
   line-height: 1.4rem
 
   &.tsundoku
-    color: var(--tsundoku-red)
+    font:
+      weight: bold
+      size: 1rem
+    color: var(--tsundoku-red-fade60)
 
   &.kidoku
+    font:
+      weight: bold
+      size: 1.4rem
     color: var(--kidoku-blue)
 
-  &::before
-    content: '¥'
-    margin:
-      right: 0.25rem
+.book-list-item__currency-symbol::before
+  content: '¥'
+  margin:
+    right: 0.25rem
 
 .book-list-item__time-ago
   color: var(--text-gray)

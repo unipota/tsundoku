@@ -14,8 +14,13 @@
           span.book-list-item__time-ago
             | 4日前
         .book-list-item__price(v-else)
-          span.book-list-item__total-price.tsundoku
-            | {{ remainingPrice.toLocaleString() }}/{{ book.price.toLocaleString() }}
+          .book-list-item__total-price.tsundoku
+            tweened-number(:num="remainingPrice")
+              //- template(v-slot="slotProps")
+              //-   | {{slotProps.num}}
+                //- | {{ remainingPrice.toLocaleString() }}
+            span
+              | /{{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
             | 4日前
     .book-list-item__progress(v-if="!kidoku")
@@ -27,6 +32,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
+import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 import Icon from '@/components/assets/Icon.vue'
 import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
@@ -38,7 +44,8 @@ import { BookRecord } from '../../types/Book'
     BookMajorInfo,
     BookListItemProgressController,
     Icon,
-    BookProgressPopover
+    BookProgressPopover,
+    TweenedNumber
   }
 })
 export default class BookListItem extends Vue {
@@ -48,10 +55,10 @@ export default class BookListItem extends Vue {
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
 
-  get remainingPrice(): string {
-    return `${Math.round(
+  get remainingPrice(): number {
+    return Math.round(
       (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    ).toLocaleString()}`
+    )
   }
 }
 </script>

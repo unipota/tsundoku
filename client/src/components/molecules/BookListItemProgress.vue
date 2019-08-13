@@ -5,7 +5,8 @@
         progress-bar(:progress="progressRatio")
         .book-list-item-progress__progress-knob(v-if="edit")
           progress-knob(:editedReadPages.sync="syncedEditedReadPages" :totalPages="totalPages")
-      | {{ progressPercentStr }}
+      tweened-number(:num="progressPercent")
+      | %
 </template>
 
 <script lang="ts">
@@ -13,11 +14,13 @@ import { Vue, Component, Prop, PropSync } from 'vue-property-decorator'
 
 import ProgressBar from '@/components/atoms/ProgressBar.vue'
 import ProgressKnob from '@/components/atoms/ProgressKnob.vue'
+import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 
 @Component({
   components: {
     ProgressBar,
-    ProgressKnob
+    ProgressKnob,
+    TweenedNumber
   }
 })
 export default class BookListItemProgress extends Vue {
@@ -36,8 +39,8 @@ export default class BookListItemProgress extends Vue {
   get progressRatio(): number {
     return this.readPages / this.totalPages
   }
-  get progressPercentStr(): string {
-    return `${Math.round((this.readPages / this.totalPages) * 100)}%`
+  get progressPercent(): number {
+    return Math.round((this.readPages / this.totalPages) * 100)
   }
 }
 </script>

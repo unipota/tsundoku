@@ -11,9 +11,9 @@
         books-empty(name="tsundoku")
       .list-item-container(
         v-else
-        v-for="book in filteredBooks"
-        :key="book.id")
-        book-list-item(:book="book")
+        v-for="bookId in filteredIds"
+        :key="bookId")
+        book-list-item(:bookId="bookId")
     portal(to="modalView")
       transition(name="modal-show")
         router-view

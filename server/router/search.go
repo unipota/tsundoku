@@ -22,6 +22,17 @@ type ISBN struct {
 	ISBN string `json:"isbn"`
 }
 
+type SearchedBook struct {
+	ID            string   `json:"id"`
+	ISBN          string   `json:"isbn"`
+	Title         string   `json:"title"`
+	Author        []string `json:"author"`
+	Price         int      `json:"price"`
+	Caption       string   `json:"caption"`
+	Publisher     string   `json:"publisher"`
+	CoverImageURL string   `json:"cover_image_url"`
+}
+
 type RakutenBook struct {
 	Title          string `json:"title"`
 	TitleKana      string `json:"titleKana"`
@@ -71,31 +82,28 @@ type RakutenBooks struct {
 func SearchWithISBN(c echo.Context) error {
 	isbn := c.QueryParam("isbn")
 
-	bookRecords := searchBooks(true, isbn)
+	searchedBooks := searchBooks(true, isbn)
 
-	return c.JSON(http.StatusOK, bookRecords)
+	return c.JSON(http.StatusOK, searchedBooks)
 }
 
 func SearchWithWord(c echo.Context) error {
 	search := c.QueryParam("search")
 
-	bookRecords := searchBooks(false, search)
+	searchedBooks := searchBooks(false, search)
 
-	return c.JSON(http.StatusOK, bookRecords)
+	return c.JSON(http.StatusOK, searchedBooks)
 }
 
-func volume2BookRecord(volume *books.Volume) *BookRecord {
-	bookRecord := &BookRecord{
+func volume2SearchedBook(volume *books.Volume) *SearchedBook {
+	searchedBook := &SearchedBook{
 		ID:            "",
 		ISBN:          "",
 		Title:         volume.VolumeInfo.Title,
-		TotalPages:    int(volume.VolumeInfo.PageCount),
 		Price:         0,
 		Caption:       "",
 		Publisher:     volume.VolumeInfo.Publisher,
 		CoverImageURL: "",
-		ReadPages:     0,
-		Memo:          "",
 	}
 
 	if volume.VolumeInfo.ImageLinks != nil {
@@ -109,7 +117,7 @@ func volume2BookRecord(volume *books.Volume) *BookRecord {
 		}
 		for _, imageLink := range imageLinks {
 			if imageLink != "" {
-				bookRecord.CoverImageURL = imageLink
+				searchedBook.CoverImageURL = imageLink
 				break
 			}
 		}
@@ -120,7 +128,7 @@ func volume2BookRecord(volume *books.Volume) *BookRecord {
 				authorList = append(authorList, author)
 			}
 		}
-		bookRecord.Author = authorList
+		searchedBook.Author = authorList
 	}
 
 	industryIdentifiers := volume.VolumeInfo.IndustryIdentifiers
@@ -134,23 +142,23 @@ func volume2BookRecord(volume *books.Volume) *BookRecord {
 		}
 	}
 	if isbn13 != "" {
-		bookRecord.ISBN = isbn13
+		searchedBook.ISBN = isbn13
 	} else if isbn10 != "" {
-		bookRecord.ISBN = isbn10
+		searchedBook.ISBN = isbn10
 	}
 
-	return bookRecord
+	return searchedBook
 }
 
-func volumes2BookRecords(volumes *books.Volumes) []*BookRecord {
-	bookRecords := make([]*BookRecord, 0)
+func volumes2searchedBooks(volumes *books.Volumes) []*SearchedBook {
+	searchedBooks := make([]*SearchedBook, 0)
 
 	for _, volume := range volumes.Items {
-		bookRecord := volume2BookRecord(volume)
-		bookRecords = append(bookRecords, bookRecord)
+		searchedBook := volume2SearchedBook(volume)
+		searchedBooks = append(searchedBooks, searchedBook)
 	}
 
-	return bookRecords
+	return searchedBooks
 }
 
 func searchWithGoogle(values url.Values) (*books.Volumes, error) {
@@ -199,18 +207,15 @@ func searchWithRakuten(values url.Values) (*RakutenBooks, error) {
 	return books, nil
 }
 
-func rakutenBook2BookRecord(book *RakutenBook) *BookRecord {
-	bookRecord := &BookRecord{
+func rakutenBook2SearchedBook(book *RakutenBook) *SearchedBook {
+	searchedBook := &SearchedBook{
 		ID:            "",
 		ISBN:          book.ISBN,
 		Title:         book.Title,
-		TotalPages:    0,
 		Price:         book.ItemPrice,
 		Caption:       "",
 		Publisher:     book.PublisherName,
 		CoverImageURL: "",
-		ReadPages:     0,
-		Memo:          "",
 	}
 
 	authorList := make([]string, 0)
@@ -220,7 +225,7 @@ func rakutenBook2BookRecord(book *RakutenBook) *BookRecord {
 			authorList = append(authorList, author)
 		}
 	}
-	bookRecord.Author = authorList
+	searchedBook.Author = authorList
 
 	imageLinks := [...]string{
 		book.LargeImageURL,
@@ -230,27 +235,27 @@ func rakutenBook2BookRecord(book *RakutenBook) *BookRecord {
 
 	for _, imageLink := range imageLinks {
 		if imageLink != "" {
-			bookRecord.CoverImageURL = imageLink
+			searchedBook.CoverImageURL = imageLink
 			break
 		}
 	}
 
-	return bookRecord
+	return searchedBook
 }
 
-func rakutenBooks2BookRecords(books *RakutenBooks) []*BookRecord {
-	bookRecords := make([]*BookRecord, 0)
+func rakutenBooks2SearchedBooks(books *RakutenBooks) []*SearchedBook {
+	searchedBooks := make([]*SearchedBook, 0)
 	bookList := books.Items
 
 	for _, bookItem := range bookList {
-		bookRecord := rakutenBook2BookRecord(bookItem.Item)
-		bookRecords = append(bookRecords, bookRecord)
+		searchedBook := rakutenBook2SearchedBook(bookItem.Item)
+		searchedBooks = append(searchedBooks, searchedBook)
 	}
 
-	return bookRecords
+	return searchedBooks
 }
 
-func withGoogle(isIsbn bool, searchWord string, bookRecordsChan chan []*BookRecord) {
+func withGoogle(isIsbn bool, searchWord string, searchedBooksChan chan []*SearchedBook) {
 	values := url.Values{}
 
 	if isIsbn {
@@ -261,13 +266,13 @@ func withGoogle(isIsbn bool, searchWord string, bookRecordsChan chan []*BookReco
 
 	volumes, err := searchWithGoogle(values)
 	if err != nil {
-		bookRecordsChan <- nil
+		searchedBooksChan <- nil
 	}
 
-	bookRecordsChan <- volumes2BookRecords(volumes)
+	searchedBooksChan <- volumes2searchedBooks(volumes)
 }
 
-func withRakuten(isIsbn bool, searchWord string, bookRecordsChan chan []*BookRecord) {
+func withRakuten(isIsbn bool, searchWord string, searchedBooksChan chan []*SearchedBook) {
 	values := url.Values{}
 
 	if isIsbn {
@@ -278,25 +283,25 @@ func withRakuten(isIsbn bool, searchWord string, bookRecordsChan chan []*BookRec
 
 	rakutenBooks, err := searchWithRakuten(values)
 	if err != nil {
-		bookRecordsChan <- nil
+		searchedBooksChan <- nil
 	}
 
-	bookRecordsChan <- rakutenBooks2BookRecords(rakutenBooks)
+	searchedBooksChan <- rakutenBooks2SearchedBooks(rakutenBooks)
 }
 
-func searchBooks(isIsbn bool, searchWord string) []*BookRecord {
-	googleChan := make(chan []*BookRecord)
-	rakutenChan := make(chan []*BookRecord)
+func searchBooks(isIsbn bool, searchWord string) []*SearchedBook {
+	googleChan := make(chan []*SearchedBook)
+	rakutenChan := make(chan []*SearchedBook)
 
 	go withGoogle(isIsbn, searchWord, googleChan)
 	go withRakuten(isIsbn, searchWord, rakutenChan)
 	googleBooks := <-googleChan
 	rakutenBooks := <-rakutenChan
 
-	return mergeBookRecords(rakutenBooks, googleBooks)
+	return mergeSearchedBooks(rakutenBooks, googleBooks)
 }
 
-func mergeBookRecord(mainBook *BookRecord, subBook *BookRecord) *BookRecord {
+func mergeBookRecord(mainBook *SearchedBook, subBook *SearchedBook) *SearchedBook {
 	if mainBook.ISBN == "" {
 		mainBook.ISBN = subBook.ISBN
 	}
@@ -316,28 +321,28 @@ func mergeBookRecord(mainBook *BookRecord, subBook *BookRecord) *BookRecord {
 	return mainBook
 }
 
-func mergeBookRecords(mainBooks []*BookRecord, subBooks []*BookRecord) []*BookRecord {
-	bookRecords := make([]*BookRecord, 0)
+func mergeSearchedBooks(mainBooks []*SearchedBook, subBooks []*SearchedBook) []*SearchedBook {
+	searchedBooks := make([]*SearchedBook, 0)
 
 	for _, mainBook := range mainBooks {
-		bookRecord := mainBook
+		searchedBook := mainBook
 		if mainBook.ISBN != "" {
 			for _, subBook := range subBooks {
 				if subBook.ISBN == mainBook.ISBN {
-					bookRecord = mergeBookRecord(mainBook, subBook)
+					searchedBook = mergeBookRecord(mainBook, subBook)
 					break
 				}
 			}
 		} else {
 			for _, subBook := range subBooks {
 				if subBook.Title == mainBook.Title {
-					bookRecord = mergeBookRecord(mainBook, subBook)
+					searchedBook = mergeBookRecord(mainBook, subBook)
 					break
 				}
 			}
 		}
-		bookRecords = append(bookRecords, bookRecord)
+		searchedBooks = append(searchedBooks, searchedBook)
 	}
 
-	return bookRecords
+	return searchedBooks
 }

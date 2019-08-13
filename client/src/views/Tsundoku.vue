@@ -2,11 +2,11 @@
   .tsundoku
     portal(to="priceDisplay")
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
-    .view-header-container(v-if="!isEmpty")
-      list-controller(:filterText.sync="filterText")
     transition-group.view(
       tag="div" 
       name="transition-item")
+      .view-header-container(v-if="!isEmpty" key="header")
+        list-controller(:filterText.sync="filterText")
       .empty(v-if="isEmpty" key="empty")
         books-empty(name="tsundoku")
       .list-item-container(
@@ -91,6 +91,9 @@ export default class Tsundoku extends Vue {
 .tsundoku
   width: 100%
 
+.view-header-container
+  width: 100%
+
 .view
   position: relative
   max-width: 100%
@@ -100,9 +103,9 @@ export default class Tsundoku extends Vue {
 
 .list-item-container
   margin:
-    top: 1.5rem
+    top: 15px
   padding:
-    bottom: 1.5rem
+    bottom: 15px
   width: 100%
   position: relative
 

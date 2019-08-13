@@ -9,6 +9,8 @@
     :placeholder="placeholder"
     @input="$emit('input', $event.target.value)"
     @keyup.enter="$emit('keyup-enter')"
+    ref="input"
+    v-focus="focus"
   )
   .close(@click="$emit('input', '')")
     transition(name="transition-close")
@@ -23,8 +25,20 @@
 <script lang="ts">
 import { Vue, Prop, Component } from 'vue-property-decorator'
 import Icon from '@/components/assets/Icon.vue'
+import { DirectiveOptions } from 'vue'
+
+const focusDirective: DirectiveOptions = {
+  inserted(el, binding) {
+    if (binding.value) {
+      el.focus()
+    }
+  }
+}
 
 @Component({
+  directives: {
+    focus: focusDirective
+  },
   components: {
     Icon
   }
@@ -34,6 +48,7 @@ export default class TextInput extends Vue {
   @Prop({ type: String, default: '' }) placeholder!: string
   @Prop({ type: Boolean, default: false }) withClearButton!: boolean
   @Prop({ type: String, default: 'text' }) type!: string
+  @Prop({ type: Boolean, default: false }) focus!: boolean
 }
 </script>
 

@@ -99,7 +99,7 @@ export const mutations: Mutations<S, M> = {
   setBooksMap(state, booksArray) {
     state.booksMap = {}
     booksArray.forEach((book: BookRecord) => {
-      state.booksMap[book.id] = book
+      state.booksMap = { ...state.booksMap, [book.id]: book }
     })
   },
   updateBookReadPages(state, { id, readPages }) {

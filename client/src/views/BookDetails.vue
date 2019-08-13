@@ -13,8 +13,13 @@
       .controller
         book-list-item-progress-controller(:book="book")
       .body
-        book-details-item.item(:name="$t('price')" :value="`¥ ${price}`")
-        book-details-item.item(:name="$t('totalPages')" :value="totalPages")
+        book-details-item.item(
+          name="ツンドク価格" 
+          :value="`¥ ${remainingPrice.toLocaleString()}`"
+          valueColor="var(--tsundoku-red)")
+        book-details-item.item(:name="$t('price')" :value="`¥ ${price.toLocaleString()}`")
+        book-details-item.item(:name="$t('totalPages')" :value="`${totalPages}`")
+        book-details-item.item(name="メモ" :value="book.memo")
 </template>
 
 <script lang="ts">
@@ -57,11 +62,17 @@ export default class BookDetails extends Vue {
   }
 
   get price() {
-    return this.book && this.book.price.toLocaleString()
+    return this.book && this.book.price
   }
 
   get totalPages() {
-    return this.book && this.book.totalPages.toString()
+    return this.book && this.book.totalPages
+  }
+
+  get remainingPrice(): number {
+    return Math.round(
+      (1 - this.book.readPages / this.book.totalPages) * this.book.price
+    )
   }
 }
 </script>
@@ -128,13 +139,12 @@ export default class BookDetails extends Vue {
 
 .cover-wrap
   position: absolute
-  top: 160px
+  top: 136px
   left: 24px
 
 .controller
-  margin-top: 64px
+  margin-top: 40px
   padding:
-    top: 12px
     right: 24px
     left: 24px
 

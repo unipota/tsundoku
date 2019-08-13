@@ -3,7 +3,7 @@
     .book-list-item-progress-container
       .progress-wrap
         book-list-item-progress(
-          :readPages="book.readPages"
+          :readPages="wrappedReadPages"
           :totalPages="book.totalPages"
           :edit="recordActive" 
           :editedReadPages.sync="editedReadPages")
@@ -41,10 +41,17 @@ export default class BookListItemProgressController extends Vue {
 
   recordActive: boolean = false
   editedReadPages: number = this.book.readPages
+  isAnimated: boolean = false
+  fakedReadPages: number = 0
+
+  get wrappedReadPages(): number {
+    return this.isAnimated ? this.fakedReadPages : this.book.readPages
+  }
 
   handleClickRecord() {
     if (!this.recordActive) {
       this.recordActive = true
+      this.editedReadPages = this.book.readPages
     } else {
       this.$store.commit('updateBookReadPages', {
         id: this.book.id,
@@ -54,7 +61,17 @@ export default class BookListItemProgressController extends Vue {
     }
   }
 
-  handleClickCheck() {}
+  async handleClickCheck() {
+    if (this.book.readPages === this.book.totalPages) return
+    this.fakedReadPages = this.book.totalPages
+    this.isAnimated = true
+    await new Promise(r => window.setTimeout(r, 500))
+    this.$store.commit('updateBookReadPages', {
+      id: this.book.id,
+      readPages: this.book.totalPages
+    })
+    this.isAnimated = false
+  }
 
   handleCancel() {
     this.recordActive = false
@@ -73,7 +90,7 @@ export default class BookListItemProgressController extends Vue {
   align-items: center
   flex-wrap: nowrap
   margin:
-    top: 4px
+    top: 8px
   padding:
     left: 4px
     right: 4px

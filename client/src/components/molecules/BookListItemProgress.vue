@@ -7,11 +7,13 @@
           :edit="edit" 
           :editedProgress="editedProgressRatio" 
           @mounted="progressBarWidth = $event.width - 4")
-        .book-list-item-progress__progress-knob(v-if="edit")
-          progress-knob(
-            :editedReadPages.sync="syncedEditedReadPages" 
-            :totalPages="totalPages"
-            :progressBarWidth="progressBarWidth")
+        .book-list-item-progress__progress-knob
+          transition(name="slide-in")
+            progress-knob(
+              v-if="edit"
+              :editedReadPages.sync="syncedEditedReadPages" 
+              :totalPages="totalPages"
+              :progressBarWidth="progressBarWidth")
       tweened-number(:num="progressPercent")
       | %
 </template>
@@ -76,33 +78,10 @@ export default class BookListItemProgress extends Vue {
     bottom: 100%
     width: 200%
 
-// .book-list-item-progress__price
-//   display: flex
-//   align-items: baseline
-//   justify-content: flex-end
-//   padding: 0 0.25rem
-
-// .book-list-item-progress__price_remaining_label
-//   color: $tsundoku-red-fade60
-//   font:
-//     weight: bold
-//     size: 0.9rem
-
-// .book-list-item-progress__price_total
-//   color: $tsundoku-red-fade60
-//   font:
-//     weight: bold
-//     size: 0.9rem
-//   &::before
-//     content: '/'
-//     margin: 0 0.25rem
-
-// .book-list-item-progress__price_remaining
-//   color: $tsundoku-red
-//   font:
-//     weight: bold
-//     size: 1.1rem
-//   &::before
-//     content: '¥'
-//     margin: 0 0.25rem
+.slide-in
+  &-enter, &-leave-to
+    transform: translateY(10px)
+    opacity: 0
+  &-enter-active, &-leave-active
+    transition: transform .3s $easeOutBack, opacity .3s
 </style>

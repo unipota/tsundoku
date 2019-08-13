@@ -201,4 +201,5 @@ export default class BookListItem extends Vue {
   position: absolute
   right: 16px
   bottom: 14px
+  color: var(--border-gray)
 </style>

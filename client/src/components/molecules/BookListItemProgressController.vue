@@ -37,15 +37,6 @@ export default class BookListItemProgressController extends Vue {
   @Prop({ type: Object, required: true })
   private book!: BookRecord
 
-  // @Prop({ type: String, required: true })
-  // private id!: string
-
-  // @Prop({ type: Number, required: true })
-  // private readPages!: number
-
-  // @Prop({ type: Number, required: true })
-  // private totalPages!: number
-
   public $store!: ExStore
 
   recordActive: boolean = false

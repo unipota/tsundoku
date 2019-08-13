@@ -8,11 +8,13 @@
           :edit="recordActive" 
           :editedReadPages.sync="editedReadPages")
       .record-read-pages-button-wrap
-        record-read-pages-button(@click.stop="handleClickRecord" :active="recordActive")
+        record-read-pages-button(@click.stop="handleClickRecord" :active="recordActive" v-tooltip="'読書状況を記録する'")
       .check-button-wrap
-        kidoku-button(@click="handleClickCheck")
-    .progress-input-wrap(v-show="recordActive")
-      progress-input(:totalPages="book.totalPages" v-model="editedReadPages" @cancel="handleCancel")
+        kidoku-button(@click="handleClickCheck" v-tooltip="'既読にする'")
+    .progress-input-wrap(:style="progressInputStyle")
+      .progress-input-body(ref="progressInputBody")
+        transition(name="dummy-transition" @after-enter="afterEnter" @before-leave="beforeLeave")
+          progress-input(v-show="recordActive" :totalPages="book.totalPages" v-model="editedReadPages" @cancel="handleCancel")
 </template>
 
 <script lang="ts">
@@ -43,6 +45,7 @@ export default class BookListItemProgressController extends Vue {
   editedReadPages: number = this.book.readPages
   isAnimated: boolean = false
   fakedReadPages: number = 0
+  progressInputHeight: number = 0
 
   get wrappedReadPages(): number {
     return this.isAnimated ? this.fakedReadPages : this.book.readPages
@@ -77,6 +80,23 @@ export default class BookListItemProgressController extends Vue {
     this.recordActive = false
     this.editedReadPages = this.book.readPages
   }
+
+  get progressInputStyle() {
+    return {
+      height: `${this.progressInputHeight}px`
+    }
+  }
+
+  afterEnter() {
+    this.$nextTick(() => {
+      const ref = this.$refs.progressInputBody as HTMLElement
+      this.progressInputHeight = ref.getBoundingClientRect().height
+    })
+  }
+
+  beforeLeave() {
+    this.progressInputHeight = 0
+  }
 }
 </script>
 
@@ -110,7 +130,13 @@ export default class BookListItemProgressController extends Vue {
   flex-shrink: 0
 
 .progress-input-wrap
-  position: relative
-  z-index: 100
+  transition: height .3s $easeInOutQuint
   margin-left: auto
+  overflow: hidden
+
+.progress-input-body
+
+.dummy-transition
+  &-leave-active
+    transition: all .3s
 </style>

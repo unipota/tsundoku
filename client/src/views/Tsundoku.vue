@@ -94,6 +94,9 @@ export default class Tsundoku extends Vue {
 .view-header-container
   width: 100%
 
+.empty
+  width: 100%
+
 .view
   position: relative
   max-width: 100%

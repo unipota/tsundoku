@@ -13,6 +13,12 @@
       @touchstart.prevent="handleTouchstart"
       )
       icon(name="bookmark" :width="24" :height="24")
+      transition(name="slide-in" appear)
+        .arrow-button.right(v-if="!isDrugging")
+          icon(name="right-arrow")
+      transition(name="slide-in" appear)
+        .arrow-button.left(v-if="!isDrugging")
+          icon(name="left-arrow")
 </template>
 
 <script lang="ts">
@@ -26,7 +32,7 @@ import Icon from '@/components/assets/Icon.vue'
 })
 export default class ProgressKnob extends Vue {
   @Prop({ type: Number, required: true })
-  private readonly editedReadPages!: number
+  private editedReadPages!: number
 
   @Prop({ type: Number, required: true })
   private readonly totalPages!: number
@@ -119,6 +125,7 @@ $triangle-width: 6px
     right: 25%
 
   &__body
+    position: relative
     display: flex
     align-items: center
     justify-content: center
@@ -161,4 +168,44 @@ $triangle-width: 6px
         right:
           width: $triangle-width
           color: transparent
+
+.arrow-button
+  position: absolute
+  z-index: 1000
+  color: var(--kidoku-blue-bg)
+  top: 20%
+  cursor: pointer
+
+  &.right
+    left: 120%
+    animation:
+      name: bounce-right
+      duration: 2s
+      iteration-count: infinite
+
+  &.left
+    right: 120%
+    animation:
+      name: bounce-left
+      duration: 2s
+      iteration-count: infinite
+
+.slide-in
+  &-enter, &-leave-to
+    transform: translateY(2px)
+    opacity: 0
+  &-enter-active, &-leave-active
+    transition: transform .3s $easeOutBack, opacity .3s
+
+@keyframes bounce-right
+  0%
+    transform: translateX(0)
+  100%
+    transform: translateX(4px)
+
+@keyframes bounce-left
+  0%
+    transform: translateX(0)
+  100%
+    transform: translateX(-4px)
 </style>

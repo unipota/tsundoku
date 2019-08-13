@@ -42,11 +42,15 @@ import { BookRecord } from '../../types/Book'
   }
 })
 export default class BookListItem extends Vue {
-  @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  @Prop({ type: String, required: true })
+  private bookId!: string
 
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
+
+  get book(): BookRecord {
+    return this.$store.state.booksMap[this.bookId]
+  }
 
   get remainingPrice(): string {
     return `${Math.round(

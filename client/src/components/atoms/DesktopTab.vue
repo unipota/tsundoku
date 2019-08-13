@@ -17,17 +17,19 @@
         span.item-label(key="item-label" :class="{'with-price': tab !== 'toukei' && isActive(tab)}")
           | {{ $t(tab) }}
         span.price-label(v-if="tab !== 'toukei' && isActive(tab)" key="item-price")
-          | {{ price.toLocaleString() }}
+          tweened-number(:num="price" formatLocal)
 </template>
 
 <script lang="ts">
 import { Vue, Prop, Component } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
+import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 
 @Component({
   components: {
-    Icon
+    Icon,
+    TweenedNumber
   }
 })
 export default class DesktopTab extends Vue {

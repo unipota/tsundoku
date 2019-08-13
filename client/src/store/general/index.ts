@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* tslint:disable:no-shadowed-variable */
 
-import Vue from 'vue'
 import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
@@ -100,11 +99,12 @@ export const mutations: Mutations<S, M> = {
   setBooksMap(state, booksArray) {
     state.booksMap = {}
     booksArray.forEach((book: BookRecord) => {
-      state.booksMap[book.id] = book
+      state.booksMap = { ...state.booksMap, [book.id]: book }
     })
   },
   updateBookReadPages(state, { id, readPages }) {
-    Vue.set(state.booksMap[id], 'readPages', readPages)
+    state.booksMap[id].readPages = readPages
+    state.booksMap = { ...state.booksMap }
   }
 }
 // ______________________________________________________

@@ -2,9 +2,16 @@
   .book-list-item-progress
     .book-list-item-progress__progress
       .book-list-item-progress__progress-bar
-        progress-bar(:progress="progressRatio")
+        progress-bar(
+          :progress="progressRatio" 
+          :edit="edit" 
+          :editedProgress="editedProgressRatio" 
+          @mounted="progressBarWidth = $event.width")
         .book-list-item-progress__progress-knob(v-if="edit")
-          progress-knob(:editedReadPages.sync="syncedEditedReadPages" :totalPages="totalPages")
+          progress-knob(
+            :editedReadPages.sync="syncedEditedReadPages" 
+            :totalPages="totalPages"
+            :progressBarWidth="progressBarWidth")
       tweened-number(:num="progressPercent")
       | %
 </template>
@@ -36,8 +43,13 @@ export default class BookListItemProgress extends Vue {
   @PropSync('editedReadPages', { type: Number })
   private syncedEditedReadPages!: number
 
+  progressBarWidth = 0
+
   get progressRatio(): number {
     return this.readPages / this.totalPages
+  }
+  get editedProgressRatio(): number {
+    return this.syncedEditedReadPages / this.totalPages
   }
   get progressPercent(): number {
     return Math.round((this.readPages / this.totalPages) * 100)
@@ -51,7 +63,8 @@ export default class BookListItemProgress extends Vue {
 
   &__progress
     position: relative
-    margin: 0.5rem 0
+    padding:
+      top: 4px
     color: $kidoku-blue
     font:
       weight: bold

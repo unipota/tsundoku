@@ -31,20 +31,13 @@ export default class ProgressKnob extends Vue {
   @Prop({ type: Number, required: true })
   private readonly totalPages!: number
 
-  moveX: number = 0 //TODO
+  @Prop({ type: Number, required: true })
+  private readonly progressBarWidth!: number
+
+  moveX: number =
+    this.progressBarWidth * (this.editedReadPages / this.totalPages)
   isDrugging: boolean = false
   currentMouseX: number = 0
-  progressBarWidth: number = 0
-
-  mounted() {
-    this.getProgressBarWidth()
-    this.moveX =
-      this.progressBarWidth * (this.editedReadPages / this.totalPages)
-  }
-
-  getProgressBarWidth() {
-    this.progressBarWidth = ~~(this.$el.getBoundingClientRect().width / 2) - 4
-  }
 
   get positionByRatio() {
     return {
@@ -65,13 +58,11 @@ export default class ProgressKnob extends Vue {
   handleTouchstart(e: TouchEvent) {
     this.isDrugging = true
     this.currentMouseX = e.touches[0].clientX
-    this.getProgressBarWidth()
   }
 
   handleMousedown(e: MouseEvent) {
     this.isDrugging = true
     this.currentMouseX = e.x
-    this.getProgressBarWidth()
   }
 
   handleMousemove(e: MouseEvent) {
@@ -141,7 +132,7 @@ $triangle-width: 6px
       radius: 8px
     padding: 4px
     margin:
-      bottom: $triangle-height
+      bottom: $triangle-height - 2px
     cursor: ew-resize
     color: white
     box-shadow: 0 2px 6px -1px var(--kidoku-blue)

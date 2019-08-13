@@ -7,10 +7,14 @@ import i18n from './i18n'
 import PortalVue from 'portal-vue'
 import vClickOutside from 'v-click-outside'
 import VueMeta from 'vue-meta'
+import VTooltip from 'v-tooltip'
 
 Vue.use(PortalVue)
 Vue.use(vClickOutside)
 Vue.use(VueMeta)
+Vue.use(VTooltip, {
+  defaultDelay: 500
+})
 
 Vue.config.productionTip = false
 

@@ -59,13 +59,17 @@ $height: 36px
       width: $height / 2
       color: var(--kidoku-blue)
     box-sizing: border-box
-    transition: border-width .3s $easeInOutQuint
+    transition: border-width .3s $easeInOutQuint, border-color .3s
 
   &.active:before
     border:
       style: solid
       width: 4px
       color: var(--kidoku-blue)
+
+  &:hover::before
+    border:
+      color: var(--kidoku-blue-hovered)
 
 .button-inner
   color: white

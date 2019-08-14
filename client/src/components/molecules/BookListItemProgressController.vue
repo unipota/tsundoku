@@ -10,7 +10,7 @@
       .record-read-pages-button-wrap
         record-read-pages-button(@click.stop="handleClickRecord" :active="recordActive" v-tooltip="'読書状況を記録する'")
       .check-button-wrap
-        kidoku-button(@click="handleClickCheck" v-tooltip="'既読にする'")
+        kidoku-button(@click="handleClickCheck" v-tooltip="'キドクにする'" :disable="isKidoku")
     .progress-input-wrap(:style="progressInputStyle")
       .progress-input-body(ref="progressInputBody")
         transition(name="dummy-transition" @after-enter="afterEnter" @before-leave="beforeLeave")
@@ -85,6 +85,10 @@ export default class BookListItemProgressController extends Vue {
     return {
       height: `${this.progressInputHeight}px`
     }
+  }
+
+  get isKidoku() {
+    return this.book.readPages === this.book.totalPages
   }
 
   afterEnter() {

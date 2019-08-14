@@ -12,13 +12,12 @@
     ref="input"
     v-focus="focus"
   )
-  .close(@click="$emit('input', '')")
-    transition(name="transition-close")
+  transition(name="transition-close")
+    .close(v-if="withClearButton && value" @click="$emit('input', '')")
       icon(
-        v-if="withClearButton && value"
         name="close"
         color="var(--text-gray)"
-        :height="16"
+        :height="12"
       )
 </template>
 
@@ -85,11 +84,17 @@ export default class TextInput extends Vue {
 .close
   display: flex
   align-items: center
-  flex: 16px 0 0
+  width: 26px
+  height: 26px
   cursor: pointer
   opacity: 0.75
+  border:
+    radius: 100%
+  transition: opacity .5s, background .5s
+
   &:hover
     opacity: 1
+    background: rgba(100,100,100,0.1)
 
 .transition-close
   &-enter, &-leave-to

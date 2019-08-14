@@ -3,9 +3,9 @@
     router-link.tab(
       v-for="tab in Object.keys(tabs)"
       :key="tab"
-      :title="tab"
       :class="{ [tab]: true, 'active': isActive(tab) }"
       :to="{ name: tabs[tab].to, hash: $route.hash }"
+      v-tooltip.right="tabs[tab].tooltip"
     )
       span.icon(:class="tab")
         icon(
@@ -39,15 +39,18 @@ export default class DesktopTab extends Vue {
   private tabs = {
     tsundoku: {
       to: 'tsundoku',
-      inactiveColor: 'var(--tsundoku-red-bg)'
+      inactiveColor: 'var(--tsundoku-red-bg)',
+      tooltip: '積んでいる本のリストとツンドク総額'
     },
     kidoku: {
       to: 'kidoku',
-      inactiveColor: 'var(--kidoku-blue-bg)'
+      inactiveColor: 'var(--kidoku-blue-bg)',
+      tooltip: '読み終わった本のリストとキドク総額'
     },
     toukei: {
       to: 'toukei',
-      inactiveColor: 'var(--toukei-black-bg)'
+      inactiveColor: 'var(--toukei-black-bg)',
+      tooltip: 'ツンドク状況の推移'
     }
   }
 

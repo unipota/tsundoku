@@ -26,9 +26,11 @@ export default class DesktopNavBarButton extends Vue {
   border-radius: 100vw
   user-select: none
   cursor: pointer
-  transition: box-shadow .5s
+  transition: box-shadow .5s, background .3s
   box-shadow: 0px 0px 5px -1px #e3402a6e
+
   &:hover
+    background: var(--tsundoku-red-hovered)
     box-shadow: 0px 3px 5px -1px #e3402a6e
 .icon
   display: flex
@@ -38,7 +40,7 @@ export default class DesktopNavBarButton extends Vue {
   height: 48px
   margin-right: 16px
   border-radius: 100vw
-  background-color: var(--tsundoku-red)
+  // background-color: var(--tsundoku-red)
 .label
   // color: var(--tsundoku-red)
   color: white

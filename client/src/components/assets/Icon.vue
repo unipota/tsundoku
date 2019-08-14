@@ -25,6 +25,7 @@ import IconLeftArrow from './IconLeftArrow.vue'
 import IconLogo from './IconLogo.vue'
 import IconPen from './IconPen.vue'
 import IconPlus from './IconPlus.vue'
+import IconRemove from './IconRemove.vue'
 import IconRightArrow from './IconRightArrow.vue'
 import IconScanner from './IconScanner.vue'
 import IconSearch from './IconSearch.vue'
@@ -48,6 +49,7 @@ import IconTwitter from './IconTwitter.vue'
     IconLogo,
     IconPen,
     IconPlus,
+    IconRemove,
     IconRightArrow,
     IconScanner,
     IconSearch,

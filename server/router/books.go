@@ -48,6 +48,14 @@ type BookDetail struct {
 	UpdatedAt     time.Time     `json:"updatedAt"`
 }
 
+type BookStat struct {
+	ID            string        `json:"id"`
+	Title         string        `json:"title"`
+	TotalPages    int           `json:"totalPages"`
+	Price         int           `json:"price"`
+	ReadHistories []ReadHistory `json:"readHistories"`
+}
+
 func GetBookListHandler(c echo.Context) error {
 	deviceID := c.Get("deviceID").(uuid.UUID)
 	books, err := model.GetBooksByDeviceID(deviceID)
@@ -153,6 +161,22 @@ func DeleteBookHandler(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
+func GetBookStatsHandler(c echo.Context) error {
+	deviceID := c.Get("deviceID").(uuid.UUID)
+	books, err := model.GetBooksByDeviceID(deviceID)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.JSON(http.StatusInternalServerError, H{"Error with get books"})
+	}
+
+	bookStats := make([]BookStat, 0, len(books))
+	for _, book := range books {
+		bookStats = append(bookStats, book2BookStat(*book))
+	}
+
+	return c.JSON(http.StatusOK, bookStats)
+}
+
 func bookRecord2Book(bookRecord BookRecord, deviceID uuid.UUID) model.Book {
 	book := model.Book{
 		ISBN:          bookRecord.ISBN,
@@ -252,4 +276,24 @@ func getTotalPages(isbn string) int {
 	}
 
 	return int(volumes.Items[0].VolumeInfo.PageCount)
+}
+
+func book2BookStat(book model.Book) BookStat {
+	bookStat := BookStat{
+		ID:         book.ID.String(),
+		Title:      book.Title,
+		TotalPages: book.TotalPages,
+		Price:      book.Price,
+	}
+
+	bookStat.ReadHistories = make([]ReadHistory, 0)
+	for _, fromBook := range book.ReadHistories {
+		readHistory := ReadHistory{
+			ReadPages: fromBook.ReadPage,
+			CreatedAt: fromBook.CreatedAt,
+		}
+		bookStat.ReadHistories = append(bookStat.ReadHistories, readHistory)
+	}
+
+	return bookStat
 }

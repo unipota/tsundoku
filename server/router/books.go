@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -11,17 +12,19 @@ import (
 )
 
 type BookRecord struct {
-	ID            string   `json:"id"`
-	ISBN          string   `json:"isbn"`
-	Title         string   `json:"title"`
-	Author        []string `json:"author"`
-	TotalPages    int      `json:"totalPages"`
-	Price         int      `json:"price"`
-	Caption       string   `json:"caption"`
-	Publisher     string   `json:"publisher"`
-	CoverImageURL string   `json:"coverImageUrl"`
-	ReadPages     int      `json:"readPages"`
-	Memo          string   `json:"memo"`
+	ID            string    `json:"id"`
+	ISBN          string    `json:"isbn"`
+	Title         string    `json:"title"`
+	Author        []string  `json:"author"`
+	TotalPages    int       `json:"totalPages"`
+	Price         int       `json:"price"`
+	Caption       string    `json:"caption"`
+	Publisher     string    `json:"publisher"`
+	CoverImageURL string    `json:"coverImageUrl"`
+	ReadPages     int       `json:"readPages"`
+	Memo          string    `json:"memo"`
+	CreatedAt     time.Time `json:"createdAt"`
+	UpdatedAt     time.Time `json:"updatedAt"`
 }
 
 type ReadHistory struct {
@@ -84,13 +87,13 @@ func GetBookDetailHandler(c echo.Context) error {
 }
 
 func PostNewBookHandler(c echo.Context) error {
-	bookRecord := BookRecord{}
-	if err := c.Bind(&bookRecord); err != nil {
+	searchedBook := SearchedBook{}
+	if err := c.Bind(&searchedBook); err != nil {
 		return c.JSON(http.StatusBadRequest, H{"Bad request"})
 	}
 
 	deviceID := c.Get("deviceID").(uuid.UUID)
-	book := bookRecord2Book(bookRecord, deviceID)
+	book := searchedBook2Book(searchedBook, deviceID)
 	newBook, err := model.NewBook(&book)
 	if err != nil {
 		c.Logger().Error(err)
@@ -157,7 +160,7 @@ func bookRecord2Book(bookRecord BookRecord, deviceID uuid.UUID) model.Book {
 		Author:        strings.Join(bookRecord.Author, ","),
 		TotalPages:    bookRecord.TotalPages,
 		Caption:       bookRecord.Caption,
-		Publisher:     bookRecord.Caption,
+		Publisher:     bookRecord.Publisher,
 		CoverImageUrl: bookRecord.CoverImageURL,
 		Memo:          bookRecord.Memo,
 		Price:         bookRecord.Price,
@@ -187,6 +190,8 @@ func book2BookRecord(book model.Book) BookRecord {
 		CoverImageURL: book.CoverImageUrl,
 		ReadPages:     book.ReadHistories[0].ReadPage,
 		Memo:          book.Memo,
+		CreatedAt:     book.CreatedAt,
+		UpdatedAt:     book.UpdatedAt,
 	}
 }
 
@@ -213,4 +218,38 @@ func book2BookDetail(book model.Book) BookDetail {
 		})
 	}
 	return bookDetail
+}
+
+func searchedBook2Book(searchedBook SearchedBook, deviceID uuid.UUID) model.Book {
+	book := model.Book{
+		ISBN:          searchedBook.ISBN,
+		Title:         searchedBook.Title,
+		Author:        strings.Join(searchedBook.Author, ","),
+		TotalPages:    getTotalPages(searchedBook.ISBN),
+		Caption:       searchedBook.Caption,
+		Publisher:     searchedBook.Publisher,
+		CoverImageUrl: searchedBook.CoverImageURL,
+		Memo:          "",
+		Price:         searchedBook.Price,
+		DeviceID:      deviceID,
+	}
+	id, err := uuid.Parse(searchedBook.ID)
+	if err != nil {
+		return book
+	}
+	book.ID = id
+	return book
+
+}
+
+func getTotalPages(isbn string) int {
+	values := url.Values{}
+	values.Add("q", "isbn:"+isbn)
+	volumes, err := searchWithGoogle(values)
+
+	if err != nil || volumes.TotalItems == 0 {
+		return 0
+	}
+
+	return int(volumes.Items[0].VolumeInfo.PageCount)
 }

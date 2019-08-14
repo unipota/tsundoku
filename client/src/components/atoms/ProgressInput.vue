@@ -9,7 +9,7 @@
         :value="readPages"
         @paste.prevent=""
         @keypress="isNumber($event)"
-        @input="handleInput"
+        @input="$emit('input', validateNumber($event.target.value))"
         @keydown.up.prevent="handleUpKey"
         @keydown.down.prevent="handleDownKey")
       span.price-total
@@ -49,10 +49,6 @@ export default class ProgressInput extends Vue {
     } else {
       return true
     }
-  }
-
-  handleInput(e: Event) {
-    this.$emit('input', this.validateNumber(e.target.value))
   }
 
   validateNumber(value: string) {

@@ -20,6 +20,9 @@ export default class BookDetailsItem extends Vue {
   @Prop({ type: String, default: 'var(--text-black)' })
   private valueColor!: string
 
+  @Prop({ type: Boolean, default: false })
+  private textarea!: boolean
+
   get valueStyle() {
     return {
       color: this.valueColor

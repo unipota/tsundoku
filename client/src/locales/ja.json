@@ -41,7 +41,10 @@
   "readPages": "読了ページ数",
   "memo": "メモ",
 
+  "overview": "概要",
+
   "edit": "編集",
+  "delete": "削除",
   "addTsundoku": "積む",
   "currency": "￥",
 

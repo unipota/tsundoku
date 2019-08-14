@@ -103,6 +103,9 @@ export default class BookListItem extends Vue {
   border-radius: 8px
   background-color: $bg-suppressed-gray
 
+  &:hover
+    box-shadow: 0 0 0 4px $text-gray
+
   &.is-desktop
     padding:
       top: 12px

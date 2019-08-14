@@ -2,11 +2,14 @@
   .progress-input
     .price-wrap
       input.current-price(
-        type="text"
+        type="number"
+        autocomplete="off"
+        :min="0"
+        :max="totalPages"
         :value="readPages"
         @paste.prevent=""
         @keypress="isNumber($event)"
-        @input="$emit('input', validateNumber($event.target.value))"
+        @input="handleInput"
         @keydown.up.prevent="handleUpKey"
         @keydown.down.prevent="handleDownKey")
       span.price-total
@@ -40,7 +43,7 @@ export default class ProgressInput extends Vue {
     const charCode = e.which ? e.which : e.keyCode
     if (
       (charCode > 31 && (charCode < 48 || charCode > 57)) ||
-      this.readPages === this.totalPages
+      this.readPages >= this.totalPages
     ) {
       e.preventDefault()
     } else {
@@ -48,8 +51,11 @@ export default class ProgressInput extends Vue {
     }
   }
 
+  handleInput(e: Event) {
+    this.$emit('input', this.validateNumber(e.target.value))
+  }
+
   validateNumber(value: string) {
-    console.log(value)
     return this.limitationNumber(Number(value))
   }
 
@@ -89,7 +95,7 @@ export default class ProgressInput extends Vue {
 .current-price
   text-align: right
   height: 28px
-  max-width: 80px
+  max-width: 120px
   background: var(--bg-gray)
   border:
     radius: 8px
@@ -111,8 +117,13 @@ export default class ProgressInput extends Vue {
   border:
     radius: 9999vw
   background:
-    color: var(--text-gray)
+    color: $text-gray
   cursor: pointer
+  transition: background-color .5s
+
+  &:hover
+    background:
+      color: darken($text-gray, 10%)
 
   span
     user-select: none

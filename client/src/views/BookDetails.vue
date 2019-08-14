@@ -14,7 +14,7 @@
         book-list-item-progress-controller(:book="book")
       .body
         book-details-item.item(
-          name="ツンドク価格" 
+          name="ツンドク残額" 
           :value="`¥ ${remainingPrice.toLocaleString()}`"
           valueColor="var(--tsundoku-red)")
         book-details-item.item(:name="$t('price')" :value="`¥ ${price.toLocaleString()}`")

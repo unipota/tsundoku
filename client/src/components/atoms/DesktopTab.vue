@@ -72,8 +72,11 @@ export default class DesktopTab extends Vue {
   width: 100%
   padding: 0 32px
   border-radius: 100vw
+  transition: background-color .3s
   &:not(:last-child)
     margin-bottom: 24px
+  &:not(.active):hover
+    background-color: var(--bg-gray)
 
 .icon
   display: flex

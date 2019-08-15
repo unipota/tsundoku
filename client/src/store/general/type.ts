@@ -60,6 +60,7 @@ export interface A {
   searchBooksByISBN: { isbn: string }
   searchBooks: { search: string }
   addNewBook: { book: BookRecord }
+  updateBook: { book: BookRecord }
   deleteBook: { id: string }
 }
 export type RA = {

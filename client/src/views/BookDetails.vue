@@ -1,12 +1,12 @@
 <template lang="pug">
   modal-frame(path="../../" closeColor="white" no-padding)
     .book-details
-      .header
+      .header(:style="headerStyle")
         .header-bg(:style="headerBgStyle")
           .info-bg
             book-major-info(:title="book.title" :authors="book.author")
         .header-fade
-        .info
+        .info(:style="infoStyle")
           book-major-info(:title="book.title" :authors="book.author")
         .actions
           book-details-action-button.action(
@@ -20,10 +20,14 @@
             :label="$t('delete')"
             @click="handleDeleteClick"
             v-tooltip="'この本を削除する'")
-      .cover-wrap
+      .cover-wrap(:style="coverWrapStyle")
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
-      .body-wrap
-        .body
+      .body-wrap(
+        ref="bodyWrap"
+        @scroll.stop.prevent.capture="handleScroll"
+        )
+        .body(ref="body")
+          .spacer
           .controller
             book-list-item-progress-controller(:book="book")
           .info-items
@@ -50,15 +54,6 @@
             book-details-item.item(
               :name="$t('isbn')"
               :value="book.isbn")
-            book-details-item.item(
-              :name="$t('isbn')"
-              :value="book.isbn")
-            book-details-item.item(
-              :name="$t('isbn')"
-              :value="book.isbn")
-            book-details-item.item(
-              :name="$t('isbn')"
-              :value="book.isbn")
 </template>
 
 <script lang="ts">
@@ -72,8 +67,11 @@ import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 
-const headerHeight = 240
+const initialHeaderHeight = 200
 const slimHeaderHeight = 120
+
+const initialCoverTop = 120
+const slimInfoLeftPadding = 100
 
 @Component({
   components: {
@@ -88,15 +86,62 @@ const slimHeaderHeight = 120
 export default class BookDetails extends Vue {
   public $store!: ExStore
   private lastBook!: BookRecord // モーダル閉じるときのエラー対策
-  private showSlimHeader = false
+  private currentHeaderHeight = initialHeaderHeight
 
   public async mounted() {
     this.lastBook = this.book
+    if (!(this.$refs.bodyWrap instanceof Element)) {
+      return
+    }
+  }
+
+  public handleScroll() {
+    if (
+      !(this.$refs.body instanceof Element) ||
+      !(this.$refs.bodyWrap instanceof Element)
+    ) {
+      return
+    }
+
+    const {
+      top: bodyWrapTop,
+      height: bodyWrapHeight
+    } = this.$refs.bodyWrap.getBoundingClientRect()
+    const {
+      top: bodyTop,
+      height: bodyHeight
+    } = this.$refs.body.getBoundingClientRect()
+
+    const d = initialHeaderHeight - slimHeaderHeight
+    const d2 = bodyHeight - bodyWrapHeight
+    const scrollRatio = (d / Math.min(d, d2)) * 1
+
+    const scrollAmount = bodyWrapTop - bodyTop
+
+    let newHeight = initialHeaderHeight - scrollAmount * scrollRatio
+    if (newHeight < slimHeaderHeight) {
+      newHeight = slimHeaderHeight
+    }
+    if (newHeight > initialHeaderHeight) {
+      newHeight = initialHeaderHeight
+    }
+    this.currentHeaderHeight = newHeight
   }
 
   public async handleDeleteClick() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
     this.$router.push('../../')
+  }
+
+  get showSlimHeader() {
+    return this.currentHeaderHeight >= 1
+  }
+
+  get headerTransitionProgress() {
+    return (
+      (initialHeaderHeight - this.currentHeaderHeight) /
+      (initialHeaderHeight - slimHeaderHeight)
+    )
   }
 
   get book(): BookRecord {
@@ -105,9 +150,28 @@ export default class BookDetails extends Vue {
     return book || this.lastBook
   }
 
+  get headerStyle() {
+    return {
+      height: `${this.currentHeaderHeight}px`
+    }
+  }
+
   get headerBgStyle() {
     return {
       backgroundImage: this.book ? `url(${this.book.coverImageUrl})` : 'white'
+    }
+  }
+
+  get infoStyle() {
+    return {
+      paddingLeft: `${this.headerTransitionProgress * slimInfoLeftPadding}px`
+    }
+  }
+
+  get coverWrapStyle() {
+    return {
+      top: `${(1 - this.headerTransitionProgress) * initialCoverTop}px`,
+      transform: `scale(${1 - this.headerTransitionProgress / 2})`
     }
   }
 
@@ -139,6 +203,7 @@ export default class BookDetails extends Vue {
   height: 100%
 
   overflow-y: hidden
+  overflow-
 
 .header
   position: relative
@@ -146,7 +211,6 @@ export default class BookDetails extends Vue {
   left: 0
 
   width: 100%
-  height: 240px
   padding: 24px
 
   overflow: hidden
@@ -161,8 +225,10 @@ export default class BookDetails extends Vue {
     grow: 1
     shrink: 1
   overflow-y: scroll
-  padding:
-    top: 40px
+  -webkit-overflow-scrolling: touch
+
+.body
+  min-height: calc(100% + 80px)
 
 .header-bg
   $blur-radius: 20px
@@ -222,8 +288,10 @@ export default class BookDetails extends Vue {
 
 .cover-wrap
   position: absolute
-  top: 136px
   left: 24px
+
+.spacer
+  height: 60px
 
 .controller
   padding:

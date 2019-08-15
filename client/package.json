@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "dayjs": "^1.8.15",
     "fuse.js": "^3.4.5",
     "portal-vue": "^2.1.6",
     "register-service-worker": "^1.6.2",

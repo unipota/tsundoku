@@ -12,7 +12,7 @@
           span.book-list-item__total-price.book-list-item__currency-symbol.kidoku
             | {{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
-            | 4日前
+            relative-time(:from="book.updatedAt" :locale="$store.state.locale")
         .book-list-item__price(v-else)
           span
             span.book-list-item__remaining-price.tsundoku
@@ -22,13 +22,14 @@
             span.book-list-item__total-price.tsundoku
               | /{{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
-            | 4日前
+            relative-time(:from="book.updatedAt" :locale="$store.state.locale")
     .book-list-item__progress(v-if="!kidoku")
       book-list-item-progress-controller(:book="book")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
 
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
@@ -36,6 +37,8 @@ import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 import Icon from '@/components/assets/Icon.vue'
 import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
+import RelativeTime from '@/components/atoms/RelativeTime.vue'
+
 import { BookRecord } from '../../types/Book'
 
 @Component({
@@ -45,7 +48,8 @@ import { BookRecord } from '../../types/Book'
     BookListItemProgressController,
     Icon,
     BookProgressPopover,
-    TweenedNumber
+    TweenedNumber,
+    RelativeTime
   }
 })
 export default class BookListItem extends Vue {
@@ -54,6 +58,18 @@ export default class BookListItem extends Vue {
 
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
+
+  public $store!: ExStore
+
+  isHovered = false
+
+  handleMouseover() {
+    this.isHovered = true
+  }
+
+  handleMouseleave() {
+    this.isHovered = false
+  }
 
   get remainingPrice(): number {
     return Math.round(
@@ -102,9 +118,10 @@ export default class BookListItem extends Vue {
   padding: 16px
   border-radius: 8px
   background-color: $bg-suppressed-gray
+  transition: box-shadow .3s
 
-  &:hover
-    box-shadow: 0 0 0 4px $text-gray
+  .book-list-item__body:hover &
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.1)
 
   &.is-desktop
     padding:

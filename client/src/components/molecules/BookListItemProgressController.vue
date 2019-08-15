@@ -56,10 +56,9 @@ export default class BookListItemProgressController extends Vue {
       this.recordActive = true
       this.editedReadPages = this.book.readPages
     } else {
-      this.$store.commit('updateBookReadPages', {
-        id: this.book.id,
-        readPages: this.editedReadPages
-      })
+      const book = this.book
+      book.readPages = this.editedReadPages
+      this.$store.dispatch('updateBook', { book })
       this.recordActive = false
     }
   }
@@ -69,10 +68,9 @@ export default class BookListItemProgressController extends Vue {
     this.fakedReadPages = this.book.totalPages
     this.isAnimated = true
     await new Promise(r => window.setTimeout(r, 500))
-    this.$store.commit('updateBookReadPages', {
-      id: this.book.id,
-      readPages: this.book.totalPages
-    })
+    const book = this.book
+    book.readPages = this.book.totalPages
+    this.$store.dispatch('updateBook', { book })
     this.isAnimated = false
   }
 

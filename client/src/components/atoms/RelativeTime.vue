@@ -1,10 +1,10 @@
 <template lang="pug">
-  div
+  span
     | {{relativeTime}}
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/ja'
@@ -22,6 +22,11 @@ export default class RelativeTime extends Vue {
   private locale!: string
 
   mounted() {
+    dayjs.locale(this.locale)
+  }
+
+  @Watch('locale')
+  onLocaleChanged() {
     dayjs.locale(this.locale)
   }
 

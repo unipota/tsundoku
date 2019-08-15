@@ -128,6 +128,8 @@ func main() {
 	api.PUT("/books/:bookID", router.PutUpdateBookHandler)
 	api.DELETE("/books/:bookID", router.DeleteBookHandler)
 
+	api.GET("/test", router.ScreenshotHandler)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"

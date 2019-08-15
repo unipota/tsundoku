@@ -66,6 +66,7 @@ export default class DesktopTemplate extends Vue {
 
   .modal-shown &
     pointer-events: none // for iOS safari
+    filter: blur(1px)
 
 .modal-wrap
   position: fixed
@@ -82,7 +83,7 @@ export default class DesktopTemplate extends Vue {
   background-color: rgba(0, 0, 0, 0.5)
   width: 100vw
   height: 100vh
-  backdrop-filter: blur(4px)
+  // backdrop-filter: blur(4px)
 
   pointer-events: none
 

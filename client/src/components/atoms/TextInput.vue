@@ -12,8 +12,8 @@
     ref="input"
     v-focus="focus"
   )
-  transition(name="transition-close")
-    .close(v-if="withClearButton && value" @click="$emit('input', '')")
+  transition(name="transition-clear")
+    .clear(v-if="withClearButton && value" @click="handleClear")
       icon(
         name="close"
         color="var(--text-gray)"
@@ -48,6 +48,12 @@ export default class TextInput extends Vue {
   @Prop({ type: Boolean, default: false }) withClearButton!: boolean
   @Prop({ type: String, default: 'text' }) type!: string
   @Prop({ type: Boolean, default: false }) focus!: boolean
+
+  handleClear() {
+    this.$emit('input', '')
+    const el = this.$refs.input as HTMLInputElement
+    el.focus()
+  }
 }
 </script>
 
@@ -81,7 +87,7 @@ export default class TextInput extends Vue {
   justify-content: center
   transform: translateX(-6px)
 
-.close
+.clear
   display: flex
   align-items: center
   width: 26px
@@ -96,7 +102,7 @@ export default class TextInput extends Vue {
     opacity: 1
     background: rgba(100,100,100,0.1)
 
-.transition-close
+.transition-clear
   &-enter, &-leave-to
     opacity: 0
 

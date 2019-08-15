@@ -21,8 +21,13 @@ export default class RelativeTime extends Vue {
   @Prop({ type: String, default: 'ja' })
   private locale!: string
 
-  mounted() {
+  now = dayjs()
+
+  created() {
     dayjs.locale(this.locale)
+    // setInterval(() => {
+    //   this.now = dayjs()
+    // }, 60 * 1000)
   }
 
   @Watch('locale')
@@ -31,7 +36,7 @@ export default class RelativeTime extends Vue {
   }
 
   get relativeTime(): string {
-    return dayjs(this.from).fromNow()
+    return dayjs(this.from).from(this.now)
   }
 }
 </script>

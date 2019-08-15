@@ -163,6 +163,18 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
+  updateBook({}, { book }): Promise<BookRecord> {
+    console.log(book)
+    return new Promise((resolve, reject) => {
+      api.updateBook(book.id, book).then(result => {
+        if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
+  },
   async deleteBook({}, { id }): Promise<BookRecord[]> {
     console.log(id)
     return new Promise((resolve, reject) => {

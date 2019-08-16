@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.43.0 // indirect
+	github.com/chromedp/chromedp v0.4.0 // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/google/go-github v17.0.0+incompatible
@@ -23,7 +24,6 @@ require (
 	golang.org/x/mobile v0.0.0-20190719004257-d2bd2a29d028 // indirect
 	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20190726091711-fc99dfbffb4e // indirect
 	golang.org/x/tools v0.0.0-20190726230722-1bd56024c620 // indirect
 	golang.org/x/xerrors v0.0.0-20190513163551-3ee3066db522
 	google.golang.org/api v0.7.0

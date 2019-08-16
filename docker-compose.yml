@@ -9,6 +9,8 @@ services:
       VIRTUAL_HOST: test.tsun-doku.app
       LETSENCRYPT_HOST: test.tsun-doku.app
       LETSENCRYPT_EMAIL: tohu.soy@gmail.com
+    env_file:
+      - .env
     expose:
       - 3000
     depends_on:

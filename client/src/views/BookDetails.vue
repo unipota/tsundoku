@@ -1,12 +1,12 @@
 <template lang="pug">
   modal-frame(path="../../" closeColor="white" no-padding)
     .book-details
-      .header(ref="header" :style="headerStyle")
+      .header(ref="header")
         .header-bg(:style="headerBgStyle")
           .info-bg
             book-major-info(:title="book.title" :authors="book.author")
         .header-fade
-        .info(:style="infoStyle")
+        .info(ref="info")
           book-major-info(:title="book.title" :authors="book.author")
         .actions
           book-details-action-button.action(
@@ -20,12 +20,9 @@
             :label="$t('delete')"
             @click="handleDeleteClick"
             v-tooltip="'この本を削除する'")
-      .cover-wrap(:style="coverWrapStyle")
+      .cover-wrap(ref="coverWrap")
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
-      .body-wrap(
-        ref="bodyWrap"
-        @scroll.stop.prevent.capture="handleScroll"
-        )
+      .body-wrap(ref="bodyWrap")
         .body(ref="body")
           .spacer
           .controller
@@ -51,6 +48,12 @@
             book-details-item.item(
               :name="$t('publisher')"
               :value="book.publisher")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
             book-details-item.item(
               :name="$t('isbn')"
               :value="book.isbn")
@@ -87,19 +90,58 @@ export default class BookDetails extends Vue {
   public $store!: ExStore
   private lastBook!: BookRecord // モーダル閉じるときのエラー対策
   private currentHeaderHeight = initialHeaderHeight
+  private animationFrameRequestId?: number
+  private animationEndTimeoutId?: number
 
   public async mounted() {
     this.lastBook = this.book
     if (!(this.$refs.bodyWrap instanceof Element)) {
       return
     }
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
+    this.updateHeader()
   }
 
-  public handleScroll() {
+  public destroy() {
+    window.removeEventListener('resize', this.handleResize)
+    this.handleResize()
+    if (this.animationFrameRequestId) {
+      cancelAnimationFrame(this.animationFrameRequestId)
+    }
+    if (this.animationEndTimeoutId) {
+      window.clearTimeout(this.animationEndTimeoutId)
+    }
+  }
+
+  public handleResize() {
+    if (
+      !(this.$refs.body instanceof Element) ||
+      !(this.$refs.bodyWrap instanceof Element)
+    ) {
+      return
+    }
+    // 本体がラッパー以上の場合はラッパー + ヘッダの高さ変化分までは伸ばす
+    const {
+      height: bodyWrapHeight
+    } = this.$refs.bodyWrap.getBoundingClientRect()
+    const { height: bodyHeight } = this.$refs.body.getBoundingClientRect()
+    if (bodyHeight >= bodyWrapHeight) {
+      this.$refs.body.style.minHeight = `${bodyWrapHeight +
+        initialHeaderHeight -
+        slimHeaderHeight}px`
+    } else {
+      this.$refs.body.style.minHeight = ''
+    }
+  }
+
+  public updateHeader() {
     if (
       !(this.$refs.body instanceof Element) ||
       !(this.$refs.bodyWrap instanceof Element) ||
-      !(this.$refs.header instanceof Element)
+      !(this.$refs.header instanceof Element) ||
+      !(this.$refs.info instanceof Element) ||
+      !(this.$refs.coverWrap instanceof Element)
     ) {
       return
     }
@@ -113,26 +155,46 @@ export default class BookDetails extends Vue {
       height: bodyHeight
     } = this.$refs.body.getBoundingClientRect()
 
-    const d = initialHeaderHeight - slimHeaderHeight
-    const d2 = bodyHeight - bodyWrapHeight
-    const scrollRatio = (d / Math.min(d, d2)) * 1
-
     const scrollAmount = bodyWrapTop - bodyTop
+    let newHeight = initialHeaderHeight - scrollAmount
 
-    let newHeight = initialHeaderHeight - scrollAmount * scrollRatio
     if (newHeight < slimHeaderHeight) {
       newHeight = slimHeaderHeight
+    } else if (newHeight > initialHeaderHeight + 80) {
+      newHeight = initialHeaderHeight - (scrollAmount - 80) * 0.25
+    } else if (newHeight > initialHeaderHeight) {
+      newHeight = initialHeaderHeight - scrollAmount * 0.5
     }
-    if (newHeight > initialHeaderHeight) {
-      newHeight = initialHeaderHeight
+
+    if (
+      Math.abs(this.currentHeaderHeight - newHeight) >=
+        (initialHeaderHeight - slimHeaderHeight) * 1 &&
+      scrollAmount <= initialHeaderHeight - slimHeaderHeight &&
+      scrollAmount >= 0
+    ) {
+      this.animationFrameRequestId = requestAnimationFrame(() =>
+        this.updateHeader()
+      )
+      return
     }
-    this.$refs.header.style.willChange = 'height'
-    requestAnimationFrame(() => {
-      // リアクティブガン無視
-      this.$refs.header.style.height = `${newHeight}px`
-      this.currentHeaderHeight = newHeight
-      this.$refs.header.style.willChange = 'auto'
-    })
+
+    const progress =
+      (initialHeaderHeight - this.currentHeaderHeight) /
+      (initialHeaderHeight - slimHeaderHeight)
+
+    // リアクティブガン無視
+    this.$refs.header.style.height = `${newHeight}px`
+    this.$refs.info.style.left = `${Math.max(
+      0,
+      progress * slimInfoLeftPadding
+    )}px`
+    this.$refs.coverWrap.style.top = `${(1 - progress) * initialCoverTop}px`
+    this.$refs.coverWrap.style.transform = `scale(${1 - progress / 2})`
+
+    this.currentHeaderHeight = newHeight
+    this.animationFrameRequestId = requestAnimationFrame(() =>
+      this.updateHeader()
+    )
   }
 
   public async handleDeleteClick() {
@@ -141,7 +203,9 @@ export default class BookDetails extends Vue {
   }
 
   get isButtonExpanded() {
-    return this.currentHeaderHeight >= initialHeaderHeight
+    return (
+      this.currentHeaderHeight >= (initialHeaderHeight + slimHeaderHeight) / 2
+    )
   }
 
   get headerTransitionProgress() {
@@ -163,19 +227,6 @@ export default class BookDetails extends Vue {
     }
   }
 
-  get infoStyle() {
-    return {
-      paddingLeft: `${this.headerTransitionProgress * slimInfoLeftPadding}px`
-    }
-  }
-
-  get coverWrapStyle() {
-    return {
-      top: `${(1 - this.headerTransitionProgress) * initialCoverTop}px`,
-      transform: `scale(${1 - this.headerTransitionProgress / 2})`
-    }
-  }
-
   get price() {
     return this.book && this.book.price
   }
@@ -194,11 +245,6 @@ export default class BookDetails extends Vue {
 
 <style lang="sass" scoped>
 .book-details
-  display: flex
-  flex:
-    direction: column
-    wrap: nowrap
-
   position: relative
   width: 100%
   height: 100%
@@ -207,9 +253,10 @@ export default class BookDetails extends Vue {
   overflow-
 
 .header
-  position: relative
+  position: absolute
   top: 0
   left: 0
+  z-index: 3
 
   height: 200px
   width: 100%
@@ -217,12 +264,12 @@ export default class BookDetails extends Vue {
 
   overflow: hidden
 
-  flex:
-    grow: 0
-    shrink: 0
+  will-change: height
 
 .body-wrap
+  position: absolute
   height: 100%
+  width: 100%
   flex:
     grow: 1
     shrink: 1
@@ -230,7 +277,8 @@ export default class BookDetails extends Vue {
   -webkit-overflow-scrolling: touch
 
 .body
-  min-height: calc(100% + 80px)
+  padding-top: 200px
+  // min-height: calc(100% + 100px)
 
 .header-bg
   $blur-radius: 20px
@@ -242,6 +290,7 @@ export default class BookDetails extends Vue {
   height: calc(100% + #{$blur-radius * 2})
 
   background:
+    color: rgb(0, 128, 255)
     size: cover
     repeat: no-repeat
     position: center center
@@ -265,13 +314,17 @@ export default class BookDetails extends Vue {
   width: 100%
 
 .info
+  left: 0
+  width: 100%
   position: relative
   margin:
     top: 12px
     left: 8px
     right: 32px
     bottom: 16px
+
   color: white
+  will-change: left, width
 
 .actions
   position: absolute
@@ -289,7 +342,11 @@ export default class BookDetails extends Vue {
 
 .cover-wrap
   position: absolute
+  top: 120px
   left: 24px
+  z-index: 4
+  transform: scale(1)
+  will-change: top, transform
 
 .spacer
   height: 60px

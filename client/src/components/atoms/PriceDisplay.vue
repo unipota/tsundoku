@@ -1,19 +1,24 @@
 <template lang="pug">
   .body(:style="bodyStyle")
     .currency-symbol ¥
-    .price-body
-      tweened-number(:num="price" formatLocal)
+    .price-body {{priceWithDelimiter}}
     .menu-button
       icon(name="down-arrow" :color="`var(--${currentColor})`")
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import * as TWEEN from '@tweenjs/tween.js'
 
 import Icon from '@/components/assets/Icon.vue'
-import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 
-@Component({ components: { Icon, TweenedNumber } })
+const animate = () => {
+  if (TWEEN.update()) {
+    requestAnimationFrame(animate)
+  }
+}
+
+@Component({ components: { Icon } })
 export default class PriceDisplay extends Vue {
   @Prop({ type: Number, default: 0 })
   readonly price!: number
@@ -24,9 +29,11 @@ export default class PriceDisplay extends Vue {
   @Prop({ type: Boolean, default: false })
   readonly kidoku!: boolean
 
-  // get priceWithDelimiter(): string {
-  //   return `${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString()}`
-  // }
+  tweenedPriceNumberObject = { price: 0 }
+
+  get priceWithDelimiter(): string {
+    return `${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString()}`
+  }
 
   get bodyStyle() {
     return {
@@ -41,6 +48,21 @@ export default class PriceDisplay extends Vue {
       : this.kidoku
       ? 'kidoku-blue'
       : undefined
+  }
+
+  @Watch('price')
+  onPriceChanged(val: number) {
+    const tween = new TWEEN.Tween(this.tweenedPriceNumberObject).to(
+      { price: val },
+      300
+    )
+    tween.easing(TWEEN.Easing.Quartic.InOut)
+    tween.start()
+    animate()
+  }
+
+  created() {
+    this.tweenedPriceNumberObject.price = this.price
   }
 }
 </script>

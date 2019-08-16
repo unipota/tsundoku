@@ -127,7 +127,6 @@ func main() {
 	api.GET("/books/:bookID", router.GetBookDetailHandler)
 	api.PUT("/books/:bookID", router.PutUpdateBookHandler)
 	api.DELETE("/books/:bookID", router.DeleteBookHandler)
-	api.GET("/books/statistics", router.GetBookStatsHandler)
 
 	api.GET("/test", router.ScreenshotHandler)
 

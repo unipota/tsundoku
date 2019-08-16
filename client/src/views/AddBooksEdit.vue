@@ -89,9 +89,7 @@ export default class AddBooksSearch extends Vue {
         publisher: '',
         coverImageUrl: this.coverImageUrl,
         readPages: 0,
-        memo: '',
-        createdAt: '',
-        updatedAt: ''
+        memo: ''
       }
     })
     await this.$store.dispatch('getMyBooks')

@@ -56,6 +56,10 @@ export default class BookListItemProgressController extends Vue {
       this.recordActive = true
       this.editedReadPages = this.book.readPages
     } else {
+      if (this.book.readPages === this.editedReadPages) {
+        this.recordActive = false
+        return
+      }
       const book = this.book
       book.readPages = this.editedReadPages
       this.$store.dispatch('updateBook', { book })

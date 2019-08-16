@@ -1,23 +1,20 @@
 const puppeteer = require('puppeteer');
 
 exports.screenshotHandler = function screenshotHandler(req, res) {
-  const filename = 'screenshot.png';
-  const name = 'tester';
-  const tsundoku = '5000';
-  const kidoku = '1000';
-  const count = '13';
+  const filename = req.query.filename;
+  const tsundoku = req.query.tsundoku;
+  const kidoku = req.query.kidoku;
+  const count = req.query.count;
 
-  screenshot(filename, name, tsundoku, kidoku, count);
+  screenshot(filename, tsundoku, kidoku, count);
   res.end(filename);
 };
 
-function screenshot(filename, name, tsundoku, kidoku, count) {
+function screenshot(filename, tsundoku, kidoku, count) {
   const baseUrl = 'http://localhost:4000/html';
   const url =
     baseUrl +
-    '?name=' +
-    name +
-    '&tsundoku=' +
+    '?tsundoku=' +
     tsundoku +
     '&kidoku=' +
     kidoku +
@@ -26,7 +23,6 @@ function screenshot(filename, name, tsundoku, kidoku, count) {
 
   (async () => {
     const browser = await puppeteer.launch({
-      // executablePath: '/usr/bin/chromium-browser',
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox'
@@ -35,7 +31,7 @@ function screenshot(filename, name, tsundoku, kidoku, count) {
     const page = await browser.newPage();
     await page.goto(url);
     const path = 'screenshots/' + filename;
-    await page.screenshot({ path: path });
+    await page.screenshot({ path: path, fullPage: true });
 
     await browser.close();
     return path;

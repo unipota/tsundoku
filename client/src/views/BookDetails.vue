@@ -2,27 +2,28 @@
   modal-frame(path="../../" closeColor="white" no-padding)
     .book-details
       .header(ref="header")
-        .header-bg(:style="headerBgStyle")
-          .info-bg
-            book-major-info(:title="book.title" :authors="book.author")
+        .header-bg(ref="headerBg" :style="headerBgStyle")
         .header-fade
-        .info(ref="info")
-          book-major-info(:title="book.title" :authors="book.author")
-        .actions
-          book-details-action-button.action(
-            :expanded="isButtonExpanded"
-            icon="pen"
-            :label="$t('edit')" :iconSize="20"
-            v-tooltip="'本の情報を編集する'")
-          book-details-action-button.action(
-            :expanded="isButtonExpanded"
-            icon="remove"
-            :label="$t('delete')"
-            @click="handleDeleteClick"
-            v-tooltip="'この本を削除する'")
+      .info(ref="info")
+        book-major-info(:title="book.title" :authors="book.author")
+      .actions(ref="actions")
+        book-details-action-button.action(
+          :expanded="isButtonExpanded"
+          icon="pen"
+          :label="$t('edit')" :iconSize="20"
+          v-tooltip="'本の情報を編集する'")
+        book-details-action-button.action(
+          :expanded="isButtonExpanded"
+          icon="remove"
+          :label="$t('delete')"
+          @click="handleDeleteClick"
+          v-tooltip="'この本を削除する'")
       .cover-wrap(ref="coverWrap")
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
-      .body-wrap(ref="bodyWrap")
+      .body-wrap(
+        ref="bodyWrap"
+        @scroll="updateHeader"
+      )
         .body(ref="body")
           .spacer
           .controller
@@ -57,6 +58,36 @@
             book-details-item.item(
               :name="$t('isbn')"
               :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
+            book-details-item.item(
+              :name="$t('isbn')"
+              :value="book.isbn")
 </template>
 
 <script lang="ts">
@@ -73,6 +104,7 @@ import BookListItemProgressController from '@/components/molecules/BookListItemP
 const initialHeaderHeight = 200
 const slimHeaderHeight = 120
 
+const initialActionsTop = 72
 const initialCoverTop = 120
 const slimInfoLeftPadding = 100
 
@@ -92,6 +124,7 @@ export default class BookDetails extends Vue {
   private currentHeaderHeight = initialHeaderHeight
   private animationFrameRequestId?: number
   private animationEndTimeoutId?: number
+  private lastShiftAmount?: number
 
   public async mounted() {
     this.lastBook = this.book
@@ -135,12 +168,19 @@ export default class BookDetails extends Vue {
     }
   }
 
-  public updateHeader() {
+  public handleBodyWrapTouchStart() {}
+  public handleBodyWrapTouchMove() {}
+  public handleBodyWrapTouchEnd() {}
+  public handleBodyWrapWheel() {}
+
+  public updateHeader(event: WheelEvent) {
     if (
       !(this.$refs.body instanceof Element) ||
       !(this.$refs.bodyWrap instanceof Element) ||
       !(this.$refs.header instanceof Element) ||
+      !(this.$refs.headerBg instanceof Element) ||
       !(this.$refs.info instanceof Element) ||
+      !(this.$refs.actions instanceof Element) ||
       !(this.$refs.coverWrap instanceof Element)
     ) {
       return
@@ -166,35 +206,44 @@ export default class BookDetails extends Vue {
       newHeight = initialHeaderHeight - scrollAmount * 0.5
     }
 
+    const shiftAmount = newHeight - this.currentHeaderHeight
+
+    // カクつき対策
     if (
-      Math.abs(this.currentHeaderHeight - newHeight) >=
-        (initialHeaderHeight - slimHeaderHeight) * 1 &&
-      scrollAmount <= initialHeaderHeight - slimHeaderHeight &&
-      scrollAmount >= 0
+      this.lastShiftAmount &&
+      Math.abs(shiftAmount / this.lastShiftAmount) > 3
     ) {
-      this.animationFrameRequestId = requestAnimationFrame(() =>
-        this.updateHeader()
-      )
+      this.lastShiftAmount = newHeight - this.currentHeaderHeight
       return
     }
+    if (shiftAmount === 0) {
+      this.lastShiftAmount = undefined
+    }
+
+    this.lastShiftAmount = newHeight - this.currentHeaderHeight
 
     const progress =
-      (initialHeaderHeight - this.currentHeaderHeight) /
+      (initialHeaderHeight - newHeight) /
       (initialHeaderHeight - slimHeaderHeight)
 
-    // リアクティブガン無視
-    this.$refs.header.style.height = `${newHeight}px`
-    this.$refs.info.style.left = `${Math.max(
+    // リアクティブガン無視コーナー
+    this.$refs.header.style.transform = `scaleY(${newHeight /
+      initialHeaderHeight})`
+    this.$refs.headerBg.style.transform = `scaleY(${initialHeaderHeight /
+      newHeight})`
+    this.$refs.info.style.transform = `translateX(${Math.max(
       0,
       progress * slimInfoLeftPadding
-    )}px`
-    this.$refs.coverWrap.style.top = `${(1 - progress) * initialCoverTop}px`
-    this.$refs.coverWrap.style.transform = `scale(${1 - progress / 2})`
+    )}px)`
+    this.$refs.actions.style.transform = `translateY(${(1 - progress) *
+      initialActionsTop}px)`
+    this.$refs.coverWrap.style.transform = `translateY(${(1 - progress) *
+      initialCoverTop}px) scale(${1 - progress / 2})`
 
     this.currentHeaderHeight = newHeight
-    this.animationFrameRequestId = requestAnimationFrame(() =>
-      this.updateHeader()
-    )
+    // this.animationFrameRequestId = requestAnimationFrame(() =>
+    //   this.updateHeader()
+    // )
   }
 
   public async handleDeleteClick() {
@@ -223,7 +272,7 @@ export default class BookDetails extends Vue {
 
   get headerBgStyle() {
     return {
-      backgroundImage: this.book ? `url(${this.book.coverImageUrl})` : 'white'
+      // backgroundImage: this.book ? `url(${this.book.coverImageUrl})` : 'white'
     }
   }
 
@@ -263,11 +312,14 @@ export default class BookDetails extends Vue {
   padding: 24px
 
   overflow: hidden
+  transform: scaleY(0)
+  transform-origin: top left
 
-  will-change: height
+  will-change: transform
 
 .body-wrap
   position: absolute
+  top: 0
   height: 100%
   width: 100%
   flex:
@@ -290,12 +342,12 @@ export default class BookDetails extends Vue {
   height: calc(100% + #{$blur-radius * 2})
 
   background:
-    color: rgb(0, 128, 255)
+    image: url('https://tn.smilevideo.jp/smile?i=26783258.L')
     size: cover
     repeat: no-repeat
     position: center center
 
-  filter: blur(20px)
+  // filter: blur(20px)
 
 .header-fade
   position: absolute
@@ -314,22 +366,22 @@ export default class BookDetails extends Vue {
   width: 100%
 
 .info
-  left: 0
-  width: 100%
+  position: absolute
+  width: calc(100% - 192px)
+  top: 24px
+  left: 32px
+  z-index: 5
   position: relative
-  margin:
-    top: 12px
-    left: 8px
-    right: 32px
-    bottom: 16px
 
   color: white
-  will-change: left, width
+  transform: translateZ(0)
+  will-change: transform
 
 .actions
   position: absolute
-  bottom: 0
+  top: 72px
   right: 0
+  z-index: 5
   padding:
     top: 0
     right: 16px
@@ -342,11 +394,11 @@ export default class BookDetails extends Vue {
 
 .cover-wrap
   position: absolute
-  top: 120px
+  top: 0
   left: 24px
   z-index: 4
-  transform: scale(1)
-  will-change: top, transform
+  transform: translateY(120px) scale(1)
+  will-change: transform
 
 .spacer
   height: 60px

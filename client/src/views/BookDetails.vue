@@ -1,7 +1,7 @@
 <template lang="pug">
   modal-frame(path="../../" closeColor="white" no-padding)
     .book-details
-      .header(:style="headerStyle")
+      .header(ref="header" :style="headerStyle")
         .header-bg(:style="headerBgStyle")
           .info-bg
             book-major-info(:title="book.title" :authors="book.author")
@@ -10,12 +10,12 @@
           book-major-info(:title="book.title" :authors="book.author")
         .actions
           book-details-action-button.action(
-            :expanded="showSlimHeader"
+            :expanded="isButtonExpanded"
             icon="pen"
             :label="$t('edit')" :iconSize="20"
             v-tooltip="'本の情報を編集する'")
           book-details-action-button.action(
-            :expanded="showSlimHeader"
+            :expanded="isButtonExpanded"
             icon="remove"
             :label="$t('delete')"
             @click="handleDeleteClick"
@@ -98,7 +98,8 @@ export default class BookDetails extends Vue {
   public handleScroll() {
     if (
       !(this.$refs.body instanceof Element) ||
-      !(this.$refs.bodyWrap instanceof Element)
+      !(this.$refs.bodyWrap instanceof Element) ||
+      !(this.$refs.header instanceof Element)
     ) {
       return
     }
@@ -125,7 +126,13 @@ export default class BookDetails extends Vue {
     if (newHeight > initialHeaderHeight) {
       newHeight = initialHeaderHeight
     }
-    this.currentHeaderHeight = newHeight
+    this.$refs.header.style.willChange = 'height'
+    requestAnimationFrame(() => {
+      // リアクティブガン無視
+      this.$refs.header.style.height = `${newHeight}px`
+      this.currentHeaderHeight = newHeight
+      this.$refs.header.style.willChange = 'auto'
+    })
   }
 
   public async handleDeleteClick() {
@@ -133,8 +140,8 @@ export default class BookDetails extends Vue {
     this.$router.push('../../')
   }
 
-  get showSlimHeader() {
-    return this.currentHeaderHeight >= 1
+  get isButtonExpanded() {
+    return this.currentHeaderHeight >= initialHeaderHeight
   }
 
   get headerTransitionProgress() {
@@ -148,12 +155,6 @@ export default class BookDetails extends Vue {
     const bookId = this.$route.params['id']
     const book = this.$store.getters.getBookById(bookId)
     return book || this.lastBook
-  }
-
-  get headerStyle() {
-    return {
-      height: `${this.currentHeaderHeight}px`
-    }
   }
 
   get headerBgStyle() {
@@ -210,6 +211,7 @@ export default class BookDetails extends Vue {
   top: 0
   left: 0
 
+  height: 200px
   width: 100%
   padding: 24px
 
@@ -263,13 +265,12 @@ export default class BookDetails extends Vue {
   width: 100%
 
 .info
+  position: relative
   margin:
     top: 12px
     left: 8px
     right: 32px
     bottom: 16px
-  position: relative
-
   color: white
 
 .actions

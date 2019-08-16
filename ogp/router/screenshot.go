@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
-	"net/http"
 
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
@@ -23,7 +22,7 @@ func Screenshot(c echo.Context) error {
 	if err := chromedp.Run(ctx, elementScreenshot(`https://www.google.com/`, `#main`, &buf)); err != nil {
 		log.Fatal(err)
 	}
-	if err := ioutil.WriteFile("elementScreenshot.png", buf, 0644); err != nil {
+	if err := ioutil.WriteFile("screenshots/elementScreenshot.png", buf, 0644); err != nil {
 		log.Fatal(err)
 	}
 
@@ -31,11 +30,11 @@ func Screenshot(c echo.Context) error {
 	if err := chromedp.Run(ctx, fullScreenshot(`https://brank.as/`, 90, &buf)); err != nil {
 		log.Fatal(err)
 	}
-	if err := ioutil.WriteFile("fullScreenshot.png", buf, 0644); err != nil {
+	if err := ioutil.WriteFile("screenshots/fullScreenshot.png", buf, 0644); err != nil {
 		log.Fatal(err)
 	}
 
-	return c.NoContent(http.StatusOK)
+	return c.File("screenshots/elementScreenshot.png")
 }
 
 // elementScreenshot takes a screenshot of a specific element.

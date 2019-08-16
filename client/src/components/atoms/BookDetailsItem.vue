@@ -2,7 +2,7 @@
   .book-details-item
     .item-name
       | {{ name }}
-    .item-value(:style="valueStyle")
+    .item-value
       | {{ value }}
 </template>
 
@@ -16,15 +16,6 @@ export default class BookDetailsItem extends Vue {
 
   @Prop({ type: String, required: true })
   private value!: string
-
-  @Prop({ type: String, default: 'var(--text-black)' })
-  private valueColor!: string
-
-  get valueStyle() {
-    return {
-      color: this.valueColor
-    }
-  }
 }
 </script>
 

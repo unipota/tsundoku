@@ -132,11 +132,6 @@ export default class ModalFrame extends Vue {
     height: 48px
     padding: 12px
     display: flex
-    border:
-      radius: 100%
-    transition: background .5s
-    &:hover
-      background: rgba(100,100,100,0.2)
     .close-icon
       margin: auto
 </style>

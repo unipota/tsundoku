@@ -99,12 +99,8 @@ export const mutations: Mutations<S, M> = {
   setBooksMap(state, booksArray) {
     state.booksMap = {}
     booksArray.forEach((book: BookRecord) => {
-      state.booksMap = { ...state.booksMap, [book.id]: book }
+      state.booksMap[book.id] = book
     })
-  },
-  updateBook(state, { book }) {
-    state.booksMap[book.id] = book
-    state.booksMap = { ...state.booksMap }
   }
 }
 // ______________________________________________________
@@ -156,19 +152,6 @@ export const actions: Actions<S, A, G, M> = {
     return new Promise((resolve, reject) => {
       api.addNewBook(book).then(result => {
         if (result.data) {
-          resolve(result.data)
-        } else {
-          reject()
-        }
-      })
-    })
-  },
-  updateBook({ commit }, { book }): Promise<BookRecord> {
-    console.log(book)
-    return new Promise((resolve, reject) => {
-      api.updateBook(book.id, book).then(result => {
-        if (result.data) {
-          commit('updateBook', { book: result.data })
           resolve(result.data)
         } else {
           reject()

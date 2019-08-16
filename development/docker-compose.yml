@@ -20,3 +20,9 @@ services:
       MYSQL_DATABASE: tsundoku
     ports:
       - "3306:3306"
+  ogp:
+    build:
+      context: ../ogp
+      dockerfile: ../development/ogp.Dockerfile
+    ports:
+      - "3001:3001"

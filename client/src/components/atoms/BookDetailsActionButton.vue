@@ -40,8 +40,8 @@ $width-sm: 40px
 .book-details-action-button
   position: relative
   cursor: pointer
-  width: $width
   height: $height
+  width: $width
   border:
     radius: 9999vw
   padding:
@@ -52,8 +52,13 @@ $width-sm: 40px
   align-items: center
   justify-content: space-between
   color: white
+  transition: all 0.3s ease
 
   @media (max-width: 340px)
+    width: $width-sm
+    justify-content: center
+
+  &:not(.expanded)
     width: $width-sm
     justify-content: center
 
@@ -73,7 +78,13 @@ $width-sm: 40px
     size: 1rem
   white-space: nowrap
   user-select: none
+  transition: all 0.3s ease
 
   @media (max-width: 340px)
-    display: none
+    width: 0
+    opacity: 0
+
+  .book-details-action-button:not(.expanded) &
+    width: 0
+    opacity: 0
 </style>

@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const html = require('./router/html');
 const ss = require('./router/scressnshot');
+const ejs = require('ejs');
 
 const port = process.env.PORT || 4000;
 
@@ -12,21 +13,12 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.engine('ejs', ejs.renderFile);
 
-app.use('/static', express.static('public'));
 
-app.post('/ogp', function(req, res) {
-  var userName = req.body.userName;
-  res.json({
-    userName: userName
-  });
-});
-
-app.get('/html', html.buildHtmlHandler);
-
+app.get('/html', html.buildOgpHtmlHandler);
 app.get('/ss', ss.screenshotHandler);
 
-app.use(express.static('screenshots'));
 
 app.listen(port);
 console.log('listen on port ' + port);

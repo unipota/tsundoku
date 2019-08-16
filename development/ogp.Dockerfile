@@ -23,22 +23,17 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo ap
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # # Japanese font
-# RUN mkdir /noto
-# ADD https://noto-website.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip /noto
-# WORKDIR /noto
-# RUN unzip NotoSansCJKjp-hinted.zip && \
-#     mkdir -p /usr/share/fonts/noto && \
-#     cp *.otf /usr/share/fonts/noto && \
-#     chmod 644 -R /usr/share/fonts/noto/ && \
-#     /usr/bin/fc-cache -fv
-# WORKDIR /
-# RUN rm -rf /noto
+RUN mkdir /noto
+ADD https://noto-website.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip /noto
+WORKDIR /noto
+RUN unzip NotoSansCJKjp-hinted.zip && \
+    mkdir -p /usr/share/fonts/noto && \
+    cp *.otf /usr/share/fonts/noto && \
+    chmod 644 -R /usr/share/fonts/noto/ && \
+    /usr/bin/fc-cache -fv
+WORKDIR /
+RUN rm -rf /noto
 
-# Work dir
-# RUN mkdir -p /app
-# WORKDIR /app
-# COPY . /app/
-# RUN mkdir -p /tsundoku/ogp
 WORKDIR /tsundoku/ogp
 COPY package*.json ./
 RUN npm install

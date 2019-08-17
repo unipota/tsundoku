@@ -1,5 +1,5 @@
 <template lang="pug">
-  .add-books-input
+  .books-info-edit-input
     .label
       | {{ label }}
     text-input(

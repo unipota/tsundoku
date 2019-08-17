@@ -3,28 +3,7 @@
     :title="$t('addBooksSearchTitle')"
     :class="$store.getters.viewTypeClass"
   )
-    book-cover(
-      :hasShadow="true"
-      :url="coverImageUrl"
-    )
-    add-books-edit-input.edit-input(
-      :label="$t('title')"
-      v-model="title"
-    )
-    add-books-edit-input.edit-input(
-      :label="$t('author')"
-      v-model="author"
-    )
-    add-books-edit-input.edit-input(
-      :label="$t('price')"
-      v-model="price"
-      type="number"
-    )
-    add-books-edit-input.edit-input(
-      :label="$t('totalPages')"
-      v-model="totalPages"
-      type="number"
-    )
+    book-info-edit(v-model="book")
     .add-button-container
       add-tsundoku-button(
         @add-tsundoku="onAddTsundoku"
@@ -35,64 +14,56 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
-import Icon from '@/components/assets/Icon.vue'
 import AddTsundokuButton from '@/components/atoms/AddTsundokuButton.vue'
-import AddBooksEditInput from '@/components/molecules/AddBooksEditInput.vue'
-import ModalFrame from '@/components/atoms/ModalFrame.vue'
-import BookCover from '@/components/atoms/BookCover.vue'
+import BookInfoEdit from '@/components/organs/BookInfoEdit.vue'
+import { BookRecord } from '../types/Book'
 
 @Component({
   components: {
-    Icon,
     AddTsundokuButton,
-    AddBooksEditInput,
-    ModalFrame,
-    BookCover
+    BookInfoEdit
   }
 })
 export default class AddBooksSearch extends Vue {
   public $store!: ExStore
-  private title = ''
-  private author = ''
-  private price = ''
-  private totalPages = ''
-  private coverImageUrl = ''
+
+  private book: BookRecord = {
+    id: '',
+    isbn: '',
+    title: '',
+    author: [],
+    totalPages: 0,
+    price: 0,
+    caption: null,
+    publisher: '',
+    coverImageUrl: '',
+    readPages: 0,
+    memo: '',
+    createdAt: '',
+    updatedAt: ''
+  }
 
   mounted() {
     if (typeof this.$route.query.title === 'string') {
-      this.title = this.$route.query.title
+      this.$set(this.book, 'title', this.$route.query.title)
     }
     if (typeof this.$route.query.author === 'string') {
-      this.author = this.$route.query.author
+      this.$set(this.book, 'author', [this.$route.query.author])
     }
     if (typeof this.$route.query.price === 'string') {
-      this.price = this.$route.query.price
+      this.$set(this.book, 'price', parseInt(this.$route.query.price))
     }
     if (typeof this.$route.query.totalPages === 'string') {
-      this.totalPages = this.$route.query.totalPages
+      this.$set(this.book, 'totalPages', parseInt(this.$route.query.totalPages))
     }
     if (typeof this.$route.query.coverImageUrl === 'string') {
-      this.coverImageUrl = this.$route.query.coverImageUrl
+      this.$set(this.book, 'coverImageUrl', this.$route.query.coverImageUrl)
     }
   }
 
   async onAddTsundoku() {
     await this.$store.dispatch('addNewBook', {
-      book: {
-        id: '',
-        isbn: '',
-        title: this.title,
-        author: [this.author],
-        totalPages: parseInt(this.totalPages),
-        price: parseInt(this.price),
-        caption: null,
-        publisher: '',
-        coverImageUrl: this.coverImageUrl,
-        readPages: 0,
-        memo: '',
-        createdAt: '',
-        updatedAt: ''
-      }
+      book: this.book
     })
     await this.$store.dispatch('getMyBooks')
     this.$router.push('/')
@@ -103,17 +74,6 @@ export default class AddBooksSearch extends Vue {
 <style lang="sass" scoped>
 .add-books-search
   -webkit-overflow-scrolling: touch
-
-.book-cover
-  margin: 20px auto 40px
-
-.edit-input
-
-  .is-desktop &
-    width: 85%
-    margin: 0 auto 40px
-  .is-mobile &
-    margin: 0 auto 30px
 
 .add-button-container
   display: flex

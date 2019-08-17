@@ -1,68 +1,73 @@
 <template lang="pug">
-  modal-frame(path="../../" closeColor="white" no-padding)
-    .book-details
+  modal-frame(
+    :closeColor="isEditing ? 'var(--text-gray)' : 'white'"
+    :title="isEditing ? '編集' : ''"
+    :path="isEditing ? '../../../' : '../../'"
+    no-padding)
+    .book-details(:class="{ editing: isEditing }")
       .header(ref="header")
         .header-bg(ref="headerBg" :style="headerBgStyle")
         .header-fade
         .header-filter
       .info(ref="info")
         book-major-info(:title="book.title" :authors="book.author")
-      .actions(ref="actions")
-        book-details-action-button.action(
-          :expanded="isButtonExpanded"
-          icon="pen"
-          :label="$t('edit')" :iconSize="20"
-          @click="onEditClick"
-          v-tooltip="'本の情報を編集する'")
-        book-details-action-button.action(
-          :expanded="isButtonExpanded"
-          icon="remove"
-          :label="$t('delete')"
-          @click="onDeleteClick"
-          v-tooltip="'この本を削除する'")
+      transition(name="fade")
+        .actions(v-if="!isEditing" ref="actions")
+          book-details-action-button.action(
+            :expanded="isButtonExpanded"
+            icon="pen"
+            :label="$t('edit')" :iconSize="20"
+            @click="onEditClick"
+            v-tooltip="'本の情報を編集する'")
+          book-details-action-button.action(
+            :expanded="isButtonExpanded"
+            icon="remove"
+            :label="$t('delete')"
+            @click="onDeleteClick"
+            v-tooltip="'この本を削除する'")
       .cover-wrap(ref="coverWrap")
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
-      .body-wrap(
-        ref="bodyWrap"
-        @scroll="updateHeader"
-      )
-        .body(ref="body")
-          .spacer
-          .controller
-            book-list-item-progress-controller(:book="book")
-          .info-items
-            book-details-item.item(
-              name="ツンドク残額"
-              :value="`¥ ${remainingPrice.toLocaleString()}`"
-              valueColor="var(--tsundoku-red)")
-            book-details-item.item(
-              :name="$t('price')"
-              :value="`¥ ${price.toLocaleString()}`")
-            book-details-item.item(
-              :name="$t('totalPages')"
-              :value="`${totalPages}`")
-            book-details-item.item(
-              name="最後に読んだ日"
-              value="0日前")
-            book-details-item.item(
-              textarea
-              clickable
-              name="メモ"
-              placeholder="メモがありません"
-              :value="book.memo")
-            book-details-item.item(
-              :name="$t('overview')"
-              :value="book.caption")
-            book-details-item.item(
-              :name="$t('publisher')"
-              :value="book.publisher")
-            book-details-item.item(
-              :name="$t('isbn')"
-              :value="book.isbn")
+      transition(name="fade" mode="out-in")
+        .edit-wrap(v-if="isEditing" key="edit")
+          book-info-edit(v-model="book")
+        .detail-wrap(v-else ref="bodyWrap" @scroll="updateHeader" key="detail")
+          .body(ref="body")
+            .spacer
+            .controller
+              book-list-item-progress-controller(:book="book")
+            .info-items
+              book-details-item.item(
+                name="ツンドク残額"
+                :value="`¥ ${remainingPrice.toLocaleString()}`"
+                valueColor="var(--tsundoku-red)")
+              book-details-item.item(
+                :name="$t('price')"
+                :value="`¥ ${price.toLocaleString()}`")
+              book-details-item.item(
+                :name="$t('totalPages')"
+                :value="`${totalPages}`")
+              book-details-item.item(
+                name="最後に読んだ日"
+                value="0日前")
+              book-details-item.item(
+                textarea
+                clickable
+                name="メモ"
+                placeholder="メモがありません"
+                :value="book.memo")
+              book-details-item.item(
+                :name="$t('overview')"
+                :value="book.caption")
+              book-details-item.item(
+                :name="$t('publisher')"
+                :value="book.publisher")
+              book-details-item.item(
+                :name="$t('isbn')"
+                :value="book.isbn")
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookRecord } from '../types/Book'
 import BookDetailsActionButton from '@/components/atoms/BookDetailsActionButton.vue'
@@ -70,6 +75,7 @@ import BookDetailsItem from '@/components/molecules/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
+import BookInfoEdit from '@/components/organs/BookInfoEdit.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 
 const initialHeaderHeight = 200
@@ -79,12 +85,15 @@ const initialActionsTop = 72
 const initialCoverTop = 120
 const slimInfoLeftPadding = 100
 
+const transitionDuration = 400
+
 @Component({
   components: {
     BookDetailsActionButton,
     BookDetailsItem,
     ModalFrame,
     BookCover,
+    BookInfoEdit,
     BookMajorInfo,
     BookListItemProgressController
   }
@@ -96,6 +105,9 @@ export default class BookDetails extends Vue {
   private animationFrameRequestId?: number
   private animationEndTimeoutId?: number
   private lastShiftAmount?: number
+
+  @Prop({ type: Boolean, default: false })
+  private isEditing: boolean
 
   public async mounted() {
     this.lastBook = this.book
@@ -137,11 +149,6 @@ export default class BookDetails extends Vue {
       this.$refs.body.style.minHeight = ''
     }
   }
-
-  public handleBodyWrapTouchStart() {}
-  public handleBodyWrapTouchMove() {}
-  public handleBodyWrapTouchEnd() {}
-  public handleBodyWrapWheel() {}
 
   public updateHeader() {
     if (
@@ -222,6 +229,39 @@ export default class BookDetails extends Vue {
     this.$router.push('../../')
   }
 
+  @Watch('isEditing')
+  public onIsEditingChanged(val) {
+    if (
+      !val ||
+      !this.$refs.header ||
+      !this.$refs.headerBg ||
+      !this.$refs.info ||
+      !this.$refs.actions ||
+      !this.$refs.coverWrap
+    ) {
+      return
+    }
+
+    // 全スタイルリセット
+    const headerElement = this.$refs.header as HTMLElement
+    const headerBgElement = this.$refs.headerBg as HTMLElement
+    const infoElement = this.$refs.info as HTMLElement
+    const actionsElement = this.$refs.actions as HTMLElement
+    const coverWrapElement = this.$refs.coverWrap as HTMLElement
+    headerElement.style.transform = ''
+    headerBgElement.style.transform = ''
+    infoElement.style.transform = ''
+    actionsElement.style.transform = ''
+    coverWrapElement.style.transform = ''
+
+    this.isOnTransitionToEdit = true
+    window.setTimeout(() => {
+      coverWrapElement.style.display = 'none'
+      this.isOnTransitionToEdit = false
+      coverWrapElement.style.opacity = '0'
+    }, transitionDuration * 1.25)
+  }
+
   public onEditClick() {
     this.$router.push(`${this.$route.path}/edit`)
   }
@@ -271,6 +311,8 @@ export default class BookDetails extends Vue {
 </script>
 
 <style lang="sass" scoped>
+$transition-duration: 0.3s
+
 .book-details
   position: relative
   width: 100%
@@ -295,14 +337,11 @@ export default class BookDetails extends Vue {
 
   will-change: transform
 
-.body-wrap
+.detail-wrap
   position: absolute
   top: 0
   height: 100%
   width: 100%
-  flex:
-    grow: 1
-    shrink: 1
   overflow-y: scroll
   -webkit-overflow-scrolling: touch
 
@@ -398,4 +437,31 @@ export default class BookDetails extends Vue {
 .item
   margin:
     bottom: 16px
+
+.book-details.editing
+  .info, .actions
+    visibility: hidden
+  .header
+    transition: all $transition-duration ease
+    transform: translateY(-100%)
+    filter: blur(15px)
+  .cover-wrap
+    transition: all $transition-duration ease
+    transform: translateX(226px) translateY(110px) scale(1)
+
+.edit-wrap
+  position: absolute
+  top: 0
+  height: 100%
+  width: 100%
+  padding: (32px + 34px + 24px) 24px 0  // modal-frameに揃える
+  overflow-y: scroll
+  -webkit-overflow-scrolling: touch
+
+
+.fade-enter-active, .fade-leave-active
+  transition: opacity $transition-duration ease
+.fade-enter, .fade-leave-to
+  opacity: 0
+  transform: translateX(-100%)
 </style>

@@ -47,7 +47,7 @@ import BookCover from '@/components/atoms/BookCover.vue'
 })
 export default class BookInfoEdit extends Vue {
   @Prop({ type: Object, required: true })
-  private value: BookDetail
+  private value!: BookDetail
 
   public update<T extends keyof BookDetail>(key: T, value: BookDetail[T]) {
     console.log(value)

@@ -114,8 +114,8 @@ export default class BookDetails extends Vue {
 
   public handleResize() {
     if (
-      !(this.$refs.body instanceof Element) ||
-      !(this.$refs.bodyWrap instanceof Element)
+      !(this.$refs.body instanceof HTMLElement) ||
+      !(this.$refs.bodyWrap instanceof HTMLElement)
     ) {
       return
     }
@@ -139,19 +139,27 @@ export default class BookDetails extends Vue {
 
   public updateHeader() {
     if (
-      !(this.$refs.body instanceof Element) ||
-      !(this.$refs.bodyWrap instanceof Element) ||
-      !(this.$refs.header instanceof Element) ||
-      !(this.$refs.headerBg instanceof Element) ||
-      !(this.$refs.info instanceof Element) ||
-      !(this.$refs.actions instanceof Element) ||
-      !(this.$refs.coverWrap instanceof Element)
+      !this.$refs.body ||
+      !this.$refs.bodyWrap ||
+      !this.$refs.header ||
+      !this.$refs.headerBg ||
+      !this.$refs.info ||
+      !this.$refs.actions ||
+      !this.$refs.coverWrap
     ) {
       return
     }
 
-    const { top: bodyWrapTop } = this.$refs.bodyWrap.getBoundingClientRect()
-    const { top: bodyTop } = this.$refs.body.getBoundingClientRect()
+    const bodyElement = this.$refs.body as HTMLElement
+    const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
+    const headerElement = this.$refs.header as HTMLElement
+    const headerBgElement = this.$refs.headerBg as HTMLElement
+    const infoElement = this.$refs.info as HTMLElement
+    const actionsElement = this.$refs.actions as HTMLElement
+    const coverWrapElement = this.$refs.coverWrap as HTMLElement
+
+    const { top: bodyWrapTop } = bodyWrapElement.getBoundingClientRect()
+    const { top: bodyTop } = bodyElement.getBoundingClientRect()
 
     const scrollAmount = bodyWrapTop - bodyTop
     let newHeight = initialHeaderHeight - scrollAmount * 0.5
@@ -186,17 +194,17 @@ export default class BookDetails extends Vue {
 
     this.animationFrameRequestId = requestAnimationFrame(() => {
       // リアクティブガン無視コーナー
-      this.$refs.header.style.transform = `scaleY(${newHeight /
+      headerElement.style.transform = `scaleY(${newHeight /
         initialHeaderHeight})`
-      this.$refs.headerBg.style.transform = `scaleY(${initialHeaderHeight /
+      headerBgElement.style.transform = `scaleY(${initialHeaderHeight /
         newHeight})`
-      this.$refs.info.style.transform = `translateX(${Math.max(
+      infoElement.style.transform = `translateX(${Math.max(
         0,
         progress * slimInfoLeftPadding
       )}px)`
-      this.$refs.actions.style.transform = `translateY(${(1 - progress) *
+      actionsElement.style.transform = `translateY(${(1 - progress) *
         initialActionsTop}px)`
-      this.$refs.coverWrap.style.transform = `translateY(${(1 - progress) *
+      coverWrapElement.style.transform = `translateY(${(1 - progress) *
         initialCoverTop}px) scale(${1 - progress / 2})`
 
       this.currentHeaderHeight = newHeight

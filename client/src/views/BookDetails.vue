@@ -12,12 +12,13 @@
           :expanded="isButtonExpanded"
           icon="pen"
           :label="$t('edit')" :iconSize="20"
+          @click="onEditClick"
           v-tooltip="'本の情報を編集する'")
         book-details-action-button.action(
           :expanded="isButtonExpanded"
           icon="remove"
           :label="$t('delete')"
-          @click="handleDeleteClick"
+          @click="onDeleteClick"
           v-tooltip="'この本を削除する'")
       .cover-wrap(ref="coverWrap")
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
@@ -41,8 +42,13 @@
               :name="$t('totalPages')"
               :value="`${totalPages}`")
             book-details-item.item(
+              name="最後に読んだ日"
+              value="0日前")
+            book-details-item.item(
               textarea
+              clickable
               name="メモ"
+              placeholder="メモがありません"
               :value="book.memo")
             book-details-item.item(
               :name="$t('overview')"
@@ -60,7 +66,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookRecord } from '../types/Book'
 import BookDetailsActionButton from '@/components/atoms/BookDetailsActionButton.vue'
-import BookDetailsItem from '@/components/atoms/BookDetailsItem.vue'
+import BookDetailsItem from '@/components/molecules/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
@@ -211,9 +217,13 @@ export default class BookDetails extends Vue {
     })
   }
 
-  public async handleDeleteClick() {
+  public async onDeleteClick() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
     this.$router.push('../../')
+  }
+
+  public onEditClick() {
+    this.$router.push(`${this.$route.path}/edit`)
   }
 
   get isButtonExpanded() {
@@ -237,7 +247,10 @@ export default class BookDetails extends Vue {
 
   get headerBgStyle() {
     return {
-      backgroundImage: this.book ? `url(${this.book.coverImageUrl})` : 'white'
+      backgroundImage:
+        this.book && this.book.coverImageUrl !== ''
+          ? `url(${this.book.coverImageUrl})`
+          : 'url("https://tn.smilevideo.jp/smile?i=26783258.L")'
     }
   }
 

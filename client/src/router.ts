@@ -26,6 +26,7 @@ export type ViewNames =
   | 'addBooksScan'
   | 'addBooksEdit'
   | 'bookDetails'
+  | 'bookDetailsEdit'
   | 'login'
   | 'user'
   | 'privacy'
@@ -40,6 +41,8 @@ interface ViewDeclaration {
   view: ViewNames
   path?: string
   children?: ViewDeclaration[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  props?: Record<string, any>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?: Record<string, any>
 }
@@ -67,6 +70,7 @@ const toRoutesObject = (
         children: route.children
           ? toRoutesObject(route.children, componentMap, path, name)
           : undefined,
+        props: route.props ? route.props : {},
         meta: route.meta ? route.meta : {}
       }
     }
@@ -81,6 +85,7 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
   addBooksScan: AddBooksScan,
   addBooksEdit: AddBooksEdit,
   bookDetails: BookDetails,
+  bookDetailsEdit: BookDetails,
   login: Login,
   user: UserDetails,
   privacy: Privacy,
@@ -92,6 +97,14 @@ const modalSubTree: ViewDeclaration[] = [
   { view: 'addBooksSearch', meta: { isModal: true } },
   { view: 'addBooksScan', meta: { isModal: true } },
   { view: 'addBooksEdit', meta: { isModal: true } },
+  {
+    view: 'bookDetailsEdit',
+    path: 'book/:id/edit',
+    props: {
+      isEditing: true
+    },
+    meta: { isModal: true }
+  },
   { view: 'bookDetails', path: 'book/:id', meta: { isModal: true } }
 ]
 

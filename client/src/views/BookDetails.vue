@@ -26,10 +26,10 @@
             @click="onDeleteClick"
             v-tooltip="'この本を削除する'")
       .cover-wrap(ref="coverWrap")
-        book-cover(:url="book.coverImageUrl" :hasShadow="true")
+        book-cover(:url="book.coverImageUrl" has-shadow)
       transition(name="fade" mode="out-in")
         .edit-wrap(v-if="isEditing" key="edit")
-          book-info-edit(v-model="book")
+          book-info-edit(v-model="book" :has-shadow="isEditing && !isOnTransitionToEdit")
         .detail-wrap(v-else ref="bodyWrap" @scroll="updateHeader" key="detail")
           .body(ref="body")
             .spacer
@@ -105,6 +105,7 @@ export default class BookDetails extends Vue {
   private animationFrameRequestId?: number
   private animationEndTimeoutId?: number
   private lastShiftAmount?: number
+  private isOnTransitionToEdit = false
 
   @Prop({ type: Boolean, default: false })
   private isEditing: boolean
@@ -311,7 +312,8 @@ export default class BookDetails extends Vue {
 </script>
 
 <style lang="sass" scoped>
-$transition-duration: 0.3s
+$transition-duration: 0.2s
+$cover-transition-duration: 0.3s
 
 .book-details
   position: relative
@@ -446,7 +448,7 @@ $transition-duration: 0.3s
     transform: translateY(-100%)
     filter: blur(15px)
   .cover-wrap
-    transition: all $transition-duration ease
+    transition: all $cover-transition-duration ease
     transform: translateX(226px) translateY(110px) scale(1)
 
 .edit-wrap

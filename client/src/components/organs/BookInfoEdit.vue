@@ -1,7 +1,7 @@
 <template lang="pug">
   .book-info-edit
     book-cover(
-      :hasShadow="true"
+      :hasShadow="hasShadow"
       :url="value.coverImageUrl"
     )
     books-info-edit-input.edit-input(
@@ -48,6 +48,9 @@ import BookCover from '@/components/atoms/BookCover.vue'
 export default class BookInfoEdit extends Vue {
   @Prop({ type: Object, required: true })
   private value!: BookDetail
+
+  @Prop({ type: Boolean, default: true })
+  private hasShadow!: boolean
 
   public update<T extends keyof BookDetail>(key: T, value: BookDetail[T]) {
     console.log(value)

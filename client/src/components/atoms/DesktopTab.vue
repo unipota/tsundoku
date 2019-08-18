@@ -3,9 +3,9 @@
     router-link.tab(
       v-for="tab in Object.keys(tabs)"
       :key="tab"
+      :title="tab"
       :class="{ [tab]: true, 'active': isActive(tab) }"
       :to="{ name: tabs[tab].to, hash: $route.hash }"
-      v-tooltip.right="tabs[tab].tooltip"
     )
       span.icon(:class="tab")
         icon(
@@ -17,19 +17,17 @@
         span.item-label(key="item-label" :class="{'with-price': tab !== 'toukei' && isActive(tab)}")
           | {{ $t(tab) }}
         span.price-label(v-if="tab !== 'toukei' && isActive(tab)" key="item-price")
-          tweened-number(:num="price" formatLocal)
+          | {{ price.toLocaleString() }}
 </template>
 
 <script lang="ts">
 import { Vue, Prop, Component } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
-import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 
 @Component({
   components: {
-    Icon,
-    TweenedNumber
+    Icon
   }
 })
 export default class DesktopTab extends Vue {
@@ -39,18 +37,15 @@ export default class DesktopTab extends Vue {
   private tabs = {
     tsundoku: {
       to: 'tsundoku',
-      inactiveColor: 'var(--tsundoku-red-bg)',
-      tooltip: '積んでいる本のリストとツンドク総額'
+      inactiveColor: 'var(--tsundoku-red-bg)'
     },
     kidoku: {
       to: 'kidoku',
-      inactiveColor: 'var(--kidoku-blue-bg)',
-      tooltip: '読み終わった本のリストとキドク総額'
+      inactiveColor: 'var(--kidoku-blue-bg)'
     },
     toukei: {
       to: 'toukei',
-      inactiveColor: 'var(--toukei-black-bg)',
-      tooltip: 'ツンドク状況の推移'
+      inactiveColor: 'var(--toukei-black-bg)'
     }
   }
 
@@ -72,11 +67,8 @@ export default class DesktopTab extends Vue {
   width: 100%
   padding: 0 32px
   border-radius: 100vw
-  transition: background-color .3s
   &:not(:last-child)
     margin-bottom: 24px
-  &:not(.active):hover
-    background-color: var(--bg-gray)
 
 .icon
   display: flex

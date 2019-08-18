@@ -1,9 +1,8 @@
 <template lang="pug">
-  .book-cover(:class="{'has-shadow': hasShadow}")
+  div.book-cover(:class="{'has-shadow': hasShadow}")
     v-lazy-image.cover-image(
       v-if="url.length > 0"
       :src="url"
-      alt="cover image"
     )
     dummy-book-cover(v-else)
 </template>
@@ -36,7 +35,6 @@ export default class BookCover extends Vue {
   border-radius: 8px
   background-color: var(--text-white)
   overflow: hidden
-  user-select: none
   &.has-shadow
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
 

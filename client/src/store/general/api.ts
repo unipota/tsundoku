@@ -18,7 +18,7 @@ const api = {
   getBookDetail(id: number): Promise<AxiosResponse> {
     return client.get(`api/books/${id}`)
   },
-  updateBook(id: string, book: BookRecord): Promise<AxiosResponse<BookRecord>> {
+  updateBook(id: string, book: BookRecord): Promise<AxiosResponse> {
     return client.put(`api/books/${id}`, book)
   },
   deleteBook(id: string): Promise<AxiosResponse> {

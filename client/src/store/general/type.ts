@@ -47,7 +47,6 @@ export interface M {
   setShowMobileTabBar: boolean
   setShowDesktopNav: boolean
   setBooksMap: BookRecord[]
-  updateBook: { book: BookRecord }
 }
 export type RM = {
   [K in keyof M]: M[K]
@@ -60,7 +59,6 @@ export interface A {
   searchBooksByISBN: { isbn: string }
   searchBooks: { search: string }
   addNewBook: { book: BookRecord }
-  updateBook: { book: BookRecord }
   deleteBook: { id: string }
 }
 export type RA = {

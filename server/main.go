@@ -132,7 +132,7 @@ func main() {
 	api.GET("/share", router.GetShareURLHandler)
 
 	e.GET("/share/:shareID", router.GetSharePageHandler)
-	e.GET("/share/ogp/:shareID", router.GetOGPImageHandler)
+	e.GET("/ogp/:shareID", router.GetOGPImageHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

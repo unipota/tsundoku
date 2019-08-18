@@ -4,15 +4,19 @@
     :title="isEditing ? '編集' : ''"
     :path="isEditing ? '../../../' : '../../'"
     no-padding)
-    .book-details(:class="{ editing: isEditing }")
-      .header(ref="header")
-        .header-bg(ref="headerBg" :style="headerBgStyle")
-        .header-fade
-        .header-filter
-      .info(ref="info")
-        book-major-info(:title="book.title" :authors="book.author")
+    .book-details(
+      :class="{ editing: isEditing, 'on-transition': isOnTransitionToEdit || isOnTransitionToDetails }"
+      ref="bookDetails")
       transition(name="fade")
-        .actions(v-if="!isEditing" ref="actions")
+        .header(ref="header" v-if="!isEditing")
+          .header-bg(ref="headerBg" :style="headerBgStyle")
+          .header-fade
+          .header-filter
+      transition(name="fade")
+        .info(ref="info" v-if="!isEditing")
+          book-major-info(:title="book.title" :authors="book.author")
+      transition(name="fade")
+        .actions(ref="actions" v-if="!isEditing")
           book-details-action-button.action(
             :expanded="isButtonExpanded"
             icon="pen"
@@ -29,7 +33,7 @@
         book-cover(:url="book.coverImageUrl" has-shadow)
       transition(name="fade" mode="out-in")
         .edit-wrap(v-if="isEditing" key="edit")
-          book-info-edit(v-model="book" :has-shadow="isEditing && !isOnTransitionToEdit")
+          book-info-edit(v-model="book" ref="bookInfoEditInstance" :has-shadow="isEditing && !isOnTransitionToEdit")
         .detail-wrap(v-else ref="bodyWrap" @scroll="updateHeader" key="detail")
           .body(ref="body")
             .spacer
@@ -106,9 +110,11 @@ export default class BookDetails extends Vue {
   private animationEndTimeoutId?: number
   private lastShiftAmount?: number
   private isOnTransitionToEdit = false
+  private isOnTransitionToDetails = false
 
+  // router
   @Prop({ type: Boolean, default: false })
-  private isEditing: boolean
+  private isEditing!: boolean
 
   public async mounted() {
     this.lastBook = this.book
@@ -136,6 +142,7 @@ export default class BookDetails extends Vue {
       !(this.$refs.body instanceof HTMLElement) ||
       !(this.$refs.bodyWrap instanceof HTMLElement)
     ) {
+      console.log('po')
       return
     }
     // 本体がラッパー以上の場合はラッパー + ヘッダの高さ変化分までは伸ばす
@@ -231,36 +238,68 @@ export default class BookDetails extends Vue {
   }
 
   @Watch('isEditing')
-  public onIsEditingChanged(val) {
-    if (
-      !val ||
-      !this.$refs.header ||
-      !this.$refs.headerBg ||
-      !this.$refs.info ||
-      !this.$refs.actions ||
-      !this.$refs.coverWrap
-    ) {
-      return
+  public async onIsEditingChanged(val: boolean) {
+    if (val) {
+      // 編集状態へのトランジション(手動)
+      const modalElement = this.$refs.bookDetails as HTMLElement
+      const coverWrapElement = this.$refs.coverWrap as HTMLElement
+
+      await this.$nextTick()
+
+      // 移動先計算
+      const modalWidth = modalElement.clientWidth
+      const coverLeft = coverWrapElement.offsetLeft
+      const coverWidth = coverWrapElement.clientWidth
+
+      const translateX = modalWidth / 2 - coverWidth / 2 - coverLeft
+
+      // 110pxはほぼマジックナンバー
+      coverWrapElement.style.transform = `translateX(${translateX}px) translateY(110px) scale(1)`
+
+      // 終了後にcoverWrapを消す
+      this.isOnTransitionToEdit = true
+      window.setTimeout(() => {
+        coverWrapElement.style.display = 'none'
+        this.isOnTransitionToEdit = false
+        coverWrapElement.style.opacity = '0'
+      }, transitionDuration * 1.25)
+    } else {
+      const modalElement = this.$refs.bookDetails as HTMLElement
+      const editAreaElement = this.$refs.bookInfoEditInstance.$el as HTMLElement
+      const coverWrapElement = this.$refs.coverWrap as HTMLElement
+
+      coverWrapElement.style.transform = ''
+
+      const modalWidth = modalElement.getBoundingClientRect().width
+      const editAreaTop = editAreaElement.getBoundingClientRect().top
+
+      coverWrapElement.style.visibility = 'auto'
+      coverWrapElement.style.display = 'block'
+      coverWrapElement.style.opacity = '1'
+      const {
+        left: coverLeft,
+        width: coverWidth
+      } = coverWrapElement.getBoundingClientRect()
+
+      const translateX = modalWidth / 2 - coverWidth / 2 - coverLeft
+      const translateY = editAreaTop - 24
+
+      coverWrapElement.style.transform = `translateX(${translateX}px) translateY(${translateY}px) scale(1)`
+
+      await this.$nextTick()
+
+      // coverWrapの位置をあわせてからtransitionを開始する
+      this.isOnTransitionToDetails = true
+      coverWrapElement.style.transform = `translateX(${0}px) translateY(${initialCoverTop}px) scale(1)`
+
+      window.setTimeout(() => {
+        this.isOnTransitionToDetails = false
+      }, transitionDuration * 1.25)
+
+      await this.$nextTick()
+      this.updateHeader()
+      this.handleResize()
     }
-
-    // 全スタイルリセット
-    const headerElement = this.$refs.header as HTMLElement
-    const headerBgElement = this.$refs.headerBg as HTMLElement
-    const infoElement = this.$refs.info as HTMLElement
-    const actionsElement = this.$refs.actions as HTMLElement
-    const coverWrapElement = this.$refs.coverWrap as HTMLElement
-    headerElement.style.transform = ''
-    headerBgElement.style.transform = ''
-    infoElement.style.transform = ''
-    actionsElement.style.transform = ''
-    coverWrapElement.style.transform = ''
-
-    this.isOnTransitionToEdit = true
-    window.setTimeout(() => {
-      coverWrapElement.style.display = 'none'
-      this.isOnTransitionToEdit = false
-      coverWrapElement.style.opacity = '0'
-    }, transitionDuration * 1.25)
   }
 
   public onEditClick() {
@@ -334,7 +373,7 @@ $cover-transition-duration: 0.3s
   padding: 24px
 
   overflow: hidden
-  transform: scaleY(0)
+  transform: scaleY(1)
   transform-origin: top left
 
   will-change: transform
@@ -392,7 +431,6 @@ $cover-transition-duration: 0.3s
   top: 24px
   left: 32px
   z-index: 5
-  position: relative
 
   color: white
   transform: translateZ(0)
@@ -409,6 +447,7 @@ $cover-transition-duration: 0.3s
     bottom: 16px
     left: 0
   display: flex
+  transform: translateY(72px);
 
 .action
   margin: 0 4px
@@ -441,29 +480,27 @@ $cover-transition-duration: 0.3s
     bottom: 16px
 
 .book-details.editing
-  .info, .actions
+  .info, .actions, .header
     visibility: hidden
-  .header
-    transition: all $transition-duration ease
-    transform: translateY(-100%)
-    filter: blur(15px)
-  .cover-wrap
-    transition: all $cover-transition-duration ease
-    transform: translateX(226px) translateY(110px) scale(1)
+  &:not(.on-transition) .cover-wrap
+    visibility: hidden
+
+.book-details.on-transition .cover-wrap
+  transition: all $cover-transition-duration $easeInOutQuad
 
 .edit-wrap
   position: absolute
   top: 0
-  height: 100%
+  height: calc(100% - 90px)
   width: 100%
-  padding: (32px + 34px + 24px) 24px 0  // modal-frameに揃える
+  padding: 0 24px  // modal-frameに揃える
+  margin: 90px 0 0 0
   overflow-y: scroll
   -webkit-overflow-scrolling: touch
 
 
 .fade-enter-active, .fade-leave-active
-  transition: opacity $transition-duration ease
+  transition: opacity $transition-duration $easeInOutQuad
 .fade-enter, .fade-leave-to
   opacity: 0
-  transform: translateX(-100%)
 </style>

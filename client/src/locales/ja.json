@@ -53,6 +53,10 @@
   "noKidoku": "キドクがありません",
   "addBooksFromHere": "新しく積むにはこちら",
   "addBooksFromSidebar": "サイドバーから積んでみましょう",
+  "tsundoku-wo": "を",
+  "kidoku-ni": "に",
+  "debt": "負債",
+  "property": "財産",
 
   "networkError": "ネットワークエラー"
 }

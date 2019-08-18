@@ -10,7 +10,7 @@ import { mockBooksMap } from './mockData'
 // ______________________________________________________
 //
 export const state = (): S => ({
-  userId: '',
+  userId: 'po',
   locale: 'ja',
   viewType: 'desktop',
   showMobileTopBar: true,
@@ -22,11 +22,12 @@ export const state = (): S => ({
 // ______________________________________________________
 //
 export const getters: Getters<S, G> = {
-  getUserId(state) {
-    return state.userId
+  isLoggedIn(state) {
+    return state.userId !== ''
   },
-  getLocale(state) {
-    return state.locale
+  isFirstLanding(_, getters) {
+    // 未ログインかつキドクもツンドクもない場合
+    return !getters.isLoggedIn && getters.books.length === 0
   },
   viewTypeClass(state) {
     switch (state.viewType) {

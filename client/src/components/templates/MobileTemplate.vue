@@ -47,16 +47,35 @@ export default class MobileTemplate extends Vue {
   @Watch('$route')
   private handleShowMobileBars() {
     this.$store.commit(
-      'setShowMobileTopBar',
-      !this.hideTopBarList.includes(this.$route.name as ViewNames)
-    )
-    this.$store.commit(
       'setShowMobileTabBar',
       !this.hideTabBarList.includes(this.$route.name as ViewNames)
     )
+
+    this.$store.commit(
+      'setShowMobileTopBar',
+      !this.hideTopBarList.includes(this.$route.name as ViewNames)
+    )
+
+    const viewList: ViewNames[] = ['tsundoku', 'kidoku']
+    viewList.forEach(view => {
+      if ((this.$route.name as ViewNames) === view) {
+        if (this.$store.getters.isFirstLanding) {
+          this.$store.commit('setShowMobileTopBar', false)
+        } else {
+          this.$store.commit('setShowMobileTopBar', true)
+        }
+      }
+    })
   }
 
   mounted() {
+    if (!this.$store.getters.isLoggedIn) {
+      if (this.$store.getters.tsundokuBooks.length === 0) {
+        this.hideTopBarList.push('tsundoku')
+      } else if (this.$store.getters.kidokuBooks.length === 0) {
+        this.hideTopBarList.push('kidoku')
+      }
+    }
     this.handleShowMobileBars()
   }
 }

@@ -21,8 +21,8 @@ export interface S {
 //
 // getters
 export interface G {
-  getUserId: string
-  getLocale: string
+  isLoggedIn: boolean
+  isFirstLanding: boolean
   viewTypeClass: ViewTypeClass
   modalTransitionClass: ModalTransitionClass
   books: BookRecord[]

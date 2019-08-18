@@ -33,7 +33,11 @@
         book-cover(:url="book.coverImageUrl" has-shadow)
       transition(name="fade" mode="out-in")
         .edit-wrap(v-if="isEditing" key="edit")
-          book-info-edit(v-model="book" ref="bookInfoEditInstance" :has-shadow="isEditing && !isOnTransitionToEdit")
+          book-info-edit(v-model="editingBook" ref="bookInfoEditInstance" :has-shadow="isEditing && !isOnTransitionToEdit")
+          .button-container
+            .cancel(@click="handleCancelClick")
+              | {{ $t('cancel')}}
+            book-info-edit-button(type="edit" @add-tsundoku="handleOkClick")
         .detail-wrap(v-else ref="bodyWrap" @scroll="updateHeader" key="detail")
           .body(ref="body")
             .spacer
@@ -74,6 +78,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookRecord } from '../types/Book'
+import BookInfoEditButton from '@/components/atoms/BookInfoEditButton.vue'
 import BookDetailsActionButton from '@/components/atoms/BookDetailsActionButton.vue'
 import BookDetailsItem from '@/components/molecules/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
@@ -93,6 +98,7 @@ const transitionDuration = 400
 
 @Component({
   components: {
+    BookInfoEditButton,
     BookDetailsActionButton,
     BookDetailsItem,
     ModalFrame,
@@ -113,9 +119,15 @@ export default class BookDetails extends Vue {
   private lastScrollAmount = 0
   private scrollDirection = 0
 
+  private editingBook?: BookRecord
+
   // router
   @Prop({ type: Boolean, default: false })
   private isEditing!: boolean
+
+  public created() {
+    this.editingBook = { ...this.book }
+  }
 
   public async mounted() {
     this.lastBook = this.book
@@ -158,6 +170,20 @@ export default class BookDetails extends Vue {
     }
   }
 
+  public handleCancelClick() {
+    this.$router.push(
+      this.$route.path.substring(0, this.$route.path.length - 5)
+    )
+  }
+
+  public async handleOkClick() {
+    await this.$store.dispatch('updateBook', {
+      book: this.editingBook
+    })
+    await this.$store.dispatch('getMyBooks')
+    this.$router.push('/')
+  }
+
   public updateHeader() {
     const bodyElement = this.$refs.body as HTMLElement
     const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
@@ -177,8 +203,6 @@ export default class BookDetails extends Vue {
       newHeight = slimHeaderHeight
     } else if (newHeight > initialHeaderHeight + 80) {
       newHeight = initialHeaderHeight - (scrollAmount - 80) * 0.25
-    } else if (newHeight > initialHeaderHeight) {
-      newHeight = initialHeaderHeight - scrollAmount * 0.5
     }
 
     // カクつき対策
@@ -223,6 +247,7 @@ export default class BookDetails extends Vue {
 
   @Watch('isEditing')
   public async onIsEditingChanged(val: boolean) {
+    this.editingBook = { ...this.book }
     if (val) {
       // 編集状態へのトランジション(手動)
       const modalElement = this.$refs.bookDetails as HTMLElement
@@ -266,7 +291,10 @@ export default class BookDetails extends Vue {
       } = coverWrapElement.getBoundingClientRect()
 
       const translateX = modalWidth / 2 - coverWidth / 2 - coverLeft
-      const translateY = editAreaTop - 24
+      const translateY =
+        this.$store.state.viewType === 'desktop'
+          ? editAreaTop
+          : editAreaTop - 24
 
       coverWrapElement.style.transform = `translateX(${translateX}px) translateY(${translateY}px) scale(1)`
 
@@ -342,7 +370,6 @@ $cover-transition-duration: 0.3s
   height: 100%
 
   overflow-y: hidden
-  overflow-
 
 .header
   position: absolute
@@ -475,14 +502,42 @@ $cover-transition-duration: 0.3s
   top: 0
   height: calc(100% - 90px)
   width: 100%
-  padding: 0 24px  // modal-frameに揃える
+  // modal-frameに揃える
+  padding:
+    top: 0
+    bottom: 24px
+    right: 24px
+    left: 24px
   margin: 90px 0 0 0
   overflow-y: scroll
   -webkit-overflow-scrolling: touch
 
+.button-container
+  display: flex
+  justify-content: flex-end
+  margin: 2rem auto
+
+  .is-desktop &
+    width: 85%
+
+.cancel
+  font-weight: bold
+  color: $text-gray
+  display: flex
+  justify-content: center
+  align-items: center
+  margin-right: 2rem
+  cursor: pointer
+  &:hover
+    opacity: 0.75
 
 .fade-enter-active, .fade-leave-active
   transition: opacity $transition-duration $easeInOutQuad
 .fade-enter, .fade-leave-to
   opacity: 0
+</style>
+
+<style lang="sass">
+.book-details.on-transition .book-info-edit .book-cover
+  visibility: hidden
 </style>

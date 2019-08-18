@@ -18,9 +18,9 @@
               :to="firstRouteName + '/add-books-edit'"
               :book="book"
             )
-            add-tsundoku-button(
+            book-info-edit-button(
               size="small"
-              :bookAdded="bookAdded"
+              :completed="bookAdded"
               @add-tsundoku="addTsundoku"
             )
 </template>
@@ -30,7 +30,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import { BookRecord } from '../../types/Book'
-import AddTsundokuButton from '../atoms/AddTsundokuButton.vue'
+import BookInfoEditButton from '../atoms/BookInfoEditButton.vue'
 import BookCover from '../atoms/BookCover.vue'
 import BookMajorInfo from '../atoms/BookMajorInfo.vue'
 import EditButton from '../atoms/EditButton.vue'
@@ -41,7 +41,7 @@ type cardType = 'search' | 'scan'
 
 @Component({
   components: {
-    AddTsundokuButton,
+    BookInfoEditButton,
     BookCover,
     BookMajorInfo,
     EditButton,
@@ -96,7 +96,7 @@ export default class AddBookCard extends Vue {
       })
       console.log(res.data)
 
-      this.bookAdded = true // → AddTsundokuButtonがチェックに変わる
+      this.bookAdded = true // → BookInfoEditButtonがチェックに変わる
 
       await new Promise(r => window.setTimeout(r, 800))
       this.showCard = false // → カードが消える

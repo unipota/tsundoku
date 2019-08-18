@@ -5,7 +5,7 @@
   )
     book-info-edit(v-model="book")
     .add-button-container
-      add-tsundoku-button(
+      books-info-edit-button(
         @add-tsundoku="onAddTsundoku"
       )
 </template>
@@ -14,13 +14,15 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
-import AddTsundokuButton from '@/components/atoms/AddTsundokuButton.vue'
+import ModalFrame from '@/components/atoms/ModalFrame.vue'
+import BookInfoEditButton from '@/components/atoms/BookInfoEditButton.vue'
 import BookInfoEdit from '@/components/organs/BookInfoEdit.vue'
 import { BookRecord } from '../types/Book'
 
 @Component({
   components: {
-    AddTsundokuButton,
+    ModalFrame,
+    BookInfoEditButton,
     BookInfoEdit
   }
 })

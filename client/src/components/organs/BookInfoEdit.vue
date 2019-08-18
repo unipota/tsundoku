@@ -33,14 +33,12 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { BookDetail } from '../../types/Book'
 
 import Icon from '@/components/assets/Icon.vue'
-import AddTsundokuButton from '@/components/atoms/AddTsundokuButton.vue'
 import BooksInfoEditInput from '@/components/molecules/BooksInfoEditInput.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 
 @Component({
   components: {
     Icon,
-    AddTsundokuButton,
     BooksInfoEditInput,
     BookCover
   }
@@ -53,7 +51,6 @@ export default class BookInfoEdit extends Vue {
   private hasShadow!: boolean
 
   public update<T extends keyof BookDetail>(key: T, value: BookDetail[T]) {
-    console.log(value)
     this.$emit('input', {
       ...this.value,
       [key]: value

@@ -119,7 +119,7 @@ func GetOGPImageHandler(c echo.Context) error {
 	defer resp.Body.Close()
 
 	// 新規に画像が生成されたのを確認できるまで待つ
-	wait := 20
+	wait := 2000
 	for i := 0; i < wait; i++ {
 		_, err := os.Stat(fullpath)
 		if !os.IsNotExist(err) {

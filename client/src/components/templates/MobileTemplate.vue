@@ -65,6 +65,7 @@ export default class MobileTemplate extends Vue {
 <style lang="sass" scoped>
 .view-mobile
   width: 100vw
+  min-height: 100vh
 
 .top-bar-wrap
   position: fixed
@@ -88,7 +89,7 @@ export default class MobileTemplate extends Vue {
 .top-bar-wrap, .content-wrap, .tsundoku-button
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
-    filter: blur(4px)
+    // filter: blur(4px)
 
 .popover-wrap
   position: fixed

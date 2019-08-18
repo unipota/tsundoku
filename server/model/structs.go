@@ -63,11 +63,3 @@ type ReadHistory struct {
 	BookID   uuid.UUID `gorm:"type:char(36);not null;"`
 	ReadPage int       `gorm:""`
 }
-
-type Share struct {
-	Base
-	DeviceID uuid.UUID `gorm:"type:char(36);not null"`
-	Tsundoku int       `json:"tsundoku"`
-	Kidoku   int       `json:"kidoku"`
-	Count    int       `json:"count"`
-}

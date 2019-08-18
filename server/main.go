@@ -134,6 +134,7 @@ func main() {
 	e.GET("/share/:shareID", router.GetSharePageHandler)
 	e.GET("/ogp/:shareID", router.GetOGPImageHandler)
 
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"

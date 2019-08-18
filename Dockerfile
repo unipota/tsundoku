@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 go build -o app
 
 
 FROM alpine:3.9
-WORKDIR /app
+WORKDIR /tsundoku
 RUN apk add --update ca-certificates openssl && \
     update-ca-certificates && \
     rm -rf /var/cache/apk/*
@@ -29,5 +29,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 EXPOSE 3000
 COPY --from=client /app/dist ./static
 COPY --from=server /tsundoku/server/app ./
+COPY --from=server /tsundoku/server/static ./server/
 
 ENTRYPOINT ./app

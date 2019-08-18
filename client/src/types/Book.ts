@@ -1,3 +1,14 @@
+export interface BookSimpleRecord {
+  id: string
+  isbn: string
+  title: string
+  author: string[]
+  price: number
+  caption: string | null
+  publisher: string
+  coverImageUrl: string | null
+}
+
 export interface BookRecord {
   id: string
   isbn: string
@@ -10,6 +21,8 @@ export interface BookRecord {
   coverImageUrl: string | null
   readPages: number
   memo: string | null
+  createdAt: string
+  updatedAt: string
 }
 
 export interface ReadHistory {

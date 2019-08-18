@@ -4,15 +4,22 @@
       .header
         .header-bg(:style="headerBgStyle")
           .info-bg
-            book-major-info(:book="book")
+            book-major-info(:title="book.title" :authors="book.author")
         .header-fade
         .info
-          book-major-info(:book="book")
+          book-major-info(:title="book.title" :authors="book.author")
       .cover-wrap
         book-cover(:url="book.coverImageUrl" :hasShadow="true")
+      .controller
+        book-list-item-progress-controller(:book="book")
       .body
-        book-details-item.item(:name="$t('price')" :value="`¥ ${price}`")
-        book-details-item.item(:name="$t('totalPages')" :value="totalPages")
+        book-details-item.item(
+          name="ツンドク残額" 
+          :value="`¥ ${remainingPrice.toLocaleString()}`"
+          valueColor="var(--tsundoku-red)")
+        book-details-item.item(:name="$t('price')" :value="`¥ ${price.toLocaleString()}`")
+        book-details-item.item(:name="$t('totalPages')" :value="`${totalPages}`")
+        book-details-item.item(name="メモ" :value="book.memo")
 </template>
 
 <script lang="ts">
@@ -23,13 +30,15 @@ import BookDetailsItem from '@/components/atoms/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
+import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 
 @Component({
   components: {
     BookDetailsItem,
     ModalFrame,
     BookCover,
-    BookMajorInfo
+    BookMajorInfo,
+    BookListItemProgressController
   }
 })
 export default class BookDetails extends Vue {
@@ -53,11 +62,17 @@ export default class BookDetails extends Vue {
   }
 
   get price() {
-    return this.book && this.book.price.toLocaleString()
+    return this.book && this.book.price
   }
 
   get totalPages() {
-    return this.book && this.book.totalPages.toString()
+    return this.book && this.book.totalPages
+  }
+
+  get remainingPrice(): number {
+    return Math.round(
+      (1 - this.book.readPages / this.book.totalPages) * this.book.price
+    )
   }
 }
 </script>
@@ -124,12 +139,20 @@ export default class BookDetails extends Vue {
 
 .cover-wrap
   position: absolute
-  top: 160px
+  top: 136px
   left: 24px
 
+.controller
+  margin-top: 40px
+  padding:
+    right: 24px
+    left: 24px
+
 .body
-  padding: 32px
-  margin-top: 64px
+  padding:
+    top: 12px
+    right: 32px
+    left: 32px
 
 .item
   margin-bottom: 8px

@@ -161,7 +161,7 @@ func buildHtml(shareID string, siteURL string) (string, error) {
 		ImageURL string
 	}{
 		SiteURL:  siteURL,
-		ImageURL: siteURL + "/share/image/" + shareID,
+		ImageURL: siteURL + "/share/ogp/" + shareID,
 	}
 	if err := tmpl.ExecuteTemplate(fw, "base", dat); err != nil {
 		return "", err

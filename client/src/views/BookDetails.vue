@@ -340,7 +340,7 @@ export default class BookDetails extends Vue {
       backgroundImage:
         this.book && this.book.coverImageUrl !== ''
           ? `url(${this.book.coverImageUrl})`
-          : 'url("https://tn.smilevideo.jp/smile?i=26783258.L")'
+          : 'white'
     }
   }
 

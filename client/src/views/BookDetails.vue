@@ -108,9 +108,10 @@ export default class BookDetails extends Vue {
   private currentHeaderHeight = initialHeaderHeight
   private animationFrameRequestId?: number
   private animationEndTimeoutId?: number
-  private lastShiftAmount?: number
   private isOnTransitionToEdit = false
   private isOnTransitionToDetails = false
+  private lastScrollAmount = 0
+  private scrollDirection = 0
 
   // router
   @Prop({ type: Boolean, default: false })
@@ -142,7 +143,6 @@ export default class BookDetails extends Vue {
       !(this.$refs.body instanceof HTMLElement) ||
       !(this.$refs.bodyWrap instanceof HTMLElement)
     ) {
-      console.log('po')
       return
     }
     // 本体がラッパー以上の場合はラッパー + ヘッダの高さ変化分までは伸ばす
@@ -159,18 +159,6 @@ export default class BookDetails extends Vue {
   }
 
   public updateHeader() {
-    if (
-      !this.$refs.body ||
-      !this.$refs.bodyWrap ||
-      !this.$refs.header ||
-      !this.$refs.headerBg ||
-      !this.$refs.info ||
-      !this.$refs.actions ||
-      !this.$refs.coverWrap
-    ) {
-      return
-    }
-
     const bodyElement = this.$refs.body as HTMLElement
     const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
     const headerElement = this.$refs.header as HTMLElement
@@ -179,8 +167,8 @@ export default class BookDetails extends Vue {
     const actionsElement = this.$refs.actions as HTMLElement
     const coverWrapElement = this.$refs.coverWrap as HTMLElement
 
-    const { top: bodyWrapTop } = bodyWrapElement.getBoundingClientRect()
-    const { top: bodyTop } = bodyElement.getBoundingClientRect()
+    const bodyWrapTop = bodyWrapElement.getBoundingClientRect().top
+    const bodyTop = bodyElement.getBoundingClientRect().top
 
     const scrollAmount = bodyWrapTop - bodyTop
     let newHeight = initialHeaderHeight - scrollAmount * 0.5
@@ -193,21 +181,16 @@ export default class BookDetails extends Vue {
       newHeight = initialHeaderHeight - scrollAmount * 0.5
     }
 
-    const shiftAmount = newHeight - this.currentHeaderHeight
-
     // カクつき対策
-    if (
-      this.lastShiftAmount &&
-      Math.abs(shiftAmount / this.lastShiftAmount) > 3
-    ) {
-      this.lastShiftAmount = newHeight - this.currentHeaderHeight
+    const deltaScroll = scrollAmount - this.lastScrollAmount
+    const scrollDirection =
+      Math.abs(deltaScroll) <= 1 ? 0 : Math.sign(deltaScroll)
+    if (scrollAmount === 0 && scrollDirection !== 0) {
       return
     }
-    if (shiftAmount === 0) {
-      this.lastShiftAmount = undefined
-    }
+    this.scrollDirection = scrollDirection
 
-    this.lastShiftAmount = newHeight - this.currentHeaderHeight
+    this.lastScrollAmount = scrollAmount
 
     const progress =
       (initialHeaderHeight - newHeight) /
@@ -229,6 +212,7 @@ export default class BookDetails extends Vue {
         initialCoverTop}px) scale(${1 - progress / 2})`
 
       this.currentHeaderHeight = newHeight
+      this.scrollDirection = 0
     })
   }
 
@@ -294,11 +278,9 @@ export default class BookDetails extends Vue {
 
       window.setTimeout(() => {
         this.isOnTransitionToDetails = false
+        this.updateHeader()
+        this.handleResize()
       }, transitionDuration * 1.25)
-
-      await this.$nextTick()
-      this.updateHeader()
-      this.handleResize()
     }
   }
 

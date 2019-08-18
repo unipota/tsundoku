@@ -79,6 +79,10 @@ export default class MobileTemplate extends Vue {
     top: 64px
     bottom: 90px
 
+  .modal-shown &
+    pointer-events: none
+    overflow: hidden
+
 .bottom-bar-wrap
   position: fixed
   z-index: 1000

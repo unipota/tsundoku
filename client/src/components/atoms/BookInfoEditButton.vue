@@ -1,24 +1,33 @@
 <template lang="pug">
   div.add-tsundoku-button-wrapper(
     :class="`is-${size}`"
+    :style="buttonStyle"
     @click="$emit('add-tsundoku')"
   )
     transition(name="transition-button-content" mode="out-in")
-      div.add-tsundoku-button.not-added(v-if="!bookAdded" key="not-added")
+      div.add-tsundoku-button.not-added(v-if="!completed" key="not-added")
         icon.icon-plus(
+          v-if="type === 'add'"
           name="plus"
           :width="iconPlusSize"
           :height="iconPlusSize"
-          :color="iconColor"
+          :color="color"
+        )
+        icon.icon-plus(
+          v-else-if="type === 'edit'"
+          name="check"
+          :width="iconCheckSize"
+          :height="iconCheckSize"
+          :color="color"
         )
         span.text
-          | {{ $t('addTsundoku') }}
+          | {{ text }}
       div.add-tsundoku-button.added(v-else key="added")
         icon.icon-check(
           name="check"
           :width="iconCheckSize"
           :height="iconCheckSize"
-          :color="iconColor"
+          :color="color"
         )
 </template>
 
@@ -28,16 +37,20 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import Icon from '@/components/assets/Icon.vue'
 
 type ButtonSize = 'large' | 'small'
+type ButtonType = 'add' | 'edit'
 
 @Component({
   components: { Icon }
 })
-export default class AddTsundokuButton extends Vue {
+export default class BookInfoEditButton extends Vue {
   @Prop({ type: String, default: 'large' })
   private readonly size!: ButtonSize
 
   @Prop({ type: Boolean, default: false })
-  private readonly bookAdded!: boolean
+  private readonly completed!: boolean
+
+  @Prop({ type: String, default: 'add' })
+  private readonly type!: ButtonType
 
   get iconPlusSize() {
     switch (this.size) {
@@ -61,8 +74,25 @@ export default class AddTsundokuButton extends Vue {
     }
   }
 
-  get iconColor() {
-    return 'var(--tsundoku-red)'
+  get color() {
+    return {
+      add: 'var(--tsundoku-red)',
+      edit: 'var(--kidoku-blue)'
+    }[this.type]
+  }
+
+  get text() {
+    return {
+      add: this.$t('addTsundoku'),
+      edit: '編集完了'
+    }[this.type]
+  }
+
+  get buttonStyle() {
+    return {
+      color: this.color,
+      borderColor: this.color
+    }
   }
 }
 </script>
@@ -81,7 +111,6 @@ export default class AddTsundokuButton extends Vue {
     .icon-plus, .icon-check
       margin: auto 4px auto 0
     .text
-      color: var(--tsundoku-red)
       font-weight: bold
       margin: auto 0
   &.is-small

@@ -29,6 +29,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 EXPOSE 3000
 COPY --from=client /app/dist ./static
 COPY --from=server /tsundoku/server/app ./
-COPY --from=server /tsundoku/server/static ./server/
+COPY --from=server /tsundoku/server/static ./server/static
 
 ENTRYPOINT ./app

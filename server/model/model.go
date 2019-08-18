@@ -86,4 +86,5 @@ var allTables = []interface{}{
 	&User{},
 	&Social{},
 	&ReadHistory{},
+	&Share{},
 }

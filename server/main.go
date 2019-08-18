@@ -129,6 +129,11 @@ func main() {
 	api.DELETE("/books/:bookID", router.DeleteBookHandler)
 	api.GET("/books/statistics", router.GetBookStatsHandler)
 
+	api.GET("/share", router.GetShareURLHandler)
+
+	e.GET("/share/:shareID", router.GetSharePageHandler)
+	e.GET("/share/image/:shareID", router.GetOGPImageHandler)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"

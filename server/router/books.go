@@ -2,7 +2,6 @@ package router
 
 import (
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -12,19 +11,17 @@ import (
 )
 
 type BookRecord struct {
-	ID            string    `json:"id"`
-	ISBN          string    `json:"isbn"`
-	Title         string    `json:"title"`
-	Author        []string  `json:"author"`
-	TotalPages    int       `json:"totalPages"`
-	Price         int       `json:"price"`
-	Caption       string    `json:"caption"`
-	Publisher     string    `json:"publisher"`
-	CoverImageURL string    `json:"coverImageUrl"`
-	ReadPages     int       `json:"readPages"`
-	Memo          string    `json:"memo"`
-	CreatedAt     time.Time `json:"createdAt"`
-	UpdatedAt     time.Time `json:"updatedAt"`
+	ID            string   `json:"id"`
+	ISBN          string   `json:"isbn"`
+	Title         string   `json:"title"`
+	Author        []string `json:"author"`
+	TotalPages    int      `json:"totalPages"`
+	Price         int      `json:"price"`
+	Caption       string   `json:"caption"`
+	Publisher     string   `json:"publisher"`
+	CoverImageURL string   `json:"coverImageUrl"`
+	ReadPages     int      `json:"readPages"`
+	Memo          string   `json:"memo"`
 }
 
 type ReadHistory struct {
@@ -46,14 +43,6 @@ type BookDetail struct {
 	Memo          string        `json:"memo"`
 	CreatedAt     time.Time     `json:"createdAt"`
 	UpdatedAt     time.Time     `json:"updatedAt"`
-}
-
-type BookStat struct {
-	ID            string        `json:"id"`
-	Title         string        `json:"title"`
-	TotalPages    int           `json:"totalPages"`
-	Price         int           `json:"price"`
-	ReadHistories []ReadHistory `json:"readHistories"`
 }
 
 func GetBookListHandler(c echo.Context) error {
@@ -95,13 +84,13 @@ func GetBookDetailHandler(c echo.Context) error {
 }
 
 func PostNewBookHandler(c echo.Context) error {
-	searchedBook := SearchedBook{}
-	if err := c.Bind(&searchedBook); err != nil {
+	bookRecord := BookRecord{}
+	if err := c.Bind(&bookRecord); err != nil {
 		return c.JSON(http.StatusBadRequest, H{"Bad request"})
 	}
 
 	deviceID := c.Get("deviceID").(uuid.UUID)
-	book := searchedBook2Book(searchedBook, deviceID)
+	book := bookRecord2Book(bookRecord, deviceID)
 	newBook, err := model.NewBook(&book)
 	if err != nil {
 		c.Logger().Error(err)
@@ -161,22 +150,6 @@ func DeleteBookHandler(c echo.Context) error {
 	return c.NoContent(http.StatusOK)
 }
 
-func GetBookStatsHandler(c echo.Context) error {
-	deviceID := c.Get("deviceID").(uuid.UUID)
-	books, err := model.GetBooksByDeviceID(deviceID)
-	if err != nil {
-		c.Logger().Error(err)
-		return c.JSON(http.StatusInternalServerError, H{"Error with get books"})
-	}
-
-	bookStats := make([]BookStat, 0, len(books))
-	for _, book := range books {
-		bookStats = append(bookStats, book2BookStat(*book))
-	}
-
-	return c.JSON(http.StatusOK, bookStats)
-}
-
 func bookRecord2Book(bookRecord BookRecord, deviceID uuid.UUID) model.Book {
 	book := model.Book{
 		ISBN:          bookRecord.ISBN,
@@ -184,7 +157,7 @@ func bookRecord2Book(bookRecord BookRecord, deviceID uuid.UUID) model.Book {
 		Author:        strings.Join(bookRecord.Author, ","),
 		TotalPages:    bookRecord.TotalPages,
 		Caption:       bookRecord.Caption,
-		Publisher:     bookRecord.Publisher,
+		Publisher:     bookRecord.Caption,
 		CoverImageUrl: bookRecord.CoverImageURL,
 		Memo:          bookRecord.Memo,
 		Price:         bookRecord.Price,
@@ -214,8 +187,6 @@ func book2BookRecord(book model.Book) BookRecord {
 		CoverImageURL: book.CoverImageUrl,
 		ReadPages:     book.ReadHistories[0].ReadPage,
 		Memo:          book.Memo,
-		CreatedAt:     book.CreatedAt,
-		UpdatedAt:     book.UpdatedAt,
 	}
 }
 
@@ -242,58 +213,4 @@ func book2BookDetail(book model.Book) BookDetail {
 		})
 	}
 	return bookDetail
-}
-
-func searchedBook2Book(searchedBook SearchedBook, deviceID uuid.UUID) model.Book {
-	book := model.Book{
-		ISBN:          searchedBook.ISBN,
-		Title:         searchedBook.Title,
-		Author:        strings.Join(searchedBook.Author, ","),
-		TotalPages:    getTotalPages(searchedBook.ISBN),
-		Caption:       searchedBook.Caption,
-		Publisher:     searchedBook.Publisher,
-		CoverImageUrl: searchedBook.CoverImageURL,
-		Memo:          "",
-		Price:         searchedBook.Price,
-		DeviceID:      deviceID,
-	}
-	id, err := uuid.Parse(searchedBook.ID)
-	if err != nil {
-		return book
-	}
-	book.ID = id
-	return book
-
-}
-
-func getTotalPages(isbn string) int {
-	values := url.Values{}
-	values.Add("q", "isbn:"+isbn)
-	volumes, err := searchWithGoogle(values)
-
-	if err != nil || volumes.TotalItems == 0 {
-		return 0
-	}
-
-	return int(volumes.Items[0].VolumeInfo.PageCount)
-}
-
-func book2BookStat(book model.Book) BookStat {
-	bookStat := BookStat{
-		ID:         book.ID.String(),
-		Title:      book.Title,
-		TotalPages: book.TotalPages,
-		Price:      book.Price,
-	}
-
-	bookStat.ReadHistories = make([]ReadHistory, 0)
-	for _, fromBook := range book.ReadHistories {
-		readHistory := ReadHistory{
-			ReadPages: fromBook.ReadPage,
-			CreatedAt: fromBook.CreatedAt,
-		}
-		bookStat.ReadHistories = append(bookStat.ReadHistories, readHistory)
-	}
-
-	return bookStat
 }

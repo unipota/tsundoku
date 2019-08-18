@@ -5,15 +5,11 @@
     .tab-wrap
       desktop-tab(:selected-tab="selectedPath" :price="price")
     .button-wrap
-      router-link(
-        :to="`${firstRouteName}/add-books-search`"
-        v-tooltip.right="'キーワードで本を検索'")
+      router-link(:to="`${firstRouteName}/add-books-search`")
         desktop-nav-button(:text="$t('add_by_searching')")
           icon(name="search" color="white" :height="24" :width="24")
     .button-wrap
-      router-link(
-        :to="`${firstRouteName}/add-books-scan`"
-        v-tooltip.right="'カメラでバーコードをスキャン'")
+      router-link(:to="`${firstRouteName}/add-books-scan`")
         desktop-nav-button(:text="$t('add_by_scanning')")
           icon(name="scanner" color="white" :height="24" :width="24")
 </template>

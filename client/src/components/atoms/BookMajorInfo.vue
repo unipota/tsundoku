@@ -1,26 +1,24 @@
 <template lang="pug">
   .book-major-info
     .book-list-item__title(:class="`is-${size}`")
-      | {{ title }}
+      | {{ book.title }}
     .book-list-item__author(:class="`is-${size}`")
       icon.icon(name="author" color="currentColor")
-      span(v-for="(author, index) in authors")
-        | {{ author + (index < authors.length-1 ? ' / ' : '')}}
+      span(v-for="(author, index) in book.author")
+        | {{ author + (index < book.author.length-1 ? ' / ' : '')}}
 </template>
 
 <script lang="ts">
 type Size = 'normal' | 'small'
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { BookRecord } from '../../types/Book'
 import Icon from '../assets/Icon.vue'
 
 @Component({ components: { Icon } })
 export default class BookMajorInfo extends Vue {
-  @Prop({ type: String, required: true })
-  private title!: string
-
-  @Prop({ type: Array, required: true })
-  private authors!: string[]
+  @Prop({ type: Object, required: true })
+  private book!: BookRecord
 
   @Prop({ type: String, default: 'normal' })
   private size!: Size

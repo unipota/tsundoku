@@ -1,14 +1,11 @@
 <template lang="pug">
   modal-frame.add-books-search(:title="$t('addBooksSearchTitle')")
-    book-cover(v-if="$store.state.viewType === 'desktop'" :hasShadow="true")
+    book-cover(:hasShadow="true")
     text-input(
       v-model="searchQuery"
       :placeholder="$t('addBooksSearchPlaceholder')"
       @keyup-enter="submitSearchQuery"
-      withClearButton
-      focus
     )
-      icon(name="search" color="var(--text-gray)" :width="18" :height="18")
     router-link.edit-yourself(
       v-show="showEditBar"
       :to="firstRouteName + '/add-books-edit'"
@@ -59,10 +56,10 @@ export default class AddBooksSearch extends Vue {
   hasSubmittedSearchQuery = false
 
   get goodSearchResult() {
-    //  検索結果が1件以上 && クエリがタイトルに部分一致するような検索結果が存在する
+    //  検索結果が1件以上 && クエリがタイトルに一致するような検索結果が存在する
     return (
       this.searchResults.length > 0 &&
-      this.searchResults.find(result => result.title.includes(this.searchQuery))
+      this.searchResults.find(result => result.title === this.searchQuery)
     )
   }
 
@@ -102,7 +99,7 @@ export default class AddBooksSearch extends Vue {
 
 .text-input
   width: 85%
-  margin: 0 auto 20px auto
+  margin: 0 auto  40px auto
 
 .edit-yourself
   width: 95%
@@ -118,7 +115,7 @@ export default class AddBooksSearch extends Vue {
     font-weight: bold
 
 .add-book-card
-  margin: 32px 0
+  margin: 48px 0
   position: relative
   &:not(:last-child)
     &:before

@@ -22,7 +22,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
   components: {}
 })
 export default class IconRightArrow extends Vue {
-  @Prop({ type: String, default: 'currentColor' })
+  @Prop({ type: String, default: 'var(--border-gray)' })
   private color!: string
 
   @Prop({ type: Number, default: 21 })

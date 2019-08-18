@@ -7,39 +7,33 @@
         .book-list-item__icon
           icon(name="right-arrow")
         .book-list-item__detail
-          book-major-info(:title="book.title" :authors="book.author")
+          book-major-info(:book="book")
         .book-list-item__price(v-if="kidoku")
-          span.book-list-item__total-price.book-list-item__currency-symbol.kidoku
+          span.book-list-item__total-price.kidoku
             | {{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
-            relative-time(:from="book.updatedAt" :locale="$store.state.locale")
+            | 4日前
         .book-list-item__price(v-else)
-          span
-            span.book-list-item__remaining-price.tsundoku
-              span.small
-                | 残り
-              tweened-number.book-list-item__currency-symbol(:num="remainingPrice")
-            span.book-list-item__total-price.tsundoku
-              | /{{ book.price.toLocaleString() }}
+          span.book-list-item__total-price.tsundoku
+            | {{ book.price.toLocaleString() }}
           span.book-list-item__time-ago
-            relative-time(:from="book.updatedAt" :locale="$store.state.locale")
+            | 4日前
     .book-list-item__progress(v-if="!kidoku")
-      book-list-item-progress-controller(:book="book")
+      book-list-item-progress-controller(
+        :book="book" @click-record="handleClickRecord" @click-check="handleClickCheck")
+    portal(to="popoverView" v-if="popoverActive")
+      book-progress-popover(:book="book")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ExStore } from 'vuex'
+import { BookRecord } from '../../types/Book'
 
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
-import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 import Icon from '@/components/assets/Icon.vue'
 import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
-import RelativeTime from '@/components/atoms/RelativeTime.vue'
-
-import { BookRecord } from '../../types/Book'
 
 @Component({
   components: {
@@ -47,9 +41,7 @@ import { BookRecord } from '../../types/Book'
     BookMajorInfo,
     BookListItemProgressController,
     Icon,
-    BookProgressPopover,
-    TweenedNumber,
-    RelativeTime
+    BookProgressPopover
   }
 })
 export default class BookListItem extends Vue {
@@ -59,31 +51,18 @@ export default class BookListItem extends Vue {
   @Prop({ type: Boolean, default: false })
   private kidoku!: boolean
 
-  public $store!: ExStore
+  popoverActive: boolean = false
 
-  isHovered = false
-
-  handleMouseover() {
-    this.isHovered = true
+  handleClickRecord() {
+    // this.popoverActive = true
   }
-
-  handleMouseleave() {
-    this.isHovered = false
-  }
-
-  get remainingPrice(): number {
-    return Math.round(
-      (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    )
+  handleClickCheck() {
+    console.log('check')
   }
 }
 </script>
 
 <style lang="sass">
-.book-list-item
-  max-width: 700px
-  margin: auto
-
 .book-list-item__body
   display: block
   position: relative
@@ -91,7 +70,6 @@ export default class BookListItem extends Vue {
   width: 100%
   height: 160px
   color: var(--text-black)
-  user-select: none
 
 .book-list-item__cover
   position: absolute
@@ -118,10 +96,6 @@ export default class BookListItem extends Vue {
   padding: 16px
   border-radius: 8px
   background-color: $bg-suppressed-gray
-  transition: box-shadow .3s
-
-  .book-list-item__body:hover &
-    box-shadow: 0 0 0 4px rgba(0,0,0,0.1)
 
   &.is-desktop
     padding:
@@ -181,38 +155,22 @@ export default class BookListItem extends Vue {
   display: flex
   flex-flow: column
 
-.book-list-item__remaining-price
+.book-list-item__total-price
   font:
     weight: bold
     size: 1.4rem
-  color: var(--tsundoku-red)
-
-  .small
-    font:
-      size: 1rem
-    color: var(--tsundoku-red-fade60)
-    margin:
-      right: 8px
-
-.book-list-item__total-price
   line-height: 1.4rem
 
   &.tsundoku
-    font:
-      weight: bold
-      size: 1rem
-    color: var(--tsundoku-red-fade60)
+    color: var(--tsundoku-red)
 
   &.kidoku
-    font:
-      weight: bold
-      size: 1.4rem
     color: var(--kidoku-blue)
 
-.book-list-item__currency-symbol::before
-  content: '¥'
-  margin:
-    right: 0.25rem
+  &::before
+    content: '¥'
+    margin:
+      right: 0.25rem
 
 .book-list-item__time-ago
   color: var(--text-gray)
@@ -221,5 +179,4 @@ export default class BookListItem extends Vue {
   position: absolute
   right: 16px
   bottom: 14px
-  color: var(--border-gray)
 </style>

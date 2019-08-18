@@ -7,7 +7,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { createDecorator } from 'vue-class-component'
-import { throttle } from 'lodash'
 
 const Meta = createDecorator((options, key) => {
   if (!options.methods) {
@@ -68,7 +67,7 @@ export default class App extends Vue {
       this.handleResizeWindow()
     })
     this.setLocale()
-    window.addEventListener('resize', throttle(this.handleResizeWindow, 100))
+    window.addEventListener('resize', this.handleResizeWindow)
     window.addEventListener('orientationchange', this.handleResizeWindow)
     this.$store.dispatch('getMyBooks')
   }
@@ -78,5 +77,4 @@ export default class App extends Vue {
 <style lang="sass">
 @import '@/style/global.sass'
 @import '@/style/reset.sass'
-@import '@/style/tooltip.sass'
 </style>

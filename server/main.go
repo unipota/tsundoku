@@ -127,11 +127,7 @@ func main() {
 	api.GET("/books/:bookID", router.GetBookDetailHandler)
 	api.PUT("/books/:bookID", router.PutUpdateBookHandler)
 	api.DELETE("/books/:bookID", router.DeleteBookHandler)
-
-	api.GET("/share", router.GetShareURLHandler)
-
-	e.GET("/share/:shareID", router.GetSharePageHandler)
-	e.GET("/share/image/:shareID", router.GetOGPImageHandler)
+	api.GET("/books/statistics", router.GetBookStatsHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

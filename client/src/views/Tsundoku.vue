@@ -2,13 +2,18 @@
   .tsundoku
     portal(to="priceDisplay")
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
-    .view-header-container(v-if="books.length !== 0")
-      list-controller(:filterText.sync="filterText")
-    .view
-      .empty(v-if="books.length === 0")
+    transition-group.view(
+      tag="div" 
+      name="transition-item")
+      .view-header-container(v-if="!isEmpty" key="header")
+        list-controller(:filterText.sync="filterText")
+      .empty(v-if="isEmpty" key="empty")
         books-empty(name="tsundoku")
-      .list-item-container(v-else v-for="book in filteredBooks")
-        book-list-item(:key="book.id" :book="book")
+      .list-item-container(
+        v-else
+        v-for="book in filteredBooks"
+        :key="book.id")
+        book-list-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
         router-view
@@ -74,9 +79,10 @@ export default class Tsundoku extends Vue {
       .map(book => book.id)
   }
   get filteredBooks() {
-    return this.filteredIds.map((id: string) =>
-      this.books.find(book => book.id === id)
-    )
+    return this.books.filter(book => this.filteredIds.includes(book.id))
+  }
+  get isEmpty() {
+    return this.books.length === 0
   }
 }
 </script>
@@ -85,31 +91,57 @@ export default class Tsundoku extends Vue {
 .tsundoku
   width: 100%
 
-.view
+.view-header-container
   width: 100%
-  padding:
+
+.empty
+  width: 100%
+
+.view
+  position: relative
+  max-width: 100%
+  margin:
     left: 5%
     right: 5%
 
 .list-item-container
   margin:
-    top: 1.5rem
+    top: 15px
   padding:
-    bottom: 1.5rem
+    bottom: 15px
   width: 100%
   position: relative
 
-  &:not(:last-child)::after
+  &::after
     content: ''
     display: block
     position: absolute
+    z-index: -1
     bottom: 0
     left: 0
     right: 0
     margin: auto
     width: calc(100% - 36px)
+    max-width: 680px
     height: 2px
     border:
       radius: 9999vw
+    transition: background .3s
+
+  &:not(:last-child)::after
     background: var(--border-gray)
+
+.transition-item
+  &-enter, &-leave-to
+    transform: translateY(10px)
+    opacity: 0
+
+  &-enter-active, &-leave-active
+    transition: transform .5s $easeInOutQuint, opacity .5s
+
+  &-leave-active
+    position: absolute
+
+  &-move
+    transition: transform .5s $easeInOutQuint
 </style>

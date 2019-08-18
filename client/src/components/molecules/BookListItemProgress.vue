@@ -1,42 +1,60 @@
 <template lang="pug">
   .book-list-item-progress
     .book-list-item-progress__progress
-      | {{ progressPercentStr }}
       .book-list-item-progress__progress-bar
-        progress-bar(:progress="progressRatio")
-    //- .book-list-item-progress__price
-      //- span.book-list-item-progress__price_remaining_label
-      //-   | {{ $t('remaining') }}
-      //- span.book-list-item-progress__price_remaining
-      //-   | {{ remainingPrice }}
-      //- span.book-list-item-progress__price_total
-      //-   | {{ book.price.toLocaleString() }}
+        progress-bar(
+          :progress="progressRatio" 
+          :edit="edit" 
+          :editedProgress="editedProgressRatio" 
+          @mounted="progressBarWidth = $event.width - 4")
+        .book-list-item-progress__progress-knob
+          transition(name="slide-in")
+            progress-knob(
+              v-if="edit"
+              :editedReadPages.sync="syncedEditedReadPages" 
+              :totalPages="totalPages"
+              :progressBarWidth="progressBarWidth")
+      tweened-number(:num="progressPercent")
+      | %
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { BookRecord } from '../../types/Book'
+import { Vue, Component, Prop, PropSync } from 'vue-property-decorator'
+
 import ProgressBar from '@/components/atoms/ProgressBar.vue'
+import ProgressKnob from '@/components/atoms/ProgressKnob.vue'
+import TweenedNumber from '@/components/atoms/TweenedNumber.vue'
 
 @Component({
   components: {
-    ProgressBar
+    ProgressBar,
+    ProgressKnob,
+    TweenedNumber
   }
 })
 export default class BookListItemProgress extends Vue {
-  @Prop({ type: Object, required: true })
-  private book!: BookRecord
+  @Prop({ type: Number, required: true })
+  private readPages!: number
+
+  @Prop({ type: Number, required: true })
+  private totalPages!: number
+
+  @Prop({ type: Boolean, default: false })
+  private edit!: false
+
+  @PropSync('editedReadPages', { type: Number })
+  private syncedEditedReadPages!: number
+
+  progressBarWidth = 0
 
   get progressRatio(): number {
-    return this.book.readPages / this.book.totalPages
+    return this.readPages / this.totalPages
   }
-  get progressPercentStr(): string {
-    return `${Math.round((this.book.readPages / this.book.totalPages) * 100)}%`
+  get editedProgressRatio(): number {
+    return this.syncedEditedReadPages / this.totalPages
   }
-  get remainingPrice(): string {
-    return `${Math.round(
-      (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    ).toLocaleString()}`
+  get progressPercent(): number {
+    return Math.round((this.readPages / this.totalPages) * 100)
   }
 }
 </script>
@@ -45,39 +63,25 @@ export default class BookListItemProgress extends Vue {
 .book-list-item-progress
   width: 100%
 
-.book-list-item-progress__progress
-  margin: 0.5rem 0
-  color: $kidoku-blue
-  font:
-    weight: bold
+  &__progress
+    position: relative
+    padding:
+      top: 4px
+    color: $kidoku-blue
+    font:
+      weight: bold
 
-.book-list-item-progress__price
-  display: flex
-  align-items: baseline
-  justify-content: flex-end
-  padding: 0 0.25rem
+  &__progress-knob
+    position: absolute
+    z-index: 10
+    left: -50%
+    bottom: 100%
+    width: 200%
 
-.book-list-item-progress__price_remaining_label
-  color: $tsundoku-red-fade60
-  font:
-    weight: bold
-    size: 0.9rem
-
-.book-list-item-progress__price_total
-  color: $tsundoku-red-fade60
-  font:
-    weight: bold
-    size: 0.9rem
-  &::before
-    content: '/'
-    margin: 0 0.25rem
-
-.book-list-item-progress__price_remaining
-  color: $tsundoku-red
-  font:
-    weight: bold
-    size: 1.1rem
-  &::before
-    content: '¥'
-    margin: 0 0.25rem
+.slide-in
+  &-enter, &-leave-to
+    transform: translateY(10px)
+    opacity: 0
+  &-enter-active, &-leave-active
+    transition: transform .3s $easeOutBack, opacity .3s
 </style>

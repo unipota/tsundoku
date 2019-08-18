@@ -1,5 +1,7 @@
 <template lang="pug">
 .text-input
+  .icon-wrap
+    slot
   input(
     type="text"
     :value="value"
@@ -7,22 +9,35 @@
     :placeholder="placeholder"
     @input="$emit('input', $event.target.value)"
     @keyup.enter="$emit('keyup-enter')"
+    ref="input"
+    v-focus="focus"
   )
-  .close(@click="$emit('input', '')")
-    transition(name="transition-close")
+  transition(name="transition-clear")
+    .clear(v-if="withClearButton && value" @click="handleClear")
       icon(
-        v-if="withClearButton && value"
         name="close"
         color="var(--text-gray)"
-        :height="16"
+        :height="12"
       )
 </template>
 
 <script lang="ts">
 import { Vue, Prop, Component } from 'vue-property-decorator'
 import Icon from '@/components/assets/Icon.vue'
+import { DirectiveOptions } from 'vue'
+
+const focusDirective: DirectiveOptions = {
+  inserted(el, binding) {
+    if (binding.value) {
+      el.focus()
+    }
+  }
+}
 
 @Component({
+  directives: {
+    focus: focusDirective
+  },
   components: {
     Icon
   }
@@ -32,6 +47,13 @@ export default class TextInput extends Vue {
   @Prop({ type: String, default: '' }) placeholder!: string
   @Prop({ type: Boolean, default: false }) withClearButton!: boolean
   @Prop({ type: String, default: 'text' }) type!: string
+  @Prop({ type: Boolean, default: false }) focus!: boolean
+
+  handleClear() {
+    this.$emit('input', '')
+    const el = this.$refs.input as HTMLInputElement
+    el.focus()
+  }
 }
 </script>
 
@@ -50,23 +72,37 @@ export default class TextInput extends Vue {
   width: 100%
   height: 100%
   flex: 100% 1 1
-  font-size: 1rem
+  font:
+    weight: bold
+    size: 1rem
   color: var(--text-black)
   &::placeholder
     color: var(--text-gray)
     font:
       weight: bold
 
-.close
+.icon-wrap
   display: flex
   align-items: center
-  flex: 16px 0 0
+  justify-content: center
+  transform: translateX(-6px)
+
+.clear
+  display: flex
+  align-items: center
+  width: 26px
+  height: 26px
   cursor: pointer
   opacity: 0.75
+  border:
+    radius: 100%
+  transition: opacity .5s, background .5s
+
   &:hover
     opacity: 1
+    background: rgba(100,100,100,0.1)
 
-.transition-close
+.transition-clear
   &-enter, &-leave-to
     opacity: 0
 

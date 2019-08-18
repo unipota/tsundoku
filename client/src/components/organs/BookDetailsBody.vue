@@ -36,15 +36,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ExStore } from 'vuex'
-import { BookRecord } from '../types/Book'
+import { BookRecord } from '../../types/Book'
 import BookDetailsActionButton from '@/components/atoms/BookDetailsActionButton.vue'
 import BookDetailsItem from '@/components/molecules/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
-import { BookRecord } from '../../types/Book'
 
 @Component({
   components: {

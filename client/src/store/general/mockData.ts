@@ -14,7 +14,9 @@ export const mockBooksMap: Record<string, BookRecord> = {
     coverImageUrl:
       'https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/0042/9784101800042.jpg?_ex=200x200',
     readPages: 200,
-    memo: ''
+    memo: '',
+    createdAt: '',
+    updatedAt: ''
   },
   mock1: {
     id: 'mock1',
@@ -28,7 +30,9 @@ export const mockBooksMap: Record<string, BookRecord> = {
     coverImageUrl:
       'https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/9905/9784832249905.jpg?_ex=200x200',
     readPages: 119,
-    memo: ''
+    memo: '',
+    createdAt: '',
+    updatedAt: ''
   },
   mock2: {
     id: 'mock2',
@@ -44,7 +48,9 @@ export const mockBooksMap: Record<string, BookRecord> = {
     coverImageUrl:
       'https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1062/9784839941062.jpg?_ex=200x200',
     readPages: 20,
-    memo: ''
+    memo: '',
+    createdAt: '',
+    updatedAt: ''
   },
   mock3: {
     id: 'mock3',
@@ -60,6 +66,8 @@ export const mockBooksMap: Record<string, BookRecord> = {
     coverImageUrl:
       'https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/1062/9784839941062.jpg?_ex=200x200',
     readPages: 20,
-    memo: ''
+    memo: '',
+    createdAt: '',
+    updatedAt: ''
   }
 }

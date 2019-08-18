@@ -177,11 +177,13 @@ export default class BookDetails extends Vue {
   }
 
   public async handleOkClick() {
-    await this.$store.dispatch('updateBook', {
-      book: this.editingBook
-    })
-    await this.$store.dispatch('getMyBooks')
-    this.$router.push('/')
+    if (this.editingBook) {
+      await this.$store.dispatch('updateBook', {
+        book: this.editingBook
+      })
+      await this.$store.dispatch('getMyBooks')
+      this.$router.push('/')
+    }
   }
 
   public updateHeader() {
@@ -274,7 +276,8 @@ export default class BookDetails extends Vue {
       }, transitionDuration * 1.25)
     } else {
       const modalElement = this.$refs.bookDetails as HTMLElement
-      const editAreaElement = this.$refs.bookInfoEditInstance.$el as HTMLElement
+      const editAreaElement = (this.$refs.bookInfoEditInstance as Vue)
+        .$el as HTMLElement
       const coverWrapElement = this.$refs.coverWrap as HTMLElement
 
       coverWrapElement.style.transform = ''

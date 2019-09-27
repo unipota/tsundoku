@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+
 module.exports = {
   css: {
     loaderOptions: {
@@ -15,7 +18,20 @@ module.exports = {
       alias: {
         vue$: 'vue/dist/vue.esm.js'
       }
-    }
+    },
+    context: __dirname,
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
+        }
+      ]
+    },
+    plugins: [new ForkTsCheckerWebpackPlugin()]
   },
 
   devServer: {

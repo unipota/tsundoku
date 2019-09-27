@@ -2,7 +2,7 @@
   .book-major-info
     .book-list-item__title(:class="`is-${size}`")
       | {{ title }}
-    .book-list-item__author(:class="`is-${size}`")
+    .book-list-item__author(v-if="!isAuthorEmpty" :class="`is-${size}`")
       icon.icon(name="author" color="currentColor")
       span(v-for="(author, index) in authors")
         | {{ author + (index < authors.length-1 ? ' / ' : '')}}
@@ -24,6 +24,10 @@ export default class BookMajorInfo extends Vue {
 
   @Prop({ type: String, default: 'normal' })
   private size!: Size
+
+  get isAuthorEmpty() {
+    return !this.authors.some(author => author !== '')
+  }
 }
 </script>
 

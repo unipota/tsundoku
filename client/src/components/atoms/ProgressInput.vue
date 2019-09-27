@@ -2,7 +2,9 @@
   .progress-input
     .price-wrap
       input.current-price(
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="\d*"
         autocomplete="off"
         :min="0"
         :max="totalPages"

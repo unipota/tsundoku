@@ -1,4 +1,4 @@
-import { BookRecord } from '@/types/Book'
+import { BookRecord, ReadHistory, BookDetail, BookStats } from '@/types/Book'
 
 type ViewType = 'mobile' | 'desktop'
 type ViewTypeClass = 'is-mobile' | 'is-desktop'
@@ -15,6 +15,8 @@ export interface S {
   showMobileTabBar: boolean
   showDesktopNav: boolean
   booksMap: Record<string, BookRecord>
+  readHistoriesMap: Record<string, ReadHistory[]>
+  bookStatsArray: BookStats[]
   useMockBooksMap: boolean
 }
 // ______________________________________________________
@@ -47,6 +49,8 @@ export interface M {
   setShowMobileTabBar: boolean
   setShowDesktopNav: boolean
   setBooksMap: BookRecord[]
+  setReadHistoriesMap: BookDetail
+  setBookStats: BookStats[]
   updateBook: { book: BookRecord }
 }
 export type RM = {
@@ -57,11 +61,13 @@ export type RM = {
 // actions
 export interface A {
   getMyBooks: {}
+  getBookDetail: { id: string }
   searchBooksByISBN: { isbn: string }
   searchBooks: { search: string }
   addNewBook: { book: BookRecord }
   updateBook: { book: BookRecord }
   deleteBook: { id: string }
+  getAllBookStats: {}
 }
 export type RA = {
   [K in keyof A]: A[K]

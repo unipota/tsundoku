@@ -20,16 +20,19 @@
         book-details-item.item(:name="$t('price')" :value="`¥ ${price.toLocaleString()}`")
         book-details-item.item(:name="$t('totalPages')" :value="`${totalPages}`")
         book-details-item.item(name="メモ" :value="book.memo")
+        //- read-history-chart(:readHistories="readHistories")
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
-import { BookRecord } from '../types/Book'
+import { BookRecord, ReadHistory } from '../types/Book'
+
 import BookDetailsItem from '@/components/atoms/BookDetailsItem.vue'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
+import ReadHistoryChart from '@/components/atoms/ReadHistoryChart.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
 
 @Component({
@@ -38,6 +41,7 @@ import BookListItemProgressController from '@/components/molecules/BookListItemP
     ModalFrame,
     BookCover,
     BookMajorInfo,
+    ReadHistoryChart,
     BookListItemProgressController
   }
 })
@@ -47,6 +51,11 @@ export default class BookDetails extends Vue {
 
   public async mounted() {
     this.lastBook = this.book
+    this.$store.dispatch('getBookDetail', { id: this.book.id })
+  }
+
+  get readHistories(): ReadHistory[] {
+    return this.book ? this.$store.state.readHistoriesMap[this.book.id] : []
   }
 
   get book(): BookRecord {
@@ -70,9 +79,11 @@ export default class BookDetails extends Vue {
   }
 
   get remainingPrice(): number {
-    return Math.round(
-      (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    )
+    return this.book.totalPages === 0
+      ? 0
+      : Math.round(
+          (1 - this.book.readPages / this.book.totalPages) * this.book.price
+        )
   }
 }
 </script>

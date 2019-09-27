@@ -45,3 +45,11 @@ export interface BookDetail {
   createdAt: string
   updatedAt: string
 }
+
+export interface BookStats {
+  id: string
+  title: string
+  totalPages: number
+  price: number
+  readHistories: ReadHistory[]
+}

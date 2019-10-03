@@ -1,4 +1,10 @@
-import { BookRecord, ReadHistory, BookDetail, BookStats } from '@/types/Book'
+import {
+  BookSimpleRecord,
+  BookRecord,
+  ReadHistory,
+  BookDetail,
+  BookStats
+} from '@/types/Book'
 
 type ViewType = 'mobile' | 'desktop'
 type ViewTypeClass = 'is-mobile' | 'is-desktop'
@@ -64,7 +70,7 @@ export interface A {
   getBookDetail: { id: string }
   searchBooksByISBN: { isbn: string }
   searchBooks: { search: string }
-  addNewBook: { book: BookRecord }
+  addNewBook: { book: BookSimpleRecord }
   updateBook: { book: BookRecord }
   deleteBook: { id: string }
   getAllBookStats: {}

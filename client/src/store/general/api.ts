@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BookRecord, BookStats } from '@/types/Book'
+import { BookSimpleRecord, BookRecord, BookStats } from '@/types/Book'
 
 const isDev = process.env['NODE_ENV'] === 'development'
 
@@ -12,7 +12,7 @@ const api = {
   getMyBooks(): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/books')
   },
-  addNewBook(book: BookRecord): Promise<AxiosResponse> {
+  addNewBook(book: BookSimpleRecord): Promise<AxiosResponse> {
     return client.post('api/books', book)
   },
   getBookDetail(id: string): Promise<AxiosResponse> {

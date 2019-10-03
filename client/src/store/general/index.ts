@@ -5,7 +5,7 @@ import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
 import api from './api'
-import { BookRecord, BookStats } from '@/types/Book'
+import { BookSimpleRecord, BookRecord, BookStats } from '@/types/Book'
 import { mockBooksMap } from './mockData'
 // ______________________________________________________
 //
@@ -162,7 +162,7 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
-  searchBooks({}, { search }): Promise<BookRecord[]> {
+  searchBooks({}, { search }): Promise<BookSimpleRecord[]> {
     console.log(search)
     return new Promise((resolve, reject) => {
       api.searchBooks(search).then(result => {

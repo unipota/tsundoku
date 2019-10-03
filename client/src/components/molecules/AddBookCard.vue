@@ -29,7 +29,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
-import { SimpleBookRecord } from '../../types/Book'
+import { BookSimpleRecord } from '../../types/Book'
 import AddTsundokuButton from '../atoms/AddTsundokuButton.vue'
 import BookCover from '../atoms/BookCover.vue'
 import BookMajorInfo from '../atoms/BookMajorInfo.vue'
@@ -56,7 +56,7 @@ export default class AddBookCard extends Vue {
   private readonly type!: cardType
 
   @Prop({ type: Object, required: true })
-  private readonly book!: SimpleBookRecord
+  private readonly book!: BookSimpleRecord
 
   private bookAdded = false
   private showCard = true

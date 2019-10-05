@@ -356,9 +356,11 @@ export default class BookDetails extends Vue {
   }
 
   get remainingPrice(): number {
-    return Math.round(
-      (1 - this.book.readPages / this.book.totalPages) * this.book.price
-    )
+    return this.book.totalPages === 0
+      ? 0
+      : Math.round(
+          (1 - this.book.readPages / this.book.totalPages) * this.book.price
+        )
   }
 }
 </script>

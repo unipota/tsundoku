@@ -5,7 +5,7 @@ import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
 import api from './api'
-import { BookRecord } from '@/types/Book'
+import { BookSimpleRecord, BookRecord, BookStats } from '@/types/Book'
 import { mockBooksMap } from './mockData'
 // ______________________________________________________
 //
@@ -17,6 +17,8 @@ export const state = (): S => ({
   showMobileTabBar: true,
   showDesktopNav: true,
   booksMap: {},
+  readHistoriesMap: {},
+  bookStatsArray: [],
   useMockBooksMap: false // 開発用
 })
 // ______________________________________________________
@@ -102,6 +104,15 @@ export const mutations: Mutations<S, M> = {
       state.booksMap = { ...state.booksMap, [book.id]: book }
     })
   },
+  setReadHistoriesMap(state, bookDetail) {
+    state.readHistoriesMap = {
+      ...state.readHistoriesMap,
+      [bookDetail.id]: bookDetail.readHistories
+    }
+  },
+  setBookStats(state, bookStatsArray) {
+    state.bookStatsArray = bookStatsArray
+  },
   updateBook(state, { book }) {
     state.booksMap[book.id] = book
     state.booksMap = { ...state.booksMap }
@@ -127,6 +138,18 @@ export const actions: Actions<S, A, G, M> = {
       }
     })
   },
+  getBookDetail({ commit }, { id }) {
+    return new Promise((resolve, reject) => {
+      api.getBookDetail(id).then(result => {
+        if (result.data) {
+          commit('setReadHistoriesMap', result.data)
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
+  },
   searchBooksByISBN({}, { isbn }): Promise<BookRecord[]> {
     console.log(isbn)
     return new Promise((resolve, reject) => {
@@ -139,7 +162,7 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
-  searchBooks({}, { search }): Promise<BookRecord[]> {
+  searchBooks({}, { search }): Promise<BookSimpleRecord[]> {
     console.log(search)
     return new Promise((resolve, reject) => {
       api.searchBooks(search).then(result => {
@@ -181,6 +204,18 @@ export const actions: Actions<S, A, G, M> = {
     return new Promise((resolve, reject) => {
       api.deleteBook(id).then(result => {
         if (result.data) {
+          resolve(result.data)
+        } else {
+          reject()
+        }
+      })
+    })
+  },
+  getAllBookStats({ commit }): Promise<BookStats[]> {
+    return new Promise((resolve, reject) => {
+      api.getAllBookStats().then(result => {
+        if (result.data) {
+          commit('setBookStats', result.data)
           resolve(result.data)
         } else {
           reject()

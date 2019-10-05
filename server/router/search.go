@@ -30,7 +30,7 @@ type SearchedBook struct {
 	Price         int      `json:"price"`
 	Caption       string   `json:"caption"`
 	Publisher     string   `json:"publisher"`
-	CoverImageURL string   `json:"cover_image_url"`
+	CoverImageURL string   `json:"coverImageUrl"`
 }
 
 type RakutenBook struct {

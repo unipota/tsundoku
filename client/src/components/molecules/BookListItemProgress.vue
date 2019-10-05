@@ -48,13 +48,15 @@ export default class BookListItemProgress extends Vue {
   progressBarWidth = 0
 
   get progressRatio(): number {
-    return this.readPages / this.totalPages
+    return this.totalPages === 0 ? 0 : this.readPages / this.totalPages
   }
   get editedProgressRatio(): number {
     return this.syncedEditedReadPages / this.totalPages
   }
   get progressPercent(): number {
-    return Math.round((this.readPages / this.totalPages) * 100)
+    return this.totalPages === 0
+      ? 0
+      : Math.round((this.readPages / this.totalPages) * 100)
   }
 }
 </script>

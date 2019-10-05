@@ -1,6 +1,5 @@
 <template lang="pug">
   modal-frame.add-books-search(:title="$t('addBooksSearchTitle')")
-    book-cover(v-if="$store.state.viewType === 'desktop'" :hasShadow="true")
     text-input(
       v-model="searchQuery"
       :placeholder="$t('addBooksSearchPlaceholder')"
@@ -9,31 +8,34 @@
       focus
     )
       icon(name="search" color="var(--text-gray)" :width="18" :height="18")
-    router-link.edit-yourself(
-      v-show="showEditBar"
-      :to="firstRouteName + '/add-books-edit'"
-    )
-      icon.icon(
-        name="logo"
-        color="var(--border-gray)"
-        :width="34"
-        :height="27"
+    template(v-if="isFirstView")
+      book-cover(:hasShadow="true")
+    template(v-else)
+      router-link.edit-yourself(
+        v-show="showEditBar"
+        :to="firstRouteName + '/add-books-edit'"
       )
-      span.text
-        | {{ $t('editYourself') }}
-      icon.icon(name="right-arrow")
-    add-book-card(
-      v-for="(book, index) in searchResults"
-      :key="index"
-      :book="book"
-      type="search"
-    )
+        icon.icon(
+          name="logo"
+          color="var(--border-gray)"
+          :width="34"
+          :height="27"
+        )
+        span.text
+          | {{ $t('editYourself') }}
+        icon.icon(name="right-arrow")
+      add-book-card(
+        v-for="(book, index) in searchResults"
+        :key="index"
+        :book="book"
+        type="search"
+      )
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
-import { BookRecord } from '../types/Book'
+import { BookSimpleRecord } from '../types/Book'
 
 import Icon from '@/components/assets/Icon.vue'
 import EditButton from '@/components/atoms/EditButton.vue'
@@ -55,8 +57,9 @@ import BookCover from '@/components/atoms/BookCover.vue'
 export default class AddBooksSearch extends Vue {
   public $store!: ExStore
   searchQuery = ''
-  searchResults: BookRecord[] = []
+  searchResults: BookSimpleRecord[] = []
   hasSubmittedSearchQuery = false
+  isFirstView = true
 
   get goodSearchResult() {
     //  検索結果が1件以上 && クエリがタイトルに部分一致するような検索結果が存在する
@@ -77,9 +80,10 @@ export default class AddBooksSearch extends Vue {
   submitSearchQuery() {
     this.$store
       .dispatch('searchBooks', { search: this.searchQuery })
-      .then((res: BookRecord[]) => {
+      .then((res: BookSimpleRecord[]) => {
         this.searchResults = res
         this.hasSubmittedSearchQuery = true
+        this.isFirstView = false
       })
   }
 
@@ -98,7 +102,7 @@ export default class AddBooksSearch extends Vue {
   -webkit-overflow-scrolling: touch
 
 .book-cover
-  margin: 20px auto 40px auto
+  margin: 20vh auto 40px auto
 
 .text-input
   width: 85%

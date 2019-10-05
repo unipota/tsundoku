@@ -56,6 +56,10 @@ export default class BookListItemProgressController extends Vue {
       this.recordActive = true
       this.editedReadPages = this.book.readPages
     } else {
+      if (this.book.readPages === this.editedReadPages) {
+        this.recordActive = false
+        return
+      }
       const book = this.book
       book.readPages = this.editedReadPages
       this.$store.dispatch('updateBook', { book })
@@ -65,6 +69,7 @@ export default class BookListItemProgressController extends Vue {
 
   async handleClickCheck() {
     if (this.book.readPages === this.book.totalPages) return
+    this.recordActive = false
     this.fakedReadPages = this.book.totalPages
     this.isAnimated = true
     await new Promise(r => window.setTimeout(r, 500))

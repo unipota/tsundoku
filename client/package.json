@@ -24,7 +24,7 @@
     "vue-chartjs": "^3.4.2",
     "vue-class-component": "^7.1.0",
     "vue-i18n": "^8.14.1",
-    "vue-meta": "^2.2.2",
+    "vue-meta": "^2.3.0",
     "vue-property-decorator": "^8.2.2",
     "vue-router": "^3.1.3",
     "vuex": "^3.1.1"
@@ -32,10 +32,10 @@
   "devDependencies": {
     "@kazupon/vue-i18n-loader": "^0.4.1",
     "@tweenjs/tween.js": "^17.4.0",
-    "@types/chart.js": "^2.8.5",
+    "@types/chart.js": "^2.8.7",
     "@types/dom-inputevent": "^1.0.5",
-    "@types/lodash": "^4.14.140",
-    "@types/webpack": "^4.39.1",
+    "@types/lodash": "^4.14.141",
+    "@types/webpack": "^4.39.2",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-plugin-pwa": "^3.11.0",

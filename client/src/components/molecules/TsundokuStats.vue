@@ -43,23 +43,23 @@ export default class TsundokuStats extends Vue {
       arrayOfDayjsToToday.push(day)
       day = day.add(1, 'day')
     }
-    const tsundokuPricePerDay: number[] = arrayOfDayjsToToday.map(day => {
-      return this.allBookStats.reduce((acc: number, stats: BookStats) => {
-        return (
-          acc +
-          stats.readHistories.find((readHistory: ReadHistory) =>
-            day.isSame(dayjs(readHistory.createdAt), 'day')
-          ).readPages
-        )
-      }, 0)
-    })
+    // const tsundokuPricePerDay: number[] = arrayOfDayjsToToday.map(day => {
+    //   return this.allBookStats.reduce((acc: number, stats: BookStats) => {
+    //     return (
+    //       acc +
+    //       stats.readHistories.find((readHistory: ReadHistory) =>
+    //         day.isSame(dayjs(readHistory.createdAt), 'day')
+    //       ).readPages
+    //     )
+    //   }, 0)
+    // })
 
     return {
       labels: arrayOfDayjsToToday.map(day => day.format('MM/DD')),
       datasets: [
         {
           label: '',
-          data: booksRegisteredCountsPerDay,
+          // data: booksRegisteredCountsPerDay,
           backgroundColor: '#E3402A'
         }
       ]

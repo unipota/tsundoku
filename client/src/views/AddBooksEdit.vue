@@ -20,11 +20,11 @@
       v-model="price"
       type="number"
     )
-    add-books-edit-input.edit-input(
-      :label="$t('totalPages')"
-      v-model="totalPages"
-      type="number"
-    )
+    //- add-books-edit-input.edit-input(
+    //-   :label="$t('totalPages')"
+    //-   v-model="totalPages"
+    //-   type="number"
+    //- )
     .add-button-container
       add-tsundoku-button(
         @add-tsundoku="onAddTsundoku"
@@ -68,9 +68,9 @@ export default class AddBooksSearch extends Vue {
     if (typeof this.$route.query.price === 'string') {
       this.price = this.$route.query.price
     }
-    if (typeof this.$route.query.totalPages === 'string') {
-      this.totalPages = this.$route.query.totalPages
-    }
+    // if (typeof this.$route.query.totalPages === 'string') {
+    //   this.totalPages = this.$route.query.totalPages
+    // }
     if (typeof this.$route.query.coverImageUrl === 'string') {
       this.coverImageUrl = this.$route.query.coverImageUrl
     }
@@ -83,15 +83,15 @@ export default class AddBooksSearch extends Vue {
         isbn: '',
         title: this.title,
         author: [this.author],
-        totalPages: parseInt(this.totalPages),
+        // totalPages: parseInt(this.totalPages),
         price: parseInt(this.price),
         caption: null,
         publisher: '',
-        coverImageUrl: this.coverImageUrl,
-        readPages: 0,
-        memo: '',
-        createdAt: '',
-        updatedAt: ''
+        coverImageUrl: this.coverImageUrl
+        // readPages: 0,
+        // memo: '',
+        // createdAt: '',
+        // updatedAt: ''
       }
     })
     await this.$store.dispatch('getMyBooks')

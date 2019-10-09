@@ -70,8 +70,17 @@ td
   padding: 0
   border: 0
 
+ul[class],
+ol[class]
+  list-style: none
+
+img
+  max-width: 100%
+  display: block
+
 a
   text-decoration: none
+  color: inherit
 
 *, *::before, *::after
   box-sizing: border-box
@@ -93,10 +102,12 @@ input[type="text"], input[type="number"]
   outline: none
   background: none
 
+input,
+button,
+textarea,
+select
+  font: inherit
+
 // fix placeholder position for iOS safari
 input::-webkit-input-placeholder
   line-height: 1.3rem
-  
-// reset link styles
-a
-  color: inherit

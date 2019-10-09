@@ -1,4 +1,4 @@
-FROM golang:1.12.6-alpine
+FROM golang:1.13.1-alpine
 WORKDIR /tsundoku/server
 RUN apk add --update --no-cache git \
   &&  go get -u github.com/pilu/fresh

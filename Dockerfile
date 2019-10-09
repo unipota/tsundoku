@@ -6,7 +6,7 @@ COPY client .
 RUN npm run build
 
 
-FROM golang:1.12.6-alpine as server
+FROM golang:1.13.1-alpine as server
 WORKDIR /tsundoku/server
 
 RUN apk add --update --no-cache git

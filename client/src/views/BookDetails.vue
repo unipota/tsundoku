@@ -5,6 +5,7 @@
     :path="isEditing ? '../../../' : '../../'"
     no-padding)
     .book-details(
+      v-if="book"
       :class="{ editing: isEditing, 'on-transition': isOnTransitionToEdit || isOnTransitionToDetails }"
       ref="bookDetails")
       transition(name="fade")
@@ -53,7 +54,7 @@
                 :value="`¥ ${price.toLocaleString()}`")
               book-details-item.item(
                 :name="$t('totalPages')"
-                :value="`${totalPages}`")
+                :value="`${totalPages}p`")
               book-details-item.item(
                 name="最後に読んだ日"
                 value="0日前")
@@ -126,6 +127,10 @@ export default class BookDetails extends Vue {
   private isEditing!: boolean
 
   public created() {
+    if (!this.book) {
+      this.$router.push({name: this.selectedPath})
+      return
+    }
     this.editingBook = { ...this.book }
   }
 
@@ -244,7 +249,7 @@ export default class BookDetails extends Vue {
 
   public async onDeleteClick() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
-    this.$router.push('../../')
+    this.$router.push({name: this.selectedPath})
   }
 
   @Watch('isEditing')
@@ -316,7 +321,17 @@ export default class BookDetails extends Vue {
   }
 
   public onEditClick() {
-    this.$router.push(`${this.$route.path}/edit`)
+    this.$router.push({path:`${this.$route.path}/edit`})
+  }
+
+  get firstRouteName() {
+    return this.$route.matched[0].path
+  }
+
+  get selectedPath() {
+    return this.firstRouteName === ''
+      ? 'tsundoku'
+      : this.firstRouteName.slice(1)
   }
 
   get isButtonExpanded() {

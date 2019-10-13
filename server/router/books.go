@@ -253,7 +253,7 @@ func searchedBook2Book(searchedBook SearchedBook, deviceID uuid.UUID) model.Book
 		Caption:       searchedBook.Caption,
 		Publisher:     searchedBook.Publisher,
 		CoverImageUrl: searchedBook.CoverImageURL,
-		Memo:          "",
+		Memo:          searchedBook.Memo,
 		Price:         searchedBook.Price,
 		DeviceID:      deviceID,
 	}

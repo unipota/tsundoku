@@ -58,6 +58,7 @@ export interface M {
   setReadHistoriesMap: BookDetail
   setBookStats: BookStats[]
   updateBook: { book: BookRecord }
+  deleteBook: string
 }
 export type RM = {
   [K in keyof M]: M[K]

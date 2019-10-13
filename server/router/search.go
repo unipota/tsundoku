@@ -31,6 +31,7 @@ type SearchedBook struct {
 	Caption       string   `json:"caption"`
 	Publisher     string   `json:"publisher"`
 	CoverImageURL string   `json:"coverImageUrl"`
+	Memo          string   `json:"memo"`
 }
 
 type RakutenBook struct {

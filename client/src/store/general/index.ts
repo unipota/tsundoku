@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* tslint:disable:no-shadowed-variable */
 
+import Vue from 'vue'
 import { Getters, Mutations, Actions } from 'vuex'
 import { S, G, M, A } from './type'
 import i18n from '@/i18n'
@@ -116,6 +117,9 @@ export const mutations: Mutations<S, M> = {
   updateBook(state, { book }) {
     state.booksMap[book.id] = book
     state.booksMap = { ...state.booksMap }
+  },
+  deleteBook(state, bookId) {
+    Vue.delete(state.booksMap, bookId)
   }
 }
 // ______________________________________________________
@@ -199,12 +203,13 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
-  async deleteBook({}, { id }): Promise<BookRecord[]> {
+  async deleteBook({ commit }, { id }): Promise<BookRecord[]> {
     console.log(id)
     return new Promise((resolve, reject) => {
       api.deleteBook(id).then(result => {
-        if (result.data) {
-          resolve(result.data)
+        if (result) {
+          commit('deleteBook', id)
+          resolve()
         } else {
           reject()
         }

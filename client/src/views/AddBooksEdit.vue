@@ -5,7 +5,7 @@
   )
     book-info-edit(v-model="book")
     .add-button-container
-      books-info-edit-button(
+      book-info-edit-button(
         @add-tsundoku="onAddTsundoku"
       )
 </template>
@@ -17,7 +17,7 @@ import { ExStore } from 'vuex'
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookInfoEditButton from '@/components/atoms/BookInfoEditButton.vue'
 import BookInfoEdit from '@/components/organs/BookInfoEdit.vue'
-import { BookRecord } from '../types/Book'
+import { BookSimpleRecord } from '../types/Book'
 
 @Component({
   components: {
@@ -29,7 +29,7 @@ import { BookRecord } from '../types/Book'
 export default class AddBooksSearch extends Vue {
   public $store!: ExStore
 
-  private book: BookRecord = {
+  private book: BookSimpleRecord = {
     id: '',
     isbn: '',
     title: '',
@@ -40,25 +40,26 @@ export default class AddBooksSearch extends Vue {
     publisher: '',
     coverImageUrl: '',
     readPages: 0,
-    memo: '',
-    createdAt: '',
-    updatedAt: ''
+    memo: ''
   }
 
   mounted() {
-    if (typeof this.$route.query.title === 'string') {
+    if (this.$route.query.title) {
       this.$set(this.book, 'title', this.$route.query.title)
     }
-    if (typeof this.$route.query.author === 'string') {
+    if (this.$route.query.author) {
       this.$set(this.book, 'author', [this.$route.query.author])
     }
-    if (typeof this.$route.query.price === 'string') {
-      this.$set(this.book, 'price', parseInt(this.$route.query.price))
+    if (this.$route.query.price) {
+      this.$set(this.book, 'price', parseInt(this.$route.query.price as string))
     }
-    if (typeof this.$route.query.totalPages === 'string') {
-      this.$set(this.book, 'totalPages', parseInt(this.$route.query.totalPages))
+    if (this.$route.query.publisher) {
+      this.$set(this.book, 'publisher', this.$route.query.publisher)
     }
-    if (typeof this.$route.query.coverImageUrl === 'string') {
+    if (this.$route.query.isbn) {
+      this.$set(this.book, 'isbn', this.$route.query.isbn)
+    }
+    if (this.$route.query.coverImageUrl) {
       this.$set(this.book, 'coverImageUrl', this.$route.query.coverImageUrl)
     }
   }

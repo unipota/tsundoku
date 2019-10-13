@@ -21,10 +21,10 @@
       @input="update('price', parseInt($event))"
     )
     books-info-edit-input.edit-input(
-      type="number"
-      :label="$t('totalPages')"
-      :value="value.totalPages.toString()"
-      @input="update('toralPages', parseInt($event))"
+      type="text"
+      :label="$t('memo')"
+      :value="value.memo.toString()"
+      @input="update('memo', $event)"
     )
 </template>
 

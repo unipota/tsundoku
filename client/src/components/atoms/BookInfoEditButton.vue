@@ -119,11 +119,12 @@ export default class BookInfoEditButton extends Vue {
     .text
       font-size: 13px
   &.is-large
-    width: 166px
-    height: 57px
+    // width: 166px
+    padding: 0 12px
+    height: 36px
     border-width: 4px
     .text
-      font-size: 22px
+      font-size: 18px
 
 .transition-button-content
   &-enter, &-leave-to

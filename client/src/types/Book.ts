@@ -1,14 +1,3 @@
-export interface BookSimpleRecord {
-  id: string
-  isbn: string
-  title: string
-  author: string[]
-  price: number
-  caption: string | null
-  publisher: string
-  coverImageUrl: string | null
-}
-
 export interface BookRecord {
   id: string
   isbn: string
@@ -25,25 +14,15 @@ export interface BookRecord {
   updatedAt: string
 }
 
+export type BookSimpleRecord = Omit<BookRecord, 'createdAt' | 'updatedAt'>
+
 export interface ReadHistory {
   readPages: number
   createdAt: string
 }
 
-export interface BookDetail {
-  id: string
-  isbn: string
-  title: string
-  author: string[]
-  totalPages: number
-  price: number // 定価
-  caption: string | null
-  publisher: string
-  coverImageUrl: string | null
+export interface BookDetail extends BookRecord {
   readHistories: ReadHistory[]
-  memo: string | null
-  createdAt: string
-  updatedAt: string
 }
 
 export interface BookStats {

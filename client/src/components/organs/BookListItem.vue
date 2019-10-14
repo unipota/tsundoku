@@ -10,7 +10,7 @@
           book-major-info(:title="book.title" :authors="book.author")
         .book-list-item__price(v-if="kidoku")
           span.book-list-item__total-price.book-list-item__currency-symbol.kidoku
-            | {{ book.price.toLocaleString() }}
+            | {{ book.price.toLocaleString('ja-JP') }}
           span.book-list-item__time-ago
             relative-time(:from="book.updatedAt" :locale="$store.state.locale")
         .book-list-item__price(v-else)
@@ -18,9 +18,9 @@
             span.book-list-item__remaining-price.tsundoku
               span.small
                 | 残り
-              tweened-number.book-list-item__currency-symbol(:num="remainingPrice")
+              tweened-number.book-list-item__currency-symbol(:num="remainingPrice" formatLocal)
             span.book-list-item__total-price.tsundoku
-              | /{{ book.price.toLocaleString() }}
+              | /{{ book.price.toLocaleString('ja-JP') }}
           span.book-list-item__time-ago
             relative-time(:from="book.updatedAt" :locale="$store.state.locale")
     .book-list-item__progress(v-if="!kidoku")

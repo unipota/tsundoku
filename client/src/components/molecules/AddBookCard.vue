@@ -11,7 +11,7 @@
         book-major-info(:title="book.title" :authors="book.author" :size="bookMajorInfoSize")
         div.price-buttons-wrapper(:class="`${$store.getters.viewTypeClass}`")
           div.price(:class="`${$store.getters.viewTypeClass}`")
-            | {{ $t('currency') + book.price.toLocaleString() }}
+            | {{ $t('currency') + book.price.toLocaleString('ja-JP') }}
           div.buttons
             component(
               :is="editButtonComponent"
@@ -123,7 +123,7 @@ export default class AddBookCard extends Vue {
     background: white
   &.is-mobile
     width: 100%
-    max-width: 300px
+    // max-width: 300px
   &.scan.is-desktop
     width: 500px
   &.search.is-desktop

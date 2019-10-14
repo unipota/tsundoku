@@ -47,11 +47,11 @@
             .info-items
               book-details-item.item(
                 name="ツンドク残額"
-                :value="`¥ ${remainingPrice.toLocaleString()}`"
+                :value="`¥ ${remainingPrice.toLocaleString('ja-JP')}`"
                 valueColor="var(--tsundoku-red)")
               book-details-item.item(
                 :name="$t('price')"
-                :value="`¥ ${price.toLocaleString()}`")
+                :value="`¥ ${price.toLocaleString('ja-JP')}`")
               book-details-item.item(
                 :name="$t('totalPages')"
                 :value="`${totalPages}p`")
@@ -374,8 +374,8 @@ export default class BookDetails extends Vue {
 
   get remainingPrice(): number {
     return tsundokuPrice(
-      this.book.totalPages,
       this.book.readPages,
+      this.book.totalPages,
       this.book.price
     )
   }

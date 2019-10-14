@@ -25,7 +25,7 @@ export default class PriceDisplay extends Vue {
   readonly kidoku!: boolean
 
   // get priceWithDelimiter(): string {
-  //   return `${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString()}`
+  //   return `${Math.floor(this.tweenedPriceNumberObject.price).toLocaleString('ja-JP')}`
   // }
 
   get bodyStyle() {

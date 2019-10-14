@@ -41,7 +41,7 @@ export default class TweenedNumber extends Vue {
       num = Math.round(num)
     }
     if (this.formatLocal) {
-      return num.toLocaleString()
+      return num.toLocaleString('ja-JP')
     } else {
       return num.toString()
     }

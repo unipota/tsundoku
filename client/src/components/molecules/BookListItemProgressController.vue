@@ -1,20 +1,27 @@
 <template lang="pug">
   .book-list-item-progress-controller
-    .book-list-item-progress-container
-      .progress-wrap
-        book-list-item-progress(
-          :readPages="wrappedReadPages"
-          :totalPages="book.totalPages"
-          :edit="recordActive" 
-          :editedReadPages.sync="editedReadPages")
-      .record-read-pages-button-wrap
-        record-read-pages-button(@click.stop="handleClickRecord" :active="recordActive" v-tooltip="'読書状況を記録する'")
-      .check-button-wrap
-        kidoku-button(@click="handleClickCheck" v-tooltip="'キドクにする'" :disable="isKidoku")
-    .progress-input-wrap(:style="progressInputStyle")
-      .progress-input-body(ref="progressInputBody")
-        transition(name="dummy-transition" @after-enter="afterEnter" @before-leave="beforeLeave")
-          progress-input(v-show="recordActive" :totalPages="book.totalPages" v-model="editedReadPages" @cancel="handleCancel")
+    template(v-if="isValidPages")
+      .book-list-item-progress-container
+        .progress-wrap
+          book-list-item-progress(
+            :readPages="wrappedReadPages"
+            :totalPages="book.totalPages"
+            :edit="recordActive" 
+            :editedReadPages.sync="editedReadPages")
+        .record-read-pages-button-wrap
+          record-read-pages-button(@click.stop="handleClickRecord" :active="recordActive" v-tooltip="'読書状況を記録する'")
+        .check-button-wrap
+          kidoku-button(@click="handleClickCheck" v-tooltip="'キドクにする'" :disable="isKidoku")
+      .progress-input-wrap(:style="progressInputStyle")
+        .progress-input-body(ref="progressInputBody")
+          transition(name="dummy-transition" @after-enter="afterEnter" @before-leave="beforeLeave")
+            progress-input(v-show="recordActive" :totalPages="book.totalPages" v-model="editedReadPages" @cancel="handleCancel")
+    template(v-else)
+      .warning-invalid-page-number
+        .icon-warning
+          icon(name="exclamation-mark" width="12" height="12" color="white")
+        span.warning-text
+          | ページ数が未設定のため読書状況を記録できません
 </template>
 
 <script lang="ts">
@@ -25,6 +32,7 @@ import BookListItemProgress from '@/components/molecules/BookListItemProgress.vu
 import RecordReadPagesButton from '@/components/atoms/RecordReadPagesButton.vue'
 import KidokuButton from '@/components/atoms/KidokuButton.vue'
 import ProgressInput from '@/components/atoms/ProgressInput.vue'
+import Icon from '@/components/assets/Icon.vue'
 import { BookRecord } from '../../types/Book'
 
 @Component({
@@ -32,7 +40,8 @@ import { BookRecord } from '../../types/Book'
     BookListItemProgress,
     RecordReadPagesButton,
     KidokuButton,
-    ProgressInput
+    ProgressInput,
+    Icon
   }
 })
 export default class BookListItemProgressController extends Vue {
@@ -94,6 +103,10 @@ export default class BookListItemProgressController extends Vue {
     return this.book.readPages === this.book.totalPages
   }
 
+  get isValidPages() {
+    return this.book.totalPages > 0
+  }
+
   afterEnter() {
     this.$nextTick(() => {
       const ref = this.$refs.progressInputBody as HTMLElement
@@ -146,4 +159,30 @@ export default class BookListItemProgressController extends Vue {
 .dummy-transition
   &-leave-active
     transition: all .3s
+
+.warning-invalid-page-number
+  margin:
+    top: 8px
+  padding:
+    right: 4px
+  display: inline-flex
+  justify-content: flex-end
+  align-items: center
+
+.icon-warning
+  flex-shrink: 0
+  width: 18px
+  height: 18px
+  border-radius: 100%
+  background: var(--danger-red)
+  display: flex
+  justify-content: center
+  align-items: center
+
+.warning-text
+  padding-left: 6px
+  font:
+    size: 14px
+    weight: bold
+  color: var(--danger-red-fade60)
 </style>

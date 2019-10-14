@@ -40,6 +40,7 @@ import BookProgressPopover from '@/components/organs/BookProgressPopover.vue'
 import RelativeTime from '@/components/atoms/RelativeTime.vue'
 
 import { BookRecord } from '../../types/Book'
+import { tsundokuPrice } from '@/utils/tsundoku'
 
 @Component({
   components: {
@@ -72,8 +73,10 @@ export default class BookListItem extends Vue {
   }
 
   get remainingPrice(): number {
-    return Math.round(
-      (1 - this.book.readPages / this.book.totalPages) * this.book.price
+    return tsundokuPrice(
+      this.book.readPages,
+      this.book.totalPages,
+      this.book.price
     )
   }
 }

@@ -8,6 +8,7 @@ import i18n from '@/i18n'
 import api from './api'
 import { BookSimpleRecord, BookRecord, BookStats } from '@/types/Book'
 import { mockBooksMap } from './mockData'
+import { tsundokuPrice } from '@/utils/tsundoku'
 // ______________________________________________________
 //
 export const state = (): S => ({
@@ -57,10 +58,20 @@ export const getters: Getters<S, G> = {
     return books
   },
   tsundokuBooks(_, getters) {
-    return getters.books.filter(book => book.readPages < book.totalPages)
+    return getters.books.filter(book => {
+      if (book.totalPages === 0) {
+        return true
+      }
+      return book.readPages < book.totalPages
+    })
   },
   kidokuBooks(_, getters) {
-    return getters.books.filter(book => book.readPages >= book.totalPages)
+    return getters.books.filter(book => {
+      if (book.totalPages === 0) {
+        return false
+      }
+      return book.readPages >= book.totalPages
+    })
   },
   getBookById(_, getters) {
     return bookId => getters.books.find(book => book.id === bookId)
@@ -68,7 +79,7 @@ export const getters: Getters<S, G> = {
   tsundokuPrice(_, getters) {
     return getters.tsundokuBooks.reduce(
       (sum, book) =>
-        sum + Math.round((1 - book.readPages / book.totalPages) * book.price),
+        sum + tsundokuPrice(book.readPages, book.totalPages, book.price),
       0
     )
   },

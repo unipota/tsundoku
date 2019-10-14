@@ -79,6 +79,8 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookRecord } from '../types/Book'
+import { tsundokuPrice } from '@/utils/tsundoku'
+
 import BookInfoEditButton from '@/components/atoms/BookInfoEditButton.vue'
 import BookDetailsActionButton from '@/components/atoms/BookDetailsActionButton.vue'
 import BookDetailsItem from '@/components/molecules/BookDetailsItem.vue'
@@ -128,7 +130,7 @@ export default class BookDetails extends Vue {
 
   public created() {
     if (!this.book) {
-      this.$router.push({name: this.selectedPath})
+      this.$router.push({ name: this.selectedPath })
       return
     }
     this.editingBook = { ...this.book }
@@ -249,7 +251,7 @@ export default class BookDetails extends Vue {
 
   public async onDeleteClick() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
-    this.$router.push({name: this.selectedPath})
+    this.$router.push({ name: this.selectedPath })
   }
 
   @Watch('isEditing')
@@ -321,7 +323,7 @@ export default class BookDetails extends Vue {
   }
 
   public onEditClick() {
-    this.$router.push({path:`${this.$route.path}/edit`})
+    this.$router.push({ path: `${this.$route.path}/edit` })
   }
 
   get firstRouteName() {
@@ -371,11 +373,11 @@ export default class BookDetails extends Vue {
   }
 
   get remainingPrice(): number {
-    return this.book.totalPages === 0
-      ? 0
-      : Math.round(
-          (1 - this.book.readPages / this.book.totalPages) * this.book.price
-        )
+    return tsundokuPrice(
+      this.book.totalPages,
+      this.book.readPages,
+      this.book.price
+    )
   }
 }
 </script>

@@ -54,6 +54,9 @@ $width-sm: 40px
   color: white
   transition: all 0.3s ease
 
+  &:hover
+    background: $text-black-fade60
+
   @media (max-width: 340px)
     width: $width-sm
     justify-content: center

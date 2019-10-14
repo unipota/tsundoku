@@ -19,7 +19,7 @@
     template(v-else)
       .warning-invalid-page-number
         .icon-warning
-          icon(name="exclamation-mark" width="12" height="12" color="white")
+          icon(name="exclamation-mark" :width="12" :height="12" color="white")
         span.warning-text
           | ページ数が未設定のため読書状況を記録できません
 </template>

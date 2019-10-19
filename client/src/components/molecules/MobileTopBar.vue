@@ -7,7 +7,7 @@
     router-link.user(v-if="!userLogined" v-tooltip="'新規登録/ログイン'" to="/login")
       icon(name="user" :width="32" :height="32")
     .user-icon-wrap(v-else)
-      user-icon(src="userIconUrl")
+      user-icon(:src="userIconUrl")
 </template>
 
 <script lang="ts">
@@ -37,6 +37,7 @@ export default class MobileTopBar extends Vue {
   display: flex
   justify-content: flex-end
   align-items: center
+  height: 64px
   padding:
     top: 8px
     left: 16px
@@ -52,10 +53,12 @@ export default class MobileTopBar extends Vue {
 .setting, .user
   display: flex
   align-items: center
-  margin: 0 2px
+  margin: 0 4px
 
 .user-icon-wrap
   width: 28px
   height: 28px
-  margin: 0 2px
+  margin:
+    left: 6px
+    right: 2px
 </style>

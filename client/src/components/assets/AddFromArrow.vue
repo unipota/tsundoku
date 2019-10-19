@@ -13,6 +13,7 @@
       fill-opacity="0.3"
     />
   </svg>
+  <!-- eslint-disable-next-line vue/valid-template-root -->
   <svg
     v-else-if="props.arrowType === 'mobile-landscape'"
     width="100%"

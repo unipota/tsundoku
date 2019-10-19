@@ -1,6 +1,6 @@
 {
-  "name": "My App",
-  "short_name": "client",
+  "name": "ツンドク",
+  "short_name": "ツンドク",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

@@ -63,14 +63,15 @@ export default class App extends Vue {
     }
   }
 
-  mounted() {
+  async mounted() {
     this.$nextTick(() => {
       this.handleResizeWindow()
     })
     this.setLocale()
     window.addEventListener('resize', throttle(this.handleResizeWindow, 100))
     window.addEventListener('orientationchange', this.handleResizeWindow)
-    this.$store.dispatch('getMyBooks')
+    await this.$store.dispatch('whoAmI')
+    await this.$store.dispatch('getMyBooks')
   }
 }
 </script>

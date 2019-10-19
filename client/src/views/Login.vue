@@ -94,14 +94,12 @@ export default class Login extends Vue {
 <style lang="sass">
 .page-wrapper
   text-align: center
-  position: absolute
-  top: 0
-  left: 0
-  right: 0
   display: block
+  padding:
+    bottom: 32px
   .title-logo
     margin:
-      top: 102px
+      top: 48px
   .columns
     display: flex
     width: max-content

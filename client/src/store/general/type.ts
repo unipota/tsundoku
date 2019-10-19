@@ -17,6 +17,12 @@ export interface S {
   userId: string
   locale: string
   viewType: ViewType
+  userConfirmed: boolean
+  userLogined: boolean
+  userScreenName: string | undefined
+  userIconUrl: string | undefined
+  userCreatedAt: string | undefined
+  booksLoaded: boolean
   showMobileTopBar: boolean
   showMobileTabBar: boolean
   showDesktopNav: boolean
@@ -51,6 +57,12 @@ export interface M {
   setUserId: string
   setLocale: string
   setViewType: ViewType
+  setUserConfirmed: boolean
+  setUserLogined: boolean
+  setUserScreenName: string
+  setUserIconUrl: string
+  setUserCreatedAt: string
+  setBooksLoaded: boolean
   setShowMobileTopBar: boolean
   setShowMobileTabBar: boolean
   setShowDesktopNav: boolean
@@ -67,6 +79,7 @@ export type RM = {
 //
 // actions
 export interface A {
+  whoAmI: {}
   getMyBooks: {}
   getBookDetail: { id: string }
   searchBooksByISBN: { isbn: string }

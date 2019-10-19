@@ -80,7 +80,7 @@ export default class BooksEmpty extends Vue {
 
 .message-container
   position: absolute
-  top: calc(50% + 18vh)
+  top: calc(50% + 30px)
   left: 50%
   width: 100%
   transform: translate(-50%, -50%)
@@ -98,21 +98,16 @@ export default class BooksEmpty extends Vue {
   color: $text-gray
 
 .arrow-container--mobile
-  position: absolute
+  position: fixed
   display: none
   .is-mobile &
     display: block
 
-  bottom: 60px
-  max-width: 120px
-  right: 0
-  height: calc(50vw - 110px)
-  width: calc(50vw - 110px)
-
-  @media(min-height: 600px)
-    bottom: 0
-    top: calc(50% + 21vh)
-    transform: translateY(-50%)
+  right: 40px
+  bottom: calc(120px)
+  bottom: calc(env(safe-area-inset-bottom) + 120px)
+  height: 80px
+  width: 80px
 
   &.arrow-container--mobile--portrait
     display: none
@@ -123,11 +118,11 @@ export default class BooksEmpty extends Vue {
     display: none
     @media(orientation: landscape)
       display: block
-      bottom: 10px
-      max-width: 100vw
-      right: 60px
-      height: calc(50% - 40px)
-      width: calc(50% - 160px)
+      bottom: calc(120px)
+      bottom: calc(env(safe-area-inset-bottom) + 120px)
+      right: 90px
+      height: 40px
+      width: 160px
 
 .arrow-container--desktop
   position: absolute

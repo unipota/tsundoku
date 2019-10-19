@@ -1,7 +1,14 @@
 <template lang="pug">
   section.main-nav
-    .brand
-      icon(name="logo")
+    .tab-header
+      .brand
+        icon(name="logo")
+      router-link.setting(v-tooltip="'設定'" to="/user")
+        icon(name="setting" :width="32" :height="32")
+      router-link.user(v-if="!userLogined" v-tooltip="'新規登録/ログイン'" to="/login")
+        icon(name="user" :width="32" :height="32")
+      .user(v-else)
+        img(:src="userIconUrl")
     .tab-wrap
       desktop-tab(:selected-tab="selectedPath" :price="price")
     .button-wrap
@@ -20,6 +27,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
 
 import DesktopTab from '@/components/atoms/DesktopTab.vue'
 import DesktopNavButton from '@/components/atoms/DesktopNavButton.vue'
@@ -33,6 +41,8 @@ import Icon from '@/components/assets/Icon.vue'
   }
 })
 export default class DesktopNav extends Vue {
+  public $store!: ExStore
+
   get firstRouteName() {
     return this.$route.matched[0].path
   }
@@ -48,6 +58,12 @@ export default class DesktopNav extends Vue {
       ? this.$store.getters.kidokuPrice
       : 0
   }
+  get userLogined(): boolean {
+    return this.$store.state.userLogined
+  }
+  get userIconUrl(): string | undefined {
+    return this.$store.state.userIconUrl
+  }
 }
 </script>
 
@@ -55,14 +71,26 @@ export default class DesktopNav extends Vue {
 .main-nav
   width: 100%
   height: 100%
-.brand
+.tab-header
   display: flex
   justify-content: flex-start
   align-items: center
   height: 40px
   width: 100%
-  margin-bottom: 24px
-  padding: 0 32px
+  margin:
+    bottom: 24px
+  padding:
+    left: 32px
+.brand
+  margin:
+    right: auto
+.setting, .user
+  margin: 0 4px
+  cursor: pointer
+  opacity: 0.8
+  transition: opacity .3s
+  &:hover
+    opacity: 1
 .tab-wrap
   margin:
     top: 32px

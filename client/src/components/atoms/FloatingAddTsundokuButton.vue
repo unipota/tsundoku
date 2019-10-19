@@ -71,6 +71,8 @@ export default class FloatingAddTsundokuButton extends Vue {
   z-index: 2000
   right: 12px
   bottom: calc(63px + 12px)
+  @supports (bottom: env(safe-area-inset-bottom))
+    bottom: calc(env(safe-area-inset-bottom) + 63px + 12px)
   display: inline-flex
   flex-wrap: nowrap
   align-items: center

@@ -96,6 +96,8 @@ export default class MobileTabBar extends Vue {
   backdrop-filter: blur(4px)
   border:
     radius: 32px 32px 0 0
+  @supports (padding-bottom: env(safe-area-inset-bottom))
+    padding-bottom: calc(env(safe-area-inset-bottom))
 
   .tab-bar
     padding: 8px 36px

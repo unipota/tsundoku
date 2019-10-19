@@ -112,7 +112,7 @@ const routes: ViewDeclaration[] = [
   { view: 'tsundoku', path: '/', children: modalSubTree },
   { view: 'kidoku', children: modalSubTree },
   { view: 'toukei', children: modalSubTree },
-  { view: 'user' },
+  { view: 'user', children: modalSubTree },
   { view: 'login' },
   { view: 'notfound', path: '*' }
 ]

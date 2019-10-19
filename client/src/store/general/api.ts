@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { BookSimpleRecord, BookRecord, BookStats } from '@/types/Book'
+import { WhoAmIResponse } from '@/types/User'
 
 const isDev = process.env['NODE_ENV'] === 'development'
 
@@ -9,6 +10,9 @@ const client = axios.create({
 })
 
 const api = {
+  whoAmI(): Promise<AxiosResponse<WhoAmIResponse>> {
+    return client.get('api/users/me')
+  },
   getMyBooks(): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/books')
   },

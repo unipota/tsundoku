@@ -32,8 +32,8 @@ export default class ListController extends Vue {
 .list-controller
   padding:
     top: 16px
-    left: 16px
-    right: 16px
+    // left: 16px
+    // right: 16px
 
 .text-input-wrap
   max-width: 480px

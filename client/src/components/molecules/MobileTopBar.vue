@@ -6,7 +6,7 @@
       icon(name="setting" :width="32" :height="32")
     router-link.user(v-if="!userLogined" v-tooltip="'新規登録/ログイン'" to="/login")
       icon(name="user" :width="32" :height="32")
-    .user-icon(v-else)
+    .user-icon-wrap(v-else)
       user-icon(src="userIconUrl")
 </template>
 
@@ -54,7 +54,8 @@ export default class MobileTopBar extends Vue {
   align-items: center
   margin: 0 2px
 
-.user-icon
-  width: 32px
-  height: 32px
+.user-icon-wrap
+  width: 28px
+  height: 28px
+  margin: 0 2px
 </style>

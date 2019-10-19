@@ -87,7 +87,6 @@ export default class MobileTemplate extends Vue {
   position: fixed
   z-index: 1000
   bottom: 0
-  bottom: env(safe-area-inset-bottom)
   width: 100%
 
 .top-bar-wrap, .content-wrap, .tsundoku-button

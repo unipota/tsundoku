@@ -7,7 +7,7 @@
         icon(name="setting" :width="32" :height="32")
       router-link.user(v-if="!userLogined" v-tooltip="'新規登録/ログイン'" to="/login")
         icon(name="user" :width="32" :height="32")
-      .user-icon(v-else)
+      .user-icon-wrap(v-else)
         user-icon(:src="userIconUrl")
     .tab-wrap
       desktop-tab(:selected-tab="selectedPath" :price="price")
@@ -93,9 +93,10 @@ export default class DesktopNav extends Vue {
   transition: opacity .3s
   &:hover
     opacity: 1
-.user-icon
-  width: 32px
-  height: 32px
+.user-icon-wrap
+  width: 28px
+  height: 28px
+  margin: 0 4px
 .tab-wrap
   margin:
     top: 32px

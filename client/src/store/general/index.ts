@@ -15,6 +15,12 @@ export const state = (): S => ({
   userId: '',
   locale: 'ja',
   viewType: 'desktop',
+  userConfirmed: false,
+  userLogined: false,
+  userScreenName: undefined,
+  userIconUrl: undefined,
+  userCreatedAt: undefined,
+  booksLoaded: false,
   showMobileTopBar: true,
   showMobileTabBar: true,
   showDesktopNav: true,
@@ -101,6 +107,24 @@ export const mutations: Mutations<S, M> = {
   setViewType(state, viewType): void {
     state.viewType = viewType
   },
+  setUserConfirmed(state, userConfirmed): void {
+    state.userConfirmed = userConfirmed
+  },
+  setUserLogined(state, userLogined): void {
+    state.userLogined = userLogined
+  },
+  setUserScreenName(state, userScreenName): void {
+    state.userScreenName = userScreenName
+  },
+  setUserIconUrl(state, userIconUrl): void {
+    state.userIconUrl = userIconUrl
+  },
+  setUserCreatedAt(state, userCreatedAt): void {
+    state.userCreatedAt = userCreatedAt
+  },
+  setBooksLoaded(state, booksLoaded): void {
+    state.booksLoaded = booksLoaded
+  },
   setShowMobileTopBar(state, showMobileTopBar): void {
     state.showMobileTopBar = showMobileTopBar
   },
@@ -136,6 +160,23 @@ export const mutations: Mutations<S, M> = {
 // ______________________________________________________
 //
 export const actions: Actions<S, A, G, M> = {
+  whoAmI({ commit }): Promise<void> {
+    return new Promise((resolve, reject) => {
+      api.whoAmI().then(result => {
+        if (result.data) {
+          const { logined, screenName, iconUrl, createdAt } = result.data
+          commit('setUserLogined', logined)
+          commit('setUserScreenName', screenName)
+          commit('setUserIconUrl', iconUrl)
+          commit('setUserCreatedAt', createdAt)
+          commit('setUserConfirmed', true)
+          resolve()
+        } else {
+          reject()
+        }
+      })
+    })
+  },
   getMyBooks({ state, commit }): Promise<void> {
     return new Promise((resolve, reject) => {
       if (state.useMockBooksMap) {
@@ -145,6 +186,7 @@ export const actions: Actions<S, A, G, M> = {
         api.getMyBooks().then(result => {
           if (result.data) {
             commit('setBooksMap', result.data)
+            commit('setBooksLoaded', true)
             resolve()
           } else {
             reject()

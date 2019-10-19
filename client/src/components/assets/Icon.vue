@@ -32,6 +32,8 @@ import IconSearch from './IconSearch.vue'
 import IconToukei from './IconToukei.vue'
 import IconTsundoku from './IconTsundoku.vue'
 import IconTwitter from './IconTwitter.vue'
+import IconSetting from './IconSetting.vue'
+import IconUser from './IconUser.vue'
 
 @Component({
   components: {
@@ -55,7 +57,9 @@ import IconTwitter from './IconTwitter.vue'
     IconSearch,
     IconToukei,
     IconTsundoku,
-    IconTwitter
+    IconTwitter,
+    IconSetting,
+    IconUser
   }
 })
 export default class Icon extends Vue {

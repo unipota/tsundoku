@@ -3,8 +3,8 @@
     .currency-symbol ¥
     .price-body
       tweened-number(:num="price" formatLocal)
-    .menu-button
-      icon(name="down-arrow" :color="`var(--${currentColor})`")
+    //- .menu-button
+    //-   icon(name="down-arrow" :color="`var(--${currentColor})`")
 </template>
 
 <script lang="ts">

@@ -42,11 +42,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
-import AddBookCard from '@/components/molecules/AddBookCard.vue'
-import ModalFrame from '@/components/atoms/ModalFrame.vue'
-import { Carousel, Slide } from 'vue-carousel'
-
+import { ExStore } from 'vuex'
 import {
   BrowserBarcodeReader,
   BarcodeFormat,
@@ -54,7 +50,11 @@ import {
   Result
 } from '@zxing/library'
 import { BookRecord } from '../types/Book'
-import { ExStore } from 'vuex'
+import { Carousel, Slide } from 'vue-carousel'
+
+import AddBookScanBarcodeReader from '@/components/atoms/AddBookScanBarcodeReader.vue'
+import AddBookCard from '@/components/molecules/AddBookCard.vue'
+import ModalFrame from '@/components/atoms/ModalFrame.vue'
 
 const codeReader = new BrowserBarcodeReader(
   500,
@@ -118,6 +118,9 @@ export default class AddBooksScan extends Vue {
 
   cardShiftWidth = 0
 
+  requestAnimationFrameID = 0
+  stream: MediaStream | null = null
+
   async mounted() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(window as any).addByIsbn = (isbn: string) =>
@@ -144,7 +147,7 @@ export default class AddBooksScan extends Vue {
       return
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia({
+    this.stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: {
           ideal: 'environment'
@@ -152,7 +155,7 @@ export default class AddBooksScan extends Vue {
       },
       audio: false
     })
-    video.srcObject = stream
+    video.srcObject = this.stream
 
     await this.$nextTick()
 
@@ -211,7 +214,7 @@ export default class AddBooksScan extends Vue {
         return
       }
       ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
-      requestAnimationFrame(draw)
+      this.requestAnimationFrameID = requestAnimationFrame(draw)
     }
 
     this.captureIntervalID = window.setInterval(async () => {
@@ -226,8 +229,14 @@ export default class AddBooksScan extends Vue {
   }
 
   beforeDestroy() {
-    codeReader.reset()
+    cancelAnimationFrame(this.requestAnimationFrameID)
     clearInterval(this.captureIntervalID)
+    codeReader.reset()
+    if (this.stream) {
+      this.stream.getVideoTracks().forEach((track: MediaStreamTrack) => {
+        track.stop()
+      })
+    }
   }
 
   setScanState(state: ScanState) {
@@ -292,12 +301,12 @@ export default class AddBooksScan extends Vue {
     await this.$nextTick()
     this.searchingCount -= 1
 
-    if (searchResult.data.length !== 1) {
+    if (searchResult.length !== 1) {
       this.setScanState('noresult')
       return
     }
     if (!(isbn in this.scannedBooksMap)) {
-      this.addCard(searchResult.data[0])
+      this.addCard(searchResult[0])
     }
   }
 

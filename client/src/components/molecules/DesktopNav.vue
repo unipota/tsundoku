@@ -7,8 +7,8 @@
         icon(name="setting" :width="32" :height="32")
       router-link.user(v-if="!userLogined" v-tooltip="'新規登録/ログイン'" to="/login")
         icon(name="user" :width="32" :height="32")
-      .user(v-else)
-        img(:src="userIconUrl")
+      .user-icon(v-else)
+        user-icon(:src="userIconUrl")
     .tab-wrap
       desktop-tab(:selected-tab="selectedPath" :price="price")
     .button-wrap
@@ -32,10 +32,12 @@ import { ExStore } from 'vuex'
 import DesktopTab from '@/components/atoms/DesktopTab.vue'
 import DesktopNavButton from '@/components/atoms/DesktopNavButton.vue'
 import Icon from '@/components/assets/Icon.vue'
+import UserIcon from '@/components/atoms/UserIcon.vue'
 
 @Component({
   components: {
     Icon,
+    UserIcon,
     DesktopTab,
     DesktopNavButton
   }
@@ -91,6 +93,9 @@ export default class DesktopNav extends Vue {
   transition: opacity .3s
   &:hover
     opacity: 1
+.user-icon
+  width: 32px
+  height: 32px
 .tab-wrap
   margin:
     top: 32px

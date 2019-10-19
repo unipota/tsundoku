@@ -1,6 +1,6 @@
 <template lang="pug">
   .user-icon
-    img(v-if="imageSrc" :src="imageSrc")
+    img(v-if="src" :src="src")
 </template>
 
 <script lang="ts">

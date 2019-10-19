@@ -8,14 +8,14 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component
 export default class UserIcon extends Vue {
-  @Prop({ type: String, default: '' }) readonly imageSrc!: string
+  @Prop({ type: String, default: '' }) readonly src!: string
 }
 </script>
 
 <style lang="sass" scoped>
 .user-icon
-  width: 48px
-  height: 48px
+  width: 100%
+  height: 100%
   border:
     radius: 100%
   background: var(--text-gray)

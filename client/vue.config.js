@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/camelcase */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-
 module.exports = {
   css: {
     loaderOptions: {
       // pass options to sass-loader
       sass: {
         // import `src/style/_main.sass` to all components
-        data: '@import "~@/style/_main.sass"'
+        prependData: '@import "~@/style/_main.sass"'
       }
     }
   },
@@ -31,7 +27,7 @@ module.exports = {
         }
       ]
     },
-    plugins: [new ForkTsCheckerWebpackPlugin()]
+    plugins: []
   },
 
   devServer: {

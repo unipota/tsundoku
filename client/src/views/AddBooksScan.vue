@@ -428,7 +428,7 @@ export default class AddBooksScan extends Vue {
   max-width: 400px
 
   margin:
-    top: 32px
+    top: 48px
     left: 16px
     bottom: 0
     right: 16px

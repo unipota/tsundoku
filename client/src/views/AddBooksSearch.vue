@@ -10,6 +10,7 @@
       icon(name="search" color="var(--text-gray)" :width="18" :height="18")
     template(v-if="isFirstView")
       book-cover(:hasShadow="true")
+      .anim-container(ref="anim-container")
     template(v-else)
       router-link.edit-yourself(
         v-show="showEditBar"
@@ -36,6 +37,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookSimpleRecord } from '../types/Book'
+import lottie from 'lottie-web/build/player/lottie_light'
 
 import Icon from '@/components/assets/Icon.vue'
 import EditButton from '@/components/atoms/EditButton.vue'
@@ -75,6 +77,18 @@ export default class AddBooksSearch extends Vue {
 
   get firstRouteName() {
     return this.$route.matched[0].path
+  }
+
+  mounted() {
+    const anim = lottie.loadAnimation({
+      container: this.$refs['anim-container'] as Element,
+      renderer: 'svg',
+      loop: true,
+      autoplay: false,
+      path: 'json/tsundoku.json'
+    })
+    anim.setSpeed(0.8)
+    // anim.play()
   }
 
   submitSearchQuery() {
@@ -133,4 +147,8 @@ export default class AddBooksSearch extends Vue {
       height: 1px
       width: 85%
       border-bottom: 2px solid var(--bg-gray)
+
+.anim-container
+  width: 100px
+  height: 100px
 </style>

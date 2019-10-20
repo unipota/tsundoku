@@ -48,8 +48,12 @@ export default class DesktopTemplate extends Vue {
   left: 0
   top: 0
   width: 320px
+  height: 100%
   padding: 24px
   flex-shrink: 0
+
+  // border:
+  //   right: solid 1px var(--border-gray)
 
   transition: filter 0.5s $easeInOutQuint
   .modal-shown &
@@ -60,9 +64,6 @@ export default class DesktopTemplate extends Vue {
   min-height: 100%
   margin:
     left: 320px
-  padding:
-    top: 24px
-    bottom: 24px
 
   .modal-shown &
     pointer-events: none // for iOS safari

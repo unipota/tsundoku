@@ -79,7 +79,7 @@ export default class App extends Vue {
     const isDark: MediaQueryList = window.matchMedia(
       '(prefers-color-scheme: dark)'
     )
-    isDark.addEventListener('change', this.toggleThemeType)
+    isDark.addListener(this.toggleThemeType)
     this.toggleThemeType(isDark)
     await this.$store.dispatch('whoAmI')
     await this.$store.dispatch('getMyBooks')

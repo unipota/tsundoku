@@ -544,7 +544,7 @@ $cover-transition-duration: 0.3s
 
 .cancel
   font-weight: bold
-  color: $text-gray
+  color: var(--text-gray)
   display: flex
   justify-content: center
   align-items: center

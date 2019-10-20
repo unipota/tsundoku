@@ -37,6 +37,8 @@ import IconSetting from './IconSetting.vue'
 import IconUser from './IconUser.vue'
 import IconDownArrow2 from './IconDownArrow2.vue'
 import IconUpArrow2 from './IconUpArrow2.vue'
+import IconList from './IconList.vue'
+import IconGrid from './IconGrid.vue'
 
 @Component({
   components: {
@@ -64,7 +66,9 @@ import IconUpArrow2 from './IconUpArrow2.vue'
     IconSetting,
     IconUser,
     IconDownArrow2,
-    IconUpArrow2
+    IconUpArrow2,
+    IconList,
+    IconGrid
   }
 })
 export default class Icon extends Vue {

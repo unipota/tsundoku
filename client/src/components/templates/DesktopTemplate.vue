@@ -60,10 +60,13 @@ export default class DesktopTemplate extends Vue {
     // filter: blur(1px)
 
 .content-wrap
-  width: 100%
+  width: 100vw
   min-height: 100%
   margin:
     left: 320px
+  overflow:
+    x: hidden
+    y: scroll
 
   .modal-shown &
     pointer-events: none // for iOS safari

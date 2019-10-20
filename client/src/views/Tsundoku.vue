@@ -2,15 +2,22 @@
   .tsundoku
     portal(to="priceDisplay")
       price-display(key="price-display" tsundoku :price="tsundokuPrice")
+    .view-header-container(v-if="!isEmpty")
+      list-controller(:filterText.sync="filterText")
+    .controller-container(v-if="!isEmpty")
+      .books-number
+        | {{booksNumber}}冊
+      sort-by(
+        :items="sortItems" 
+        @change="handleChangeSortBy"
+        @toggle="handleChangeIsDesc")
+    .empty(v-if="isEmpty" key="empty")
+      books-empty(name="tsundoku")
     transition-group.view(
+      v-else
       tag="div" 
       name="transition-item")
-      .view-header-container(v-if="!isEmpty" key="header")
-        list-controller(:filterText.sync="filterText")
-      .empty(v-if="isEmpty" key="empty")
-        books-empty(name="tsundoku")
       .list-item-container(
-        v-else
         v-for="book in filteredBooks"
         :key="book.id")
         book-list-item(:book="book")
@@ -24,9 +31,16 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import Fuse from 'fuse.js'
 import { kanaToHira } from '@/utils/string'
+import {
+  comparePrice,
+  compareTsundokuPrice,
+  compareUpdatedAt,
+  compareTotalPages
+} from '@/utils/sort'
 import { BookRecord } from '../types/Book'
 
 import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
+import SortBy from '@/components/atoms/SortBy.vue'
 import ListController from '@/components/molecules/ListController.vue'
 import BooksEmpty from '@/components/molecules/BooksEmpty.vue'
 import BookListItem from '@/components/organs/BookListItem.vue'
@@ -45,12 +59,17 @@ const options: Fuse.FuseOptions<FilterTargetBookRecord> = {
     PriceDisplay,
     ListController,
     BooksEmpty,
-    BookListItem
+    BookListItem,
+    SortBy
   }
 })
 export default class Tsundoku extends Vue {
   public $store!: ExStore
   filterText: string = ''
+
+  sortItems: string[] = ['購入価格', 'ツンドク残額', '総ページ数', '更新日']
+  sortItemId: number = 0
+  sortIsDesc: boolean = true
 
   get books(): BookRecord[] {
     return this.$store.getters.tsundokuBooks
@@ -79,10 +98,34 @@ export default class Tsundoku extends Vue {
       .map(book => book.id)
   }
   get filteredBooks() {
-    return this.books.filter(book => this.filteredIds.includes(book.id))
+    return this.books
+      .filter(book => this.filteredIds.includes(book.id))
+      .sort(this.compareFunction)
+  }
+  get booksNumber() {
+    return this.filteredBooks.length
   }
   get isEmpty() {
     return this.books.length === 0
+  }
+  get compareFunction() {
+    switch (this.sortItemId) {
+      case 0:
+        return comparePrice(this.sortIsDesc)
+      case 1:
+        return compareTsundokuPrice(this.sortIsDesc)
+      case 2:
+        return compareTotalPages(this.sortIsDesc)
+      case 3:
+        return compareUpdatedAt(this.sortIsDesc)
+    }
+  }
+
+  handleChangeSortBy(id: number) {
+    this.sortItemId = id
+  }
+  handleChangeIsDesc(isDesc: boolean) {
+    this.sortIsDesc = isDesc
   }
 }
 </script>
@@ -90,17 +133,45 @@ export default class Tsundoku extends Vue {
 <style lang="sass" scoped>
 .tsundoku
   width: 100%
+  padding:
+    bottom: 24px
 
 .view-header-container
+  .view-desktop &
+    position: sticky
+    z-index: 100
+    top: 0
+  background: var(--bg-white)
   width: 100%
+  padding:
+    top: 8px
+    left: 5%
+    right: 5%
+    bottom: 12px
+  // border:
+  //   bottom: solid 1px var(--border-gray)
+
+.controller-container
+  display: flex
+  justify-content: space-between
+  padding:
+    top: 12px
+    left: calc(5% + 6px)
+    right: calc(5% + 6px)
+
+.books-number
+  font:
+    weight: bold
+    size: 16px
+  color: var(--text-gray)
 
 .empty
   width: 100%
 
 .view
   position: relative
-  max-width: 100%
-  margin:
+  width: 100%
+  padding:
     left: 5%
     right: 5%
 

@@ -9,6 +9,8 @@ import {
 type ViewType = 'mobile' | 'desktop'
 type ViewTypeClass = 'is-mobile' | 'is-desktop'
 type ModalTransitionClass = 'translate-y' | 'translate-x'
+type ThemeType = 'light' | 'dark'
+type ThemeSetting = 'light' | 'dark' | 'auto'
 
 // ______________________________________________________
 //
@@ -17,6 +19,8 @@ export interface S {
   userId: string
   locale: string
   viewType: ViewType
+  currentTheme: ThemeType
+  themeSetting: ThemeSetting
   userConfirmed: boolean
   userLogined: boolean
   userScreenName: string | undefined
@@ -57,6 +61,7 @@ export interface M {
   setUserId: string
   setLocale: string
   setViewType: ViewType
+  setCurrentTheme: ThemeType
   setUserConfirmed: boolean
   setUserLogined: boolean
   setUserScreenName: string

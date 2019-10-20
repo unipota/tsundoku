@@ -47,13 +47,13 @@ $height: 8px
   position: relative
   width: 100%
   height: $height
-  background-color: $border-gray
+  background-color: var(--border-gray)
   border-radius: 100vw
   overflow: hidden
 
 .progress, .edited-progress
   height: $height
-  background-color: $kidoku-blue
+  background-color: var(--kidoku-blue)
   border-radius: 100vw
   position: absolute
   top: 0

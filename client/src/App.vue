@@ -63,13 +63,24 @@ export default class App extends Vue {
     }
   }
 
+  toggleThemeType(mql: MediaQueryListEvent | MediaQueryList) {
+    if (mql.matches) {
+      this.$store.commit('setCurrentTheme', 'dark')
+    } else {
+      this.$store.commit('setCurrentTheme', 'light')
+    }
+  }
+
   async mounted() {
-    this.$nextTick(() => {
-      this.handleResizeWindow()
-    })
+    this.handleResizeWindow()
     this.setLocale()
     window.addEventListener('resize', throttle(this.handleResizeWindow, 100))
     window.addEventListener('orientationchange', this.handleResizeWindow)
+    const isDark: MediaQueryList = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    )
+    isDark.addEventListener('change', this.toggleThemeType)
+    this.toggleThemeType(isDark)
     await this.$store.dispatch('whoAmI')
     await this.$store.dispatch('getMyBooks')
   }

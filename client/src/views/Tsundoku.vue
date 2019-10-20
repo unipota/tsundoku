@@ -11,16 +11,23 @@
         :items="sortItems" 
         @change="handleChangeSortBy"
         @toggle="handleChangeIsDesc")
+      view-mode.view-mode-icon(v-model="isList")
     .empty(v-if="isEmpty" key="empty")
       books-empty(name="tsundoku")
     transition-group.view(
       v-else
       tag="div" 
       name="transition-item")
-      .list-item-container(
-        v-for="book in filteredBooks"
-        :key="book.id")
-        book-list-item(:book="book")
+      template(v-if="isList")
+        .list-item-container(
+          v-for="book in filteredBooks"
+          :key="book.id")
+          book-list-item(:book="book")
+      template(v-else)
+        .grid-item-container(
+          v-for="book in filteredBooks"
+          :key="book.id")
+          book-grid-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
         router-view
@@ -41,9 +48,11 @@ import { BookRecord } from '../types/Book'
 
 import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
 import SortBy from '@/components/atoms/SortBy.vue'
+import ViewMode from '@/components/atoms/ViewMode.vue'
 import ListController from '@/components/molecules/ListController.vue'
 import BooksEmpty from '@/components/molecules/BooksEmpty.vue'
 import BookListItem from '@/components/organs/BookListItem.vue'
+import BookGridItem from '@/components/organs/BookGridItem.vue'
 
 type FilterTargetBookRecord = Pick<
   BookRecord,
@@ -60,7 +69,9 @@ const options: Fuse.FuseOptions<FilterTargetBookRecord> = {
     ListController,
     BooksEmpty,
     BookListItem,
-    SortBy
+    BookGridItem,
+    SortBy,
+    ViewMode
   }
 })
 export default class Tsundoku extends Vue {
@@ -70,6 +81,8 @@ export default class Tsundoku extends Vue {
   sortItems: string[] = ['購入価格', 'ツンドク残額', '総ページ数', '更新日']
   sortItemId: number = 0
   sortIsDesc: boolean = true
+
+  isList: boolean = true
 
   get books(): BookRecord[] {
     return this.$store.getters.tsundokuBooks
@@ -153,9 +166,9 @@ export default class Tsundoku extends Vue {
 
 .controller-container
   display: flex
-  justify-content: space-between
+  justify-content: flex-end
   padding:
-    top: 12px
+    top: 4px
     left: calc(5% + 6px)
     right: calc(5% + 6px)
 
@@ -164,12 +177,20 @@ export default class Tsundoku extends Vue {
     weight: bold
     size: 16px
   color: var(--text-gray)
+  margin:
+    right: auto
+
+.view-mode-icon
+  margin:
+    left: 18px
 
 .empty
   width: 100%
 
 .view
   position: relative
+  display: flex
+  flex-wrap: wrap
   width: 100%
   padding:
     left: 5%

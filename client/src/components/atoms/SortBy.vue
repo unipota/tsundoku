@@ -85,7 +85,7 @@ export default class SortBy extends Vue {
   justify-content: center
   align-items: center
   margin:
-    left: 16px
+    left: 8px
     bottom: 2px
   cursor: pointer
   transform: rotate(-180deg)

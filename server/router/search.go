@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/seihmd/openbd"
 	"google.golang.org/api/books/v1"
 )
 
@@ -208,6 +209,18 @@ func searchWithRakuten(values url.Values) (*RakutenBooks, error) {
 	return books, nil
 }
 
+func searchWithOpenBD(isbn string) (*openbd.Book, error) {
+	o := openbd.New()
+
+	book, err := o.Get(isbn)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return book, nil
+}
+
 func rakutenBook2SearchedBook(book *RakutenBook) *SearchedBook {
 	searchedBook := &SearchedBook{
 		ID:            "",
@@ -256,6 +269,34 @@ func rakutenBooks2SearchedBooks(books *RakutenBooks) []*SearchedBook {
 	return searchedBooks
 }
 
+func openBDBook2SearchedBook(book *openbd.Book) *SearchedBook {
+	searchedBook := &SearchedBook{
+		ID:            "",
+		ISBN:          book.GetISBN(),
+		Title:         book.GetTitle(),
+		Price:         0,
+		Caption:       "",
+		Publisher:     book.GetPublisher(),
+		CoverImageURL: book.GetCover(),
+	}
+
+	authorList := make([]string, 0)
+	authors := strings.Split(book.GetAuthor(), "/")
+	for _, author := range authors {
+		if author != "" {
+			authorList = append(authorList, author)
+		}
+	}
+	searchedBook.Author = authorList
+
+	if len(book.ProductSupply.SupplyDetail.Price) > 0 {
+		price, _ := book.ProductSupply.SupplyDetail.Price[0].PriceAmount.Int64()
+		searchedBook.Price = int(price)
+	}
+
+	return searchedBook
+}
+
 func withGoogle(isIsbn bool, searchWord string, searchedBooksChan chan []*SearchedBook) {
 	values := url.Values{}
 
@@ -290,16 +331,32 @@ func withRakuten(isIsbn bool, searchWord string, searchedBooksChan chan []*Searc
 	searchedBooksChan <- rakutenBooks2SearchedBooks(rakutenBooks)
 }
 
+func withOpenBD(isIsbn bool, searchWord string, searchedBookChan chan *SearchedBook) {
+	if !isIsbn {
+		searchedBookChan <- nil
+	}
+
+	openBDBook, err := searchWithOpenBD(searchWord)
+	if err != nil {
+		searchedBookChan <- nil
+	}
+
+	searchedBookChan <- openBDBook2SearchedBook(openBDBook)
+}
+
 func searchBooks(isIsbn bool, searchWord string) []*SearchedBook {
 	googleChan := make(chan []*SearchedBook)
 	rakutenChan := make(chan []*SearchedBook)
+	openBDChan := make(chan *SearchedBook)
 
 	go withGoogle(isIsbn, searchWord, googleChan)
 	go withRakuten(isIsbn, searchWord, rakutenChan)
+	go withOpenBD(isIsbn, searchWord, openBDChan)
 	googleBooks := <-googleChan
 	rakutenBooks := <-rakutenChan
+	openBDBook := <-openBDChan
 
-	return mergeSearchedBooks(rakutenBooks, googleBooks)
+	return mergeSearchedBooks(rakutenBooks, googleBooks, openBDBook)
 }
 
 func mergeBookRecord(mainBook *SearchedBook, subBook *SearchedBook) *SearchedBook {
@@ -322,7 +379,7 @@ func mergeBookRecord(mainBook *SearchedBook, subBook *SearchedBook) *SearchedBoo
 	return mainBook
 }
 
-func mergeSearchedBooks(mainBooks []*SearchedBook, subBooks []*SearchedBook) []*SearchedBook {
+func mergeSearchedBooks(mainBooks []*SearchedBook, subBooks []*SearchedBook, subBook2 *SearchedBook) []*SearchedBook {
 	searchedBooks := make([]*SearchedBook, 0)
 
 	for _, mainBook := range mainBooks {
@@ -343,6 +400,10 @@ func mergeSearchedBooks(mainBooks []*SearchedBook, subBooks []*SearchedBook) []*
 			}
 		}
 		searchedBooks = append(searchedBooks, searchedBook)
+	}
+
+	if len(mainBooks) == 0 {
+		searchedBooks = append(searchedBooks, subBook2)
 	}
 
 	return searchedBooks

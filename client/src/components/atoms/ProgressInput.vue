@@ -115,7 +115,7 @@ export default class ProgressInput extends Vue {
   border:
     radius: 9999vw
   background:
-    color: $text-gray
+    color: var(--text-gray)
   cursor: pointer
   transition: background-color .5s
 

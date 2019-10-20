@@ -15,6 +15,8 @@ export const state = (): S => ({
   userId: '',
   locale: 'ja',
   viewType: 'desktop',
+  currentTheme: 'light',
+  themeSetting: 'auto',
   userConfirmed: false,
   userLogined: false,
   userScreenName: undefined,
@@ -106,6 +108,9 @@ export const mutations: Mutations<S, M> = {
   },
   setViewType(state, viewType): void {
     state.viewType = viewType
+  },
+  setCurrentTheme(state, themeType): void {
+    state.currentTheme = themeType
   },
   setUserConfirmed(state, userConfirmed): void {
     state.userConfirmed = userConfirmed

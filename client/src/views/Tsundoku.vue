@@ -14,20 +14,21 @@
       view-mode.view-mode-icon(v-model="isList")
     .empty(v-if="isEmpty" key="empty")
       books-empty(name="tsundoku")
-    transition-group.view(
-      v-else
-      tag="div" 
-      name="transition-item")
-      template(v-if="isList")
-        .list-item-container(
-          v-for="book in filteredBooks"
-          :key="book.id")
-          book-list-item(:book="book")
-      template(v-else)
-        .grid-item-container(
-          v-for="book in filteredBooks"
-          :key="book.id")
-          book-grid-item(:book="book")
+    .view(v-else)
+      transition-group.inner-view(
+        tag="div" 
+        name="transition-item"
+        :style="innerViewStyle")
+        template(v-if="isList")
+          .list-item-container(
+            v-for="book in filteredBooks"
+            :key="book.id")
+            book-list-item(:book="book")
+        template(v-else)
+          .grid-item-container(
+            v-for="book in filteredBooks"
+            :key="book.id")
+            book-grid-item(:book="book")
     portal(to="modalView")
       transition(name="modal-show")
         router-view
@@ -45,6 +46,7 @@ import {
   compareTotalPages
 } from '@/utils/sort'
 import { BookRecord } from '../types/Book'
+import { throttle } from 'lodash'
 
 import PriceDisplay from '@/components/atoms/PriceDisplay.vue'
 import SortBy from '@/components/atoms/SortBy.vue'
@@ -78,12 +80,32 @@ export default class Tsundoku extends Vue {
   public $store!: ExStore
   filterText: string = ''
 
-  sortItems: string[] = ['購入価格', 'ツンドク残額', '総ページ数', '更新日']
+  sortItems: string[] = ['ツンドク残額', '購入価格', '総ページ数', '更新日']
   sortItemId: number = 0
   sortIsDesc: boolean = true
 
   isList: boolean = true
+  gridColumnNum: number = 0
 
+  mounted() {
+    window.addEventListener('resize', throttle(this.handleResizeWindow, 100))
+    window.addEventListener('orientationchange', this.handleResizeWindow)
+    this.$nextTick(() => {
+      this.handleResizeWindow()
+    })
+  }
+
+  handleResizeWindow() {
+    this.gridColumnNum = Math.floor(
+      (this.$el.getBoundingClientRect().width * 0.9) / 136
+    )
+  }
+
+  get innerViewStyle() {
+    return {
+      width: this.isList ? '' : `${136 * this.gridColumnNum}px`
+    }
+  }
   get books(): BookRecord[] {
     return this.$store.getters.tsundokuBooks
   }
@@ -124,9 +146,9 @@ export default class Tsundoku extends Vue {
   get compareFunction() {
     switch (this.sortItemId) {
       case 0:
-        return comparePrice(this.sortIsDesc)
-      case 1:
         return compareTsundokuPrice(this.sortIsDesc)
+      case 1:
+        return comparePrice(this.sortIsDesc)
       case 2:
         return compareTotalPages(this.sortIsDesc)
       case 3:
@@ -188,13 +210,17 @@ export default class Tsundoku extends Vue {
   width: 100%
 
 .view
-  position: relative
-  display: flex
-  flex-wrap: wrap
   width: 100%
   padding:
     left: 5%
     right: 5%
+
+.inner-view
+  position: relative
+  display: flex
+  flex-wrap: wrap
+  width: 100%
+  margin: 0 auto
 
 .list-item-container
   margin:

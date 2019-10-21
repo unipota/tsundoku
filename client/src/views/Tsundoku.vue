@@ -80,7 +80,7 @@ export default class Tsundoku extends Vue {
   public $store!: ExStore
   filterText: string = ''
 
-  sortItems: string[] = ['ツンドク残額', '購入価格', '総ページ数', '更新日']
+  sortItems: string[] = ['ツンドク残額', '購入価格', '総ページ数', '最終更新']
   sortItemId: number = 0
   sortIsDesc: boolean = true
 

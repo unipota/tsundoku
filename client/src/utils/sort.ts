@@ -31,7 +31,7 @@ export const compareUpdatedAt = (
   b: BookRecord
 ): number => {
   return (
-    (dayjs(b.updatedAt).unix() - dayjs(a.updatedAt).unix()) * (isDesc ? -1 : 1)
+    (dayjs(a.updatedAt).unix() - dayjs(b.updatedAt).unix()) * (isDesc ? -1 : 1)
   )
 }
 

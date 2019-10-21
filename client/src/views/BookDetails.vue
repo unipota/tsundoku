@@ -56,7 +56,7 @@
                 :name="$t('totalPages')"
                 :value="`${totalPages}p`")
               book-details-item.item(
-                name="最終更新日"
+                name="最終更新"
                 :value="relativeTime")
               book-details-item.item(
                 textarea
@@ -140,7 +140,7 @@ export default class BookDetails extends Vue {
     }
     this.editingBook = { ...this.book }
 
-    dayjs.locale(this.locale)
+    dayjs.locale(this.$store.state.locale)
   }
 
   public async mounted() {
@@ -259,11 +259,6 @@ export default class BookDetails extends Vue {
   public async onDeleteClick() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
     this.$router.push({ name: this.selectedPath })
-  }
-
-  @Watch('locale')
-  onLocaleChanged() {
-    dayjs.locale(this.locale)
   }
 
   @Watch('isEditing')

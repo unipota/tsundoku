@@ -56,8 +56,8 @@
                 :name="$t('totalPages')"
                 :value="`${totalPages}p`")
               book-details-item.item(
-                name="最後に読んだ日"
-                value="0日前")
+                name="最終更新日"
+                :value="relativeTime")
               book-details-item.item(
                 textarea
                 clickable
@@ -80,6 +80,9 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookRecord } from '../types/Book'
 import { tsundokuPrice } from '@/utils/tsundoku'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/ja'
 
 import BookInfoEditButton from '@/components/atoms/BookInfoEditButton.vue'
 import BookDetailsActionButton from '@/components/atoms/BookDetailsActionButton.vue'
@@ -89,6 +92,8 @@ import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookInfoEdit from '@/components/organs/BookInfoEdit.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
+
+dayjs.extend(relativeTime)
 
 const initialHeaderHeight = 200
 const slimHeaderHeight = 120
@@ -134,6 +139,8 @@ export default class BookDetails extends Vue {
       return
     }
     this.editingBook = { ...this.book }
+
+    dayjs.locale(this.locale)
   }
 
   public async mounted() {
@@ -252,6 +259,11 @@ export default class BookDetails extends Vue {
   public async onDeleteClick() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
     this.$router.push({ name: this.selectedPath })
+  }
+
+  @Watch('locale')
+  onLocaleChanged() {
+    dayjs.locale(this.locale)
   }
 
   @Watch('isEditing')
@@ -378,6 +390,10 @@ export default class BookDetails extends Vue {
       this.book.totalPages,
       this.book.price
     )
+  }
+
+  get relativeTime(): string {
+    return dayjs(this.book.updatedAt).fromNow()
   }
 }
 </script>

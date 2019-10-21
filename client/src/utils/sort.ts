@@ -8,7 +8,7 @@ export const comparePrice = (
   a: BookRecord,
   b: BookRecord
 ): number => {
-  return (a.price - b.price) * (isDesc ? 1 : -1)
+  return (a.price - b.price) * (isDesc ? -1 : 1)
 }
 
 export const compareTsundokuPrice = (
@@ -20,7 +20,7 @@ export const compareTsundokuPrice = (
   return (
     (tsundokuPrice(a.readPages, a.totalPages, a.price) -
       tsundokuPrice(b.readPages, b.totalPages, b.price)) *
-    (isDesc ? 1 : -1)
+    (isDesc ? -1 : 1)
   )
 }
 
@@ -31,7 +31,7 @@ export const compareUpdatedAt = (
   b: BookRecord
 ): number => {
   return (
-    (dayjs(b.updatedAt).unix() - dayjs(a.updatedAt).unix()) * (isDesc ? 1 : -1)
+    (dayjs(b.updatedAt).unix() - dayjs(a.updatedAt).unix()) * (isDesc ? -1 : 1)
   )
 }
 
@@ -41,5 +41,5 @@ export const compareTotalPages = (
   a: BookRecord,
   b: BookRecord
 ): number => {
-  return (a.totalPages - b.totalPages) * (isDesc ? 1 : -1)
+  return (a.totalPages - b.totalPages) * (isDesc ? -1 : 1)
 }

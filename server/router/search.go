@@ -402,7 +402,7 @@ func mergeSearchedBooks(mainBooks []*SearchedBook, subBooks []*SearchedBook, sub
 		searchedBooks = append(searchedBooks, searchedBook)
 	}
 
-	if len(mainBooks) == 0 {
+	if len(mainBooks) == 0 && subBook2 != nil {
 		searchedBooks = append(searchedBooks, subBook2)
 	}
 

@@ -6,12 +6,8 @@ import AddBooksSearch from './views/AddBooksSearch.vue'
 import BookDetails from './views/BookDetails.vue'
 import Kidoku from './views/Kidoku.vue'
 import NotFound from './views/NotFound.vue'
-import Login from './views/Login.vue'
 import Toukei from './views/Toukei.vue'
 import Tsundoku from './views/Tsundoku.vue'
-import UserDetails from './views/UserDetails.vue'
-import Privacy from './views/Privacy.vue'
-import Term from './views/Term.vue'
 import { VueConstructor } from 'vue'
 import { RouteConfig } from 'vue-router'
 
@@ -27,10 +23,6 @@ export type ViewNames =
   | 'addBooksEdit'
   | 'bookDetails'
   | 'bookDetailsEdit'
-  | 'login'
-  | 'user'
-  | 'privacy'
-  | 'term'
   | 'notfound'
 
 type ViewNamesToComponentMap = {
@@ -86,10 +78,6 @@ const viewNamesToComponentMap: ViewNamesToComponentMap = {
   addBooksEdit: AddBooksEdit,
   bookDetails: BookDetails,
   bookDetailsEdit: BookDetails,
-  login: Login,
-  user: UserDetails,
-  privacy: Privacy,
-  term: Term,
   notfound: NotFound
 }
 
@@ -112,8 +100,6 @@ const routes: ViewDeclaration[] = [
   { view: 'tsundoku', path: '/', children: modalSubTree },
   { view: 'kidoku', children: modalSubTree },
   { view: 'toukei', children: modalSubTree },
-  { view: 'user', children: modalSubTree },
-  { view: 'login' },
   { view: 'notfound', path: '*' }
 ]
 

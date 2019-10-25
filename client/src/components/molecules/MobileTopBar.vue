@@ -2,10 +2,8 @@
   .mobile-top-bar
     .price-display
       portal-target(name="priceDisplay")
-    router-link.setting(v-tooltip="'設定'" to="/user")
-      icon(name="setting" :width="32" :height="32")
-    router-link.user(v-if="!userLogined" v-tooltip="'新規登録/ログイン'" to="/login")
-      icon(name="user" :width="32" :height="32")
+    setting-button.setting
+    user-button.user(v-if="!userLogined")
     .user-icon-wrap(v-else)
       user-icon(:src="userIconUrl")
 </template>
@@ -15,10 +13,11 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import UserIcon from '@/components/atoms/UserIcon.vue'
-import Icon from '@/components/assets/Icon.vue'
+import SettingButton from '@/components/atoms/SettingButton.vue'
+import UserButton from '@/components/atoms/UserButton.vue'
 
 @Component({
-  components: { UserIcon, Icon }
+  components: { UserIcon, SettingButton, UserButton }
 })
 export default class MobileTopBar extends Vue {
   public $store!: ExStore

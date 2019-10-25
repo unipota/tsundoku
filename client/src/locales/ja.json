@@ -19,6 +19,7 @@
 
   "add_by_searching": "検索して積む",
   "add_by_scanning": "スキャンして積む",
+  "add_by_edit": "入力して積む",
 
   "scan_message_scanning": "バーコードをスキャンしてください",
   "scan_message_searching": "検索しています…",

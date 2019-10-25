@@ -66,7 +66,7 @@ export default class BookInfoEditButton extends Vue {
   get iconCheckSize() {
     switch (this.size) {
       case 'large':
-        return 20
+        return 14
         break
       case 'small':
         return 14
@@ -105,6 +105,8 @@ export default class BookInfoEditButton extends Vue {
   display: flex
   padding:
     top: 2px
+  transition: border .3s
+
   .add-tsundoku-button
     margin: 0 auto
     display: flex
@@ -119,8 +121,7 @@ export default class BookInfoEditButton extends Vue {
     .text
       font-size: 13px
   &.is-large
-    // width: 166px
-    padding: 0 12px
+    padding: 0 8px
     height: 36px
     border-width: 4px
     .text

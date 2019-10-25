@@ -1,7 +1,9 @@
 <template lang="pug">
-  .view-desktop(:class="{ 'modal-shown': $route.meta.isModal }")
+  .view-desktop(:class="{ 'modal-shown': modalShown }")
+    .popup-modal-wrap
+      popup-modal
     portal-target.modal-wrap(name="modalView")
-    .modal-overlay
+    .modal-overlay(@click="closeModal")
     .nav-wrap
       desktop-nav(v-if="$store.state.showDesktopNav")
     .content-wrap
@@ -15,13 +17,14 @@ import { ExStore } from 'vuex'
 
 import { ViewNames } from '../../router'
 import DesktopNav from '@/components/molecules/DesktopNav.vue'
+import PopupModal from '@/components/organs/PopupModal.vue'
 
 @Component({
-  components: { DesktopNav }
+  components: { DesktopNav, PopupModal }
 })
 export default class DesktopTemplate extends Vue {
   public $store!: ExStore
-  hideNavList: ViewNames[] = ['login']
+  hideNavList: ViewNames[] = []
 
   @Watch('$route')
   private handleShowDesktopNav() {
@@ -32,8 +35,21 @@ export default class DesktopTemplate extends Vue {
     }
   }
 
+  get modalShown() {
+    return (
+      this.$route.meta.isModal || this.$store.getters['modal/currentModalName']
+    )
+  }
+
   mounted() {
     this.handleShowDesktopNav()
+  }
+
+  closeModal() {
+    if (this.$route.meta.isModal) {
+    } else {
+      this.$store.commit('modal/popAll')
+    }
   }
 }
 </script>
@@ -71,6 +87,16 @@ export default class DesktopTemplate extends Vue {
   .modal-shown &
     pointer-events: none // for iOS safari
     filter: blur(1px)
+
+.popup-modal-wrap
+  position: fixed
+  z-index: 5000
+  width: 100vw
+  height: 100vh
+  display: flex
+  align-items: center
+  justify-content: center
+  pointer-events: none
 
 .modal-wrap
   position: fixed

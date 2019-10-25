@@ -6,12 +6,12 @@
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <circle cx="5" cy="3" r="3" :fill="props.color" />
+    <circle :fill="props.color" cx="5" cy="3" r="3" />
     <path
+      :fill="props.color"
       fill-rule="evenodd"
       clip-rule="evenodd"
       d="M10 12C10 9.23858 7.76142 7 5 7C2.23858 7 0 9.23858 0 12H10Z"
-      :fill="props.color"
     />
   </svg>
 </template>

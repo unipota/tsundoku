@@ -58,9 +58,15 @@ export default class App extends Vue {
       title: 'ツンドク',
       htmlAttrs: {},
       bodyAttrs: {
-        class: [this.$route.meta.isModal ? 'scroll-fix' : '']
+        class: [this.modalShown ? 'scroll-fix' : '']
       }
     }
+  }
+
+  get modalShown() {
+    return (
+      this.$route.meta.isModal || this.$store.getters['modal/currentModalName']
+    )
   }
 
   toggleThemeType(mql: MediaQueryListEvent | MediaQueryList) {

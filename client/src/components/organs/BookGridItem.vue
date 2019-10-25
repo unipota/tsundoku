@@ -60,7 +60,7 @@ export default class BookGridItem extends Vue {
 
 <style lang="sass">
 .book-grid-item
-  margin: 24px 18px
+  margin: 24px 14px
 
 .book-grid-item__body
 

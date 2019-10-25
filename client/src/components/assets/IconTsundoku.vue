@@ -7,21 +7,21 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect
+      :fill="props.color"
       x="2.83081"
       y="30.1384"
       width="35.3846"
       height="8.49231"
       rx="1"
-      :fill="props.color"
     />
-    <rect y="1" width="35.3846" height="8.49231" rx="1" :fill="props.color" />
+    <rect :fill="props.color" y="1" width="35.3846" height="8.49231" rx="1" />
     <rect
+      :fill="props.color"
       x="14.1538"
       y="15.5693"
       width="31.8462"
       height="8.49231"
       rx="1"
-      :fill="props.color"
     />
   </svg>
 </template>

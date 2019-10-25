@@ -97,13 +97,13 @@ export default class Tsundoku extends Vue {
 
   handleResizeWindow() {
     this.gridColumnNum = Math.floor(
-      (this.$el.getBoundingClientRect().width * 0.9) / 136
+      (this.$el.getBoundingClientRect().width * 0.9) / 128
     )
   }
 
   get innerViewStyle() {
     return {
-      width: this.isList ? '' : `${136 * this.gridColumnNum}px`
+      width: this.isList ? '' : `${128 * this.gridColumnNum}px`
     }
   }
   get books(): BookRecord[] {

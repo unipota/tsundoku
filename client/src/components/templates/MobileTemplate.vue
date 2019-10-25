@@ -1,8 +1,9 @@
 <template lang="pug">
-  .view-mobile(:class="{ 'modal-shown': $route.meta.isModal }")
-    portal-target.popover-wrap(name="popoverView")
+  .view-mobile(:class="{ 'modal-shown': modalShown }")
+    .popup-modal-wrap
+      popup-modal
     portal-target.modal-wrap(name="modalView")
-    .modal-overlay
+    .modal-overlay(@click="closeModal")
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
     .content-wrap(ref="scrollContainer")
@@ -22,16 +23,19 @@ import { ViewNames } from '../../router'
 import MobileTabBar from '@/components/molecules/MobileTabBar.vue'
 import MobileTopBar from '@/components/molecules/MobileTopBar.vue'
 import FloatingAddTsundokuButton from '@/components/atoms/FloatingAddTsundokuButton.vue'
+import PopupModal from '@/components/organs/PopupModal.vue'
 
 @Component({
   components: {
     MobileTabBar,
     MobileTopBar,
-    FloatingAddTsundokuButton
+    FloatingAddTsundokuButton,
+    PopupModal
   }
 })
 export default class MobileTemplate extends Vue {
   public $store!: ExStore
+
   get firstRouteName() {
     return this.$route.matched[0].path
   }
@@ -41,8 +45,8 @@ export default class MobileTemplate extends Vue {
       : this.firstRouteName.slice(1)
   }
 
-  hideTopBarList: ViewNames[] = ['login', 'user']
-  hideTabBarList: ViewNames[] = ['login', 'user']
+  hideTopBarList: ViewNames[] = []
+  hideTabBarList: ViewNames[] = []
 
   @Watch('$route')
   private handleShowMobileBars() {
@@ -56,8 +60,21 @@ export default class MobileTemplate extends Vue {
     )
   }
 
+  get modalShown() {
+    return (
+      this.$route.meta.isModal || this.$store.getters['modal/currentModalName']
+    )
+  }
+
   mounted() {
     this.handleShowMobileBars()
+  }
+
+  closeModal() {
+    if (this.$route.meta.isModal) {
+    } else {
+      this.$store.commit('modal/popAll')
+    }
   }
 }
 </script>
@@ -82,6 +99,16 @@ export default class MobileTemplate extends Vue {
   .modal-shown &
     pointer-events: none
     overflow: hidden
+
+.popup-modal-wrap
+  position: fixed
+  z-index: 5000
+  width: 100vw
+  height: 100vh
+  display: flex
+  align-items: center
+  justify-content: center
+  pointer-events: none
 
 .bottom-bar-wrap
   position: fixed

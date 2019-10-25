@@ -29,7 +29,9 @@ import { DirectiveOptions } from 'vue'
 const focusDirective: DirectiveOptions = {
   inserted(el, binding) {
     if (binding.value) {
-      el.focus()
+      window.setTimeout(() => {
+        el.focus()
+      }, 500)
     }
   }
 }

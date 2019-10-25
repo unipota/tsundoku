@@ -7,8 +7,8 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M0 0H7L6.16168 22.3562H0.838323L0 0ZM0.419162 32V25.863H6.58084V32H0.419162Z"
       :fill="props.color"
+      d="M0 0H7L6.16168 22.3562H0.838323L0 0ZM0.419162 32V25.863H6.58084V32H0.419162Z"
     />
   </svg>
 </template>

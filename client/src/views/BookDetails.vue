@@ -561,6 +561,8 @@ $cover-transition-duration: 0.3s
   align-items: center
   margin-right: 2rem
   cursor: pointer
+  transition: opacity .3s
+
   &:hover
     opacity: 0.75
 

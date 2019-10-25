@@ -22,20 +22,21 @@ export default class ProgressBar extends Vue {
     this.$emit('mounted', { width: this.$el.getBoundingClientRect().width })
   }
 
-  validatedProgress(value: number) {
-    return Math.min(1, Math.max(0.02, value))
+  get validatedProgress() {
+    return Math.min(1, Math.max(0, this.progress))
   }
 
   get progressStyle() {
     return {
-      width: `${this.validatedProgress(this.progress) * 100}%`,
-      boxShadow: !this.edit ? '0 0 0 4px white' : ''
+      width: `${this.validatedProgress * 100}%`,
+      boxShadow:
+        !this.edit && this.validatedProgress > 0 ? '0 0 0 4px white' : ''
     }
   }
 
   get editedProgressStyle() {
     return {
-      width: `${this.validatedProgress(this.editedProgress) * 100}%`
+      width: `${this.validatedProgress * 100}%`
     }
   }
 }

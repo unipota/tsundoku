@@ -62,7 +62,7 @@ export default class BookGridItem extends Vue {
 .book-grid-item
   margin: 24px 14px
 
-.book-grid-item__body
+// .book-grid-item__body
 
 .book-grid-item__cover
   display: flex

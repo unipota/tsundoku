@@ -56,22 +56,20 @@ export default class BookInfoEditButton extends Vue {
     switch (this.size) {
       case 'large':
         return 14
-        break
       case 'small':
         return 8.2
-        break
     }
+    return ''
   }
 
   get iconCheckSize() {
     switch (this.size) {
       case 'large':
         return 14
-        break
       case 'small':
         return 14
-        break
     }
+    return ''
   }
 
   get color() {

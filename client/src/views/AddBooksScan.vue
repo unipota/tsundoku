@@ -223,7 +223,9 @@ export default class AddBooksScan extends Vue {
           canvas.toDataURL()
         )
         this.barcodeScanned(scanResult)
-      } catch (_) {}
+      } catch (_) {
+        //
+      }
     }, 500)
     draw()
   }

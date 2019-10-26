@@ -9,8 +9,8 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "chart.js": "^2.8.0",
-    "core-js": "^3.3.3",
+    "chart.js": "^2.9.0",
+    "core-js": "^3.3.4",
     "dayjs": "^1.8.16",
     "fuse.js": "^3.4.5",
     "lodash": "^4.17.15",
@@ -53,9 +53,9 @@
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.2.3",
-    "fork-ts-checker-webpack-plugin": "^1.6.0",
     "node-sass": "^4.13.0",
     "prettier": "^1.18.2",
+    "sass": "^1.23.1",
     "sass-loader": "^8.0.0",
     "typescript": "^3.6.4",
     "vue-cli-plugin-i18n": "^0.6.0",

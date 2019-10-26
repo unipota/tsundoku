@@ -154,7 +154,7 @@ export default class BookListItemProgressController extends Vue {
   margin-left: auto
   overflow: hidden
 
-.progress-input-body
+// .progress-input-body
 
 .dummy-transition
   &-leave-active

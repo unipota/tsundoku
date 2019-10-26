@@ -8,10 +8,9 @@ module.exports = {
     parser: '@typescript-eslint/parser'
   },
   extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:vue/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended'
+    'plugin:vue/essential',
+    '@vue/prettier',
+    '@vue/typescript'
   ],
   rules: {
     'vue/max-attributes-per-line': 'off',

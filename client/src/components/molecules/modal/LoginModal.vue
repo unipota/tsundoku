@@ -1,19 +1,19 @@
 <template lang="pug">
   popup-modal-frame(name="login" title="登録/ログイン")
     div.page-wrapper
-      div.title-logo
-        title-logo
+      //- div.title-logo
+      //-   title-logo
       div.columns
         div.column.icon-cloud-tsundoku
           icon(name="cloud")
           icon(name="tsundoku" color="var(--text-gray)" :width="28" :height="24")
         div.column.descriptions-wrapper
           div.description
-            icon(name="check" :color="checkColor" :width="checkWidth" :height="checkHeight").icon-check
+            icon(name="check" color="var(--kidoku-blue)" :width="checkWidth" :height="checkHeight").icon-check
             span.text
               | {{ $t('multi_device') }}
           div.description
-            icon(name="check" :color="checkColor" :width="checkWidth" :height="checkHeight").icon-check
+            icon(name="check" color="var(--kidoku-blue)" :width="checkWidth" :height="checkHeight").icon-check
             span.text
               | {{ $t('backup') }}
       div.buttons
@@ -55,7 +55,6 @@ type Services = {
   components: { PopupModalFrame, Icon, TitleLogo }
 })
 export default class LoginModal extends Vue {
-  private checkColor = '#085092'
   private checkWidth = 18
   private checkHeight = 14.14
   private services: Services = {
@@ -109,7 +108,7 @@ export default class LoginModal extends Vue {
           margin:
             top: 5px
         .text
-          color: $text-gray
+          color: var(--text-black)
           font-weight: bold
           margin:
             left: 8px
@@ -118,7 +117,7 @@ export default class LoginModal extends Vue {
       top: 32px
     .button
       display: flex
-      background: $border-gray
+      background: var(--border-gray)
       border-radius: 29px
       height: 38px
       width: 270px
@@ -135,8 +134,8 @@ export default class LoginModal extends Vue {
         margin: auto 0 auto 24px
   .will-not-post
     display: flex
-    background: $danger-red-bg
-    color: $danger-red
+    background: var(--danger-red-bg)
+    color: var(--danger-red)
     margin: 39px auto 0 auto
     width: 301px
     height: 73px
@@ -151,7 +150,7 @@ export default class LoginModal extends Vue {
   .terms-and-privacy-policy
     margin:
       top: 44px
-    color: rgba(79, 79, 79, 0.6)
+    color: var(--text-black-fade60)
     font-weight: bold
     .dot
       margin: 0 4px

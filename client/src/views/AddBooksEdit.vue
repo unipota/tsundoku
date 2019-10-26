@@ -13,6 +13,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
+import { Route } from 'vue-router'
 
 import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import BookInfoEditButton from '@/components/atoms/BookInfoEditButton.vue'
@@ -28,6 +29,7 @@ import { BookSimpleRecord } from '../types/Book'
 })
 export default class AddBooksSearch extends Vue {
   public $store!: ExStore
+  public $route!: Route
 
   private book: BookSimpleRecord = {
     id: '',

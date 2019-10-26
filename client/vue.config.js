@@ -17,15 +17,7 @@ module.exports = {
     },
     context: __dirname,
     module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          loader: 'ts-loader',
-          options: {
-            transpileOnly: true
-          }
-        }
-      ]
+      rules: []
     },
     plugins: []
   },

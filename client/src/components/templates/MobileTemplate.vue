@@ -72,6 +72,7 @@ export default class MobileTemplate extends Vue {
 
   closeModal() {
     if (this.$route.meta.isModal) {
+      //
     } else {
       this.$store.commit('modal/popAll')
     }

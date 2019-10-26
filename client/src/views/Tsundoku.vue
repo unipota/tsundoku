@@ -151,7 +151,7 @@ export default class Tsundoku extends Vue {
         return comparePrice(this.sortIsDesc)
       case 2:
         return compareTotalPages(this.sortIsDesc)
-      case 3:
+      default:
         return compareUpdatedAt(this.sortIsDesc)
     }
   }

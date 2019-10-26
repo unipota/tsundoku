@@ -100,6 +100,6 @@ $height: 36px
   white-space: nowrap
   user-select: none
 
-.transition-button
-  &-enter-active, &-leave-active
+// .transition-button
+//   &-enter-active, &-leave-active
 </style>

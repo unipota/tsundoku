@@ -212,7 +212,7 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
-  searchBooksByISBN({}, { isbn }): Promise<BookRecord[]> {
+  searchBooksByISBN(_, { isbn }): Promise<BookRecord[]> {
     console.log(isbn)
     return new Promise((resolve, reject) => {
       api.searchBooksByISBN(isbn).then(result => {
@@ -224,7 +224,7 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
-  searchBooks({}, { search }): Promise<BookSimpleRecord[]> {
+  searchBooks(_, { search }): Promise<BookSimpleRecord[]> {
     console.log(search)
     return new Promise((resolve, reject) => {
       api.searchBooks(search).then(result => {
@@ -236,7 +236,7 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
-  addNewBook({}, { book }): Promise<BookRecord[]> {
+  addNewBook(_, { book }): Promise<BookRecord[]> {
     console.log(book)
     return new Promise((resolve, reject) => {
       api.addNewBook(book).then(result => {

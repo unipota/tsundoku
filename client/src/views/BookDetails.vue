@@ -77,6 +77,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Route } from 'vue-router'
 import { ExStore } from 'vuex'
 import { BookRecord } from '../types/Book'
 import { tsundokuPrice } from '@/utils/tsundoku'
@@ -118,6 +119,8 @@ const transitionDuration = 400
 })
 export default class BookDetails extends Vue {
   public $store!: ExStore
+  public $route!: Route
+
   private lastBook!: BookRecord // モーダル閉じるときのエラー対策
   private currentHeaderHeight = initialHeaderHeight
   private animationFrameRequestId?: number
@@ -489,7 +492,7 @@ $cover-transition-duration: 0.3s
     bottom: 16px
     left: 0
   display: flex
-  transform: translateY(72px);
+  transform: translateY(72px)
 
 .action
   margin: 0 4px

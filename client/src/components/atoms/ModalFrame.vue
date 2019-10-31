@@ -71,7 +71,7 @@ export default class ModalFrame extends Vue {
 
   private modalAnimationState: 'none' | 'css' | 'animationFrame' = 'none'
 
-  readonly flickSpeedThreshold = 25
+  readonly flickSpeedThreshold = 20
   readonly modalHideThreshold = 200
   readonly animationDurationMs = 300
 
@@ -158,7 +158,6 @@ export default class ModalFrame extends Vue {
     const y = event.touches[0].clientY
     const flickSpeed = y - this.previousTouchClientY
     if (!this.isContentNonScrollable && flickSpeed > 0) {
-      console.log(event)
       event.preventDefault()
       event.stopPropagation()
     }

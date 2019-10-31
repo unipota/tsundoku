@@ -36,7 +36,12 @@
       .cover-wrap(ref="coverWrap")
         book-cover(:url="book.coverImageUrl" has-shadow)
       transition(name="fade" mode="out-in")
-        .edit-wrap(v-if="isEditing" key="edit")
+        .edit-wrap(
+          v-if="isEditing"
+          key="edit"
+          ref="editWrap"
+          @touchend="updateIsBodyScrollTopOnEdit"
+        )
           book-info-edit(v-model="editingBook" ref="bookInfoEditInstance" :has-shadow="isEditing && !isOnTransitionToEdit")
           .button-container
             .cancel(@click="handleCancelClick")
@@ -218,7 +223,15 @@ export default class BookDetails extends Vue {
 
   public updateIsBodyScrollTop() {
     const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
-    this.isBodyScrollTop = bodyWrapElement.scrollTop <= 10
+    if (this) {
+      this.isBodyScrollTop = bodyWrapElement.scrollTop <= 0
+    }
+  }
+  public updateIsBodyScrollTopOnEdit() {
+    const editWrapElement = this.$refs.editWrap as HTMLElement
+    if (this) {
+      this.isBodyScrollTop = editWrapElement.scrollTop <= 0
+    }
   }
 
   public updateHeader(event: Event | undefined) {
@@ -285,6 +298,9 @@ export default class BookDetails extends Vue {
       const coverWrapElement = this.$refs.coverWrap as HTMLElement
 
       await this.$nextTick()
+
+      // モーダル状態リセット
+      this.isBodyScrollTop = false
 
       // 移動先計算
       const modalWidth = modalElement.clientWidth

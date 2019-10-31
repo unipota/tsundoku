@@ -81,9 +81,6 @@ export default class ModalFrame extends Vue {
       return
     }
     this.isModalInteractive = this.isContentNonScrollable
-    if (!this.isContentNonScrollable) {
-      this.modifyScrollPosition()
-    }
   }
 
   @Watch('isContentNonScrollable')
@@ -93,16 +90,6 @@ export default class ModalFrame extends Vue {
       return
     }
     this.isModalInteractive = val
-    if (!val) {
-      this.modifyScrollPosition()
-    }
-  }
-
-  modifyScrollPosition() {
-    if (this.overrideModalInteractivity) {
-      // 自分でやる場合は自分でやってもらう
-      ;(this.$refs.modalFrameBody as HTMLElement).scrollTop = 1
-    }
   }
 
   get modalClass() {

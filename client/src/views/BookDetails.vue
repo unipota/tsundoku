@@ -3,7 +3,10 @@
     :closeColor="isEditing ? 'var(--text-gray)' : 'white'"
     :title="isEditing ? '編集' : ''"
     :path="isEditing ? '../../../' : '../../'"
-    no-padding)
+    no-padding
+    override-modal-interactivity
+    :overrided-is-modal-interactive="isBodyScrollTop"
+    )
     .book-details(
       v-if="book"
       :class="{ editing: isEditing, 'on-transition': isOnTransitionToEdit || isOnTransitionToDetails }"
@@ -33,13 +36,24 @@
       .cover-wrap(ref="coverWrap")
         book-cover(:url="book.coverImageUrl" has-shadow)
       transition(name="fade" mode="out-in")
-        .edit-wrap(v-if="isEditing" key="edit")
+        .edit-wrap(
+          v-if="isEditing"
+          key="edit"
+          ref="editWrap"
+          @touchend="updateIsBodyScrollTopOnEdit"
+        )
           book-info-edit(v-model="editingBook" ref="bookInfoEditInstance" :has-shadow="isEditing && !isOnTransitionToEdit")
           .button-container
             .cancel(@click="handleCancelClick")
               | {{ $t('cancel')}}
             book-info-edit-button(type="edit" @add-tsundoku="handleOkClick")
-        .detail-wrap(v-else ref="bodyWrap" @scroll="updateHeader" key="detail")
+        .detail-wrap(
+          v-else
+          ref="bodyWrap"
+          @scroll="updateHeader"
+          @touchend="updateIsBodyScrollTop"
+          key="detail"
+        )
           .body(ref="body")
             .spacer
             .controller
@@ -105,6 +119,8 @@ const slimInfoLeftPadding = 100
 
 const transitionDuration = 400
 
+const slimHeaderScrollThreshold = 25
+
 @Component({
   components: {
     BookInfoEditButton,
@@ -127,8 +143,9 @@ export default class BookDetails extends Vue {
   private animationEndTimeoutId?: number
   private isOnTransitionToEdit = false
   private isOnTransitionToDetails = false
-  private lastScrollAmount = 0
-  private scrollDirection = 0
+  private scrollAmount = 0
+  private isBodyScrollTop = true
+  private scrollTimeoutId = 0
 
   private editingBook?: BookRecord
 
@@ -153,7 +170,8 @@ export default class BookDetails extends Vue {
     }
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
-    this.updateHeader()
+    this.updateHeader(undefined)
+    this.updateIsBodyScrollTop()
   }
 
   public destroy() {
@@ -203,7 +221,20 @@ export default class BookDetails extends Vue {
     }
   }
 
-  public updateHeader() {
+  public updateIsBodyScrollTop() {
+    const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
+    if (this) {
+      this.isBodyScrollTop = bodyWrapElement.scrollTop <= 0
+    }
+  }
+  public updateIsBodyScrollTopOnEdit() {
+    const editWrapElement = this.$refs.editWrap as HTMLElement
+    if (this) {
+      this.isBodyScrollTop = editWrapElement.scrollTop <= 0
+    }
+  }
+
+  public updateHeader(event: Event | undefined) {
     const bodyElement = this.$refs.body as HTMLElement
     const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
     const headerElement = this.$refs.header as HTMLElement
@@ -212,32 +243,27 @@ export default class BookDetails extends Vue {
     const actionsElement = this.$refs.actions as HTMLElement
     const coverWrapElement = this.$refs.coverWrap as HTMLElement
 
+    clearTimeout(this.scrollTimeoutId)
+    this.scrollTimeoutId = window.setTimeout(() => {
+      this.updateIsBodyScrollTop()
+    }, 100)
+
+    this.isBodyScrollTop = false
+    if (this.isBodyScrollTop && event) {
+      event.preventDefault()
+      return
+    }
+
     const bodyWrapTop = bodyWrapElement.getBoundingClientRect().top
     const bodyTop = bodyElement.getBoundingClientRect().top
 
-    const scrollAmount = bodyWrapTop - bodyTop
-    let newHeight = initialHeaderHeight - scrollAmount * 0.5
+    this.scrollAmount = bodyWrapTop - bodyTop
 
-    if (newHeight < slimHeaderHeight) {
-      newHeight = slimHeaderHeight
-    } else if (newHeight > initialHeaderHeight + 80) {
-      newHeight = initialHeaderHeight - (scrollAmount - 80) * 0.25
-    }
-
-    // カクつき対策
-    const deltaScroll = scrollAmount - this.lastScrollAmount
-    const scrollDirection =
-      Math.abs(deltaScroll) <= 1 ? 0 : Math.sign(deltaScroll)
-    if (scrollAmount === 0 && scrollDirection !== 0) {
-      return
-    }
-    this.scrollDirection = scrollDirection
-
-    this.lastScrollAmount = scrollAmount
-
-    const progress =
-      (initialHeaderHeight - newHeight) /
-      (initialHeaderHeight - slimHeaderHeight)
+    const progress = this.scrollAmount > slimHeaderScrollThreshold ? 1 : 0
+    const newHeight =
+      this.scrollAmount > slimHeaderScrollThreshold
+        ? slimHeaderHeight
+        : initialHeaderHeight
 
     this.animationFrameRequestId = requestAnimationFrame(() => {
       // リアクティブガン無視コーナー
@@ -255,7 +281,6 @@ export default class BookDetails extends Vue {
         initialCoverTop}px) scale(${1 - progress / 2})`
 
       this.currentHeaderHeight = newHeight
-      this.scrollDirection = 0
     })
   }
 
@@ -273,6 +298,9 @@ export default class BookDetails extends Vue {
       const coverWrapElement = this.$refs.coverWrap as HTMLElement
 
       await this.$nextTick()
+
+      // モーダル状態リセット
+      this.isBodyScrollTop = false
 
       // 移動先計算
       const modalWidth = modalElement.clientWidth
@@ -326,7 +354,7 @@ export default class BookDetails extends Vue {
 
       window.setTimeout(() => {
         this.isOnTransitionToDetails = false
-        this.updateHeader()
+        this.updateHeader(undefined)
         this.handleResize()
       }, transitionDuration * 1.25)
     }
@@ -347,16 +375,7 @@ export default class BookDetails extends Vue {
   }
 
   get isButtonExpanded() {
-    return (
-      this.currentHeaderHeight >= (initialHeaderHeight + slimHeaderHeight) / 2
-    )
-  }
-
-  get headerTransitionProgress() {
-    return (
-      (initialHeaderHeight - this.currentHeaderHeight) /
-      (initialHeaderHeight - slimHeaderHeight)
-    )
+    return this.scrollAmount > slimHeaderScrollThreshold
   }
 
   get book(): BookRecord {
@@ -405,7 +424,7 @@ $cover-transition-duration: 0.3s
   width: 100%
   height: 100%
 
-  overflow-y: hidden
+  overflow: hidden
 
 .header
   position: absolute
@@ -568,6 +587,9 @@ $cover-transition-duration: 0.3s
 
   &:hover
     opacity: 0.75
+
+.info, .cover-wrap
+  transition: all 0.35s ease
 
 .fade-enter-active, .fade-leave-active
   transition: opacity $transition-duration $easeInOutQuad

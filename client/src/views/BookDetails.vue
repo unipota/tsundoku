@@ -218,10 +218,7 @@ export default class BookDetails extends Vue {
 
   public updateIsBodyScrollTop() {
     const bodyWrapElement = this.$refs.bodyWrap as HTMLElement
-    clearTimeout(this.scrollTimeoutId)
-    this.scrollTimeoutId = window.setTimeout(() => {
-      this.isBodyScrollTop = bodyWrapElement.scrollTop <= 0
-    }, 300)
+    this.isBodyScrollTop = bodyWrapElement.scrollTop <= 10
   }
 
   public updateHeader(event: Event | undefined) {
@@ -232,6 +229,11 @@ export default class BookDetails extends Vue {
     const infoElement = this.$refs.info as HTMLElement
     const actionsElement = this.$refs.actions as HTMLElement
     const coverWrapElement = this.$refs.coverWrap as HTMLElement
+
+    clearTimeout(this.scrollTimeoutId)
+    this.scrollTimeoutId = window.setTimeout(() => {
+      this.updateIsBodyScrollTop()
+    }, 100)
 
     this.isBodyScrollTop = false
     if (this.isBodyScrollTop && event) {

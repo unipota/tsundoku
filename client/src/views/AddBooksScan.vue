@@ -1,5 +1,9 @@
 <template lang="pug">
-  modal-frame.add-books-scan(close-color="white" no-padding)
+  modal-frame.add-books-scan(
+      close-color="white"
+      no-padding
+      is-content-non-scrollable
+    )
     video#video(autoplay muted playsinline)
     #overlay
       #crop-area

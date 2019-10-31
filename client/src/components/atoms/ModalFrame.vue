@@ -1,20 +1,31 @@
 <template lang="pug">
   .modal-frame-overlay(
-    :class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`"
-    v-click-outside="handleClickOutside"
+      :class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`"
+      v-click-outside="handleClickOutside"
     )
-    .modal-frame-wrapper(:class="modalClass")
+    .modal-frame-wrapper(
+      :class="modalClass"
+      :style="{ transform: `translateY(${modalDeltaY}px)` }"
+      @touchstart.capture="handleTouchStart"
+      @touchmove.capture="handleTouchMove"
+      @touchend="handleTouchEnd"
+      @touchcancel="handleTouchEnd"
+    )
       .modal-frame-top
         .title(v-if="title")
           | {{ title }}
         router-link.close-link(:to="{ path }" append)
           icon.close-icon(name="close" :color="closeColor" :width="16")
-      .modal-frame-body
+      .modal-frame-body(
+        ref="modalFrameBody"
+        :class="modalBodyClass"
+        @scroll="handleModalBodyScroll"
+      )
         slot
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 
 import Icon from '@/components/assets/Icon.vue'
 import { ExStore } from 'vuex'
@@ -37,11 +48,73 @@ export default class ModalFrame extends Vue {
   @Prop({ type: String, required: false, default: '' })
   private title!: string
 
+  @Prop({ type: Boolean, required: false, default: false })
+  private isContentNonScrollable!: boolean
+
+  @Prop({ type: Boolean, required: false, default: false })
+  private overrideModalInteractivity!: boolean
+
+  @Prop({ type: Boolean, required: false, default: false })
+  private overridedIsModalInteractive!: boolean
+
+  /** モーダルが下に降りてる分 */
+  private modalDeltaY = 0
+
+  /** モーダルを下におろせるかどうか */
+  private isModalInteractive = false
+  private hasIsHalfModalInteractiveChanged = false
+
+  // タッチ関連
+  private flickSpeed = 0
+  private previousTouchClientY = 0
+  private scrollTimeoutId = 0
+
+  private modalAnimationState: 'none' | 'css' | 'animationFrame' = 'none'
+
+  readonly flickSpeedThreshold = 20
+  readonly modalHideThreshold = 200
+  readonly animationDurationMs = 300
+
+  mounted() {
+    if (this.overrideModalInteractivity) {
+      this.isModalInteractive = true
+      return
+    }
+    this.isModalInteractive = this.isContentNonScrollable
+  }
+
+  @Watch('isContentNonScrollable')
+  onIsContentNonSctollableChanged(val: boolean) {
+    if (this.hasIsHalfModalInteractiveChanged) {
+      // すでにスクロールが成功していたら無視
+      return
+    }
+    this.isModalInteractive = val
+  }
+
   get modalClass() {
     return {
       [this.$store.getters.viewTypeClass]: true,
-      'no-padding': this.noPadding
+      'no-padding': this.noPadding,
+      'css-animating': this.modalAnimationState === 'css'
     }
+  }
+  get modalBodyClass() {
+    return {
+      'non-smooth': this.isModalInteractive
+    }
+  }
+
+  handleModalBodyScroll() {
+    clearTimeout(this.scrollTimeoutId)
+    this.isModalInteractive = false
+    this.scrollTimeoutId = window.setTimeout(() => {
+      const body = this.$refs.modalFrameBody as HTMLDivElement
+      this.isModalInteractive = body.scrollTop <= 0
+      if (!this.hasIsHalfModalInteractiveChanged) {
+        this.hasIsHalfModalInteractiveChanged = true
+      }
+    }, 100)
   }
 
   handleClickOutside() {
@@ -59,6 +132,65 @@ export default class ModalFrame extends Vue {
     this.$nextTick(() => {
       this.$router.push(base.join('/'))
     })
+  }
+
+  get isModalAcceptingTouch() {
+    const interactive = this.overrideModalInteractivity
+      ? this.overridedIsModalInteractive
+      : this.isModalInteractive
+    return (
+      this.$store.state.viewType === 'mobile' &&
+      interactive &&
+      this.modalAnimationState === 'none'
+    )
+  }
+  handleTouchStart(event: TouchEvent) {
+    if (!this.isModalAcceptingTouch) {
+      return
+    }
+    this.flickSpeed = 0
+    this.previousTouchClientY = event.touches[0].clientY
+  }
+  handleTouchMove(event: TouchEvent) {
+    if (!this.isModalAcceptingTouch) {
+      return
+    }
+    const y = event.touches[0].clientY
+    const flickSpeed = y - this.previousTouchClientY
+    if (!this.isContentNonScrollable && flickSpeed > 0) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    this.flickSpeed = flickSpeed
+    this.previousTouchClientY = y
+    requestAnimationFrame(() => {
+      if (this.modalDeltaY >= -flickSpeed) {
+        this.modalDeltaY += flickSpeed
+      }
+    })
+  }
+  handleTouchEnd() {
+    if (!this.isModalAcceptingTouch) {
+      return
+    }
+    if (this.flickSpeed > this.flickSpeedThreshold) {
+      this.handleClickOutside()
+      this.modalAnimationState = 'animationFrame'
+      return
+    }
+    if (this.modalDeltaY > this.modalHideThreshold) {
+      this.handleClickOutside()
+      return
+    }
+    this.modalAnimationState = 'css'
+    this.flickSpeed = 0
+    this.previousTouchClientY = 0
+    this.$nextTick(() => {
+      this.modalDeltaY = 0
+    })
+    setTimeout(() => {
+      this.modalAnimationState = 'none'
+    }, this.animationDurationMs)
   }
 }
 </script>
@@ -93,6 +225,8 @@ export default class ModalFrame extends Vue {
     height: 100%
     border:
       radius: 0 24px 24px 0
+  &.css-animating
+    transition: transform 0.3s ease
 
 .modal-frame-body
   padding:
@@ -115,6 +249,9 @@ export default class ModalFrame extends Vue {
     padding: 0
     margin:
       top: -32px - 34px  // .modal-frame-wrapperと.modal-frame-wrapのpadding分マイナスマージンで上に
+
+  &.non-smooth
+    -webkit-overflow-scrolling: auto
 
 .modal-frame-top
   position: relative

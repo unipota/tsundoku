@@ -250,7 +250,7 @@ export default class BookDetails extends Vue {
 
     this.isBodyScrollTop = false
     if (this.isBodyScrollTop && event) {
-      event.preventDefault()
+      // event.preventDefault()
       return
     }
 

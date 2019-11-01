@@ -9,6 +9,7 @@
       @touchstart.capture="handleTouchStart"
       @touchmove.capture="handleTouchMove"
       @touchend="handleTouchEnd"
+      @pointerleave="handleTouchEnd"
       @touchcancel="handleTouchEnd"
     )
       .modal-frame-top
@@ -71,7 +72,7 @@ export default class ModalFrame extends Vue {
 
   private modalAnimationState: 'none' | 'css' | 'animationFrame' = 'none'
 
-  readonly flickSpeedThreshold = 20
+  readonly flickSpeedThreshold = 15
   readonly modalHideThreshold = 200
   readonly animationDurationMs = 300
 
@@ -106,6 +107,9 @@ export default class ModalFrame extends Vue {
   }
 
   handleModalBodyScroll() {
+    if (this.overrideModalInteractivity) {
+      return
+    }
     clearTimeout(this.scrollTimeoutId)
     this.isModalInteractive = false
     this.scrollTimeoutId = window.setTimeout(() => {
@@ -171,6 +175,9 @@ export default class ModalFrame extends Vue {
   }
   handleTouchEnd() {
     if (!this.isModalAcceptingTouch) {
+      return
+    }
+    if (this.flickSpeed === 0) {
       return
     }
     if (this.flickSpeed > this.flickSpeedThreshold) {

@@ -85,7 +85,6 @@ export default class AddBooksSearch extends Vue {
   }
 
   mounted() {
-    console.log(tsundokuLoading)
     const anim = lottie.loadAnimation({
       container: this.$refs['anim-container'] as Element,
       renderer: 'svg',
@@ -94,7 +93,7 @@ export default class AddBooksSearch extends Vue {
       animationData: tsundokuLoading
     })
     anim.setSpeed(1)
-    anim.play()
+    // anim.play()
   }
 
   submitSearchQuery() {

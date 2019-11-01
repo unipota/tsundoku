@@ -234,7 +234,7 @@ export default class AddBooksScan extends Vue {
     draw()
   }
 
-  beforeDestroy() {
+  destroyed() {
     cancelAnimationFrame(this.requestAnimationFrameID)
     clearInterval(this.captureIntervalID)
     codeReader.reset()

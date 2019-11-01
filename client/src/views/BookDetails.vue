@@ -440,6 +440,7 @@ $cover-transition-duration: 0.3s
   left: 0
   width: 100%
   height: 100%
+  filter: blur(16px)
 
   background:
     size: cover
@@ -452,7 +453,7 @@ $cover-transition-duration: 0.3s
   left: 0
   width: 100%
   height: 100%
-  backdrop-filter: blur(15px)
+  // backdrop-filter: blur(15px)
 
 .header-fade
   position: absolute

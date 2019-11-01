@@ -2,13 +2,13 @@
 .books-count-stats(@mouseenter="onMouseOver" @mouseleave="onMouseLeave")
   .info-wrapper
     .count-wrapper
-      .count-number(v-tooltip="'今までの累計ツンドク額'")
+      .count-number(v-tooltip="'現在のキドク総額'")
         span.count-unit ¥
         tweened-number(:num="priceCount" formatLocal)
       .icon-wrapper
-        icon(name="tsundoku" :width="36" :height="36")
+        icon(name="kidoku" :width="36" :height="36")
     .count-label
-      | ツンドク額
+      | キドク額
   .chart-scroller-wrapper
     .chart-scroller(ref="scroller")
       .chart-gradation-left
@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
 import { BookStats, ReadHistory } from '@/types/Book'
 import { ChartData, ChartOptions } from 'chart.js'
 import dayjs, { Dayjs } from 'dayjs'
@@ -46,9 +47,10 @@ interface ReadHistoryEx extends ReadHistory {
 @Component({
   components: { Icon, LineChart, TweenedNumber }
 })
-export default class TsundokuStats extends Vue {
+export default class KidokuStats extends Vue {
   @Prop({ type: Array, required: true })
   private allBookStats!: BookStats[]
+  $store!: ExStore
 
   rendered: boolean = false
   hovered: boolean = false
@@ -63,9 +65,7 @@ export default class TsundokuStats extends Vue {
   }
 
   get priceCount(): number {
-    return this.allBookStats.reduce((acc: number, stats: BookStats) => {
-      return acc + stats.price
-    }, 0)
+    return this.$store.getters.kidokuPrice
   }
 
   get booksRegisteredDateArray() {
@@ -82,7 +82,7 @@ export default class TsundokuStats extends Vue {
     const array: ReadHistoryEx[] = []
     array.push({
       ...readHistories.slice(-1)[0],
-      price
+      price: 0
     })
     readHistories
       .slice(0, readHistories.length - 1)
@@ -90,10 +90,13 @@ export default class TsundokuStats extends Vue {
       .forEach(
         (readHistroy: ReadHistory, index: number, original: ReadHistory[]) => {
           array.unshift({
-            price: Math.round(
-              (price * (array[0].readPages - readHistroy.readPages)) /
-                totalPages
-            ),
+            price:
+              readHistroy.readPages === totalPages
+                ? price
+                : array[0].readPages === totalPages &&
+                  readHistroy.readPages !== totalPages
+                ? price * -1
+                : 0,
             createdAt: readHistroy.createdAt,
             readPages: readHistroy.readPages
           })
@@ -160,7 +163,7 @@ export default class TsundokuStats extends Vue {
         {
           label: '',
           data: tsundokuPriceArrayPerDay,
-          backgroundColor: '#E3402A',
+          backgroundColor: '#2488D0',
           borderWidth: 0,
           pointBorderColor: 'transparent',
           pointBackgroundColor: 'transparent'
@@ -227,7 +230,7 @@ export default class TsundokuStats extends Vue {
             },
             ticks: {
               display: this.hovered,
-              fontColor: 'rgba(227, 64, 42, 0.6)',
+              fontColor: 'rgba(35, 136, 208, 0.6)',
               fontStyle: 'bold'
             }
           }
@@ -272,7 +275,7 @@ export default class TsundokuStats extends Vue {
   padding: 16px
   border:
     radius: 24px
-  background: var(--tsundoku-red-bg)
+  background: var(--kidoku-blue-bg)
 
 .info-wrapper
   padding:
@@ -288,7 +291,7 @@ export default class TsundokuStats extends Vue {
   align-items: center
 
 .count-number
-  color: var(--tsundoku-red)
+  color: var(--kidoku-blue)
   font:
     size: 38px
     weight: bold
@@ -300,7 +303,7 @@ export default class TsundokuStats extends Vue {
     size: 24px
 
 .count-label
-  color: var(--tsundoku-red-fade60)
+  color: var(--kidoku-blue-fade60)
   font:
     size: 18px
     weight: bold
@@ -324,11 +327,11 @@ export default class TsundokuStats extends Vue {
 
 .chart-gradation-left
   left: 0
-  background: linear-gradient(to right, #ffdad5 0%, transparent)
+  background: linear-gradient(to right, #c3d4f0 0%, transparent)
 
 .chart-gradation-right
   right: 0
-  background: linear-gradient(to left, #ffdad5 0%, transparent)
+  background: linear-gradient(to left, #c3d4f0 0%, transparent)
 
 .chart-wrapper
   width: 200%
@@ -338,7 +341,7 @@ export default class TsundokuStats extends Vue {
 .chart-range-label
   font:
     weight: bold
-  color: var(--tsundoku-red-fade60)
+  color: var(--kidoku-blue-fade60)
   height: 24px
   padding:
     left: 16px

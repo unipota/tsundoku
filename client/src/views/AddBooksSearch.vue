@@ -1,5 +1,8 @@
 <template lang="pug">
-  modal-frame.add-books-search(:title="$t('addBooksSearchTitle')")
+  modal-frame.add-books-search(
+    :title="$t('addBooksSearchTitle')"
+    is-content-non-scrollable
+  )
     text-input(
       v-model="searchQuery"
       :placeholder="$t('addBooksSearchPlaceholder')"

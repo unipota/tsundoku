@@ -6,13 +6,13 @@
     .modal-frame-wrapper(
       :class="modalClass"
       :style="{ transform: `translateY(${modalDeltaY}px)` }"
-      @touchstart.capture="handleTouchStart"
+      @touchstart="handleTouchStart"
       @touchmove.capture="handleTouchMove"
       @touchend="handleTouchEnd"
       @pointerleave="handleTouchEnd"
       @touchcancel="handleTouchEnd"
     )
-      .modal-frame-top
+      .modal-frame-top(ref="modalTop")
         .title(v-if="title")
           | {{ title }}
         router-link.close-link(:to="{ path }" append)
@@ -67,12 +67,12 @@ export default class ModalFrame extends Vue {
 
   // タッチ関連
   private flickSpeed = 0
-  private previousTouchClientY = 0
+  private previousTouchClientY = -1
   private scrollTimeoutId = 0
 
   private modalAnimationState: 'none' | 'css' | 'animationFrame' = 'none'
 
-  readonly flickSpeedThreshold = 15
+  readonly flickSpeedThreshold = 20
   readonly modalHideThreshold = 200
   readonly animationDurationMs = 300
 
@@ -90,7 +90,8 @@ export default class ModalFrame extends Vue {
       // すでにスクロールが成功していたら無視
       return
     }
-    this.isModalInteractive = val
+    this.isModalInteractive = true
+    ;(this.$refs.modalFrameBody as HTMLElement).scrollTop = 0
   }
 
   get modalClass() {
@@ -106,8 +107,12 @@ export default class ModalFrame extends Vue {
     }
   }
 
-  handleModalBodyScroll() {
+  handleModalBodyScroll(event: Event) {
     if (this.overrideModalInteractivity) {
+      return
+    }
+    if (this.isModalInteractive) {
+      event.preventDefault()
       return
     }
     clearTimeout(this.scrollTimeoutId)
@@ -152,14 +157,20 @@ export default class ModalFrame extends Vue {
     if (!this.isModalAcceptingTouch) {
       return
     }
+    const y = event.touches[0].clientY
+
     this.flickSpeed = 0
-    this.previousTouchClientY = event.touches[0].clientY
+    this.previousTouchClientY = y
   }
   handleTouchMove(event: TouchEvent) {
     if (!this.isModalAcceptingTouch) {
       return
     }
     const y = event.touches[0].clientY
+    if (this.previousTouchClientY < 0) {
+      this.previousTouchClientY = y
+      return
+    }
     const flickSpeed = y - this.previousTouchClientY
     if (!this.isContentNonScrollable && flickSpeed > 0) {
       event.preventDefault()
@@ -191,7 +202,10 @@ export default class ModalFrame extends Vue {
     }
     this.modalAnimationState = 'css'
     this.flickSpeed = 0
-    this.previousTouchClientY = 0
+    this.previousTouchClientY = -1
+    const body = this.$refs.modalFrameBody as HTMLDivElement
+    this.isModalInteractive = body.scrollTop <= 0
+    this.isGrabbingHeader = false
     this.$nextTick(() => {
       this.modalDeltaY = 0
     })

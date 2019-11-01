@@ -49,6 +49,8 @@ import ModalFrame from '@/components/atoms/ModalFrame.vue'
 import AddBookCard from '@/components/molecules/AddBookCard.vue'
 import BookCover from '@/components/atoms/BookCover.vue'
 
+import tsundokuLoading from '@/animation/tsundoku.json'
+
 @Component({
   components: {
     Icon,
@@ -83,15 +85,16 @@ export default class AddBooksSearch extends Vue {
   }
 
   mounted() {
+    console.log(tsundokuLoading)
     const anim = lottie.loadAnimation({
       container: this.$refs['anim-container'] as Element,
       renderer: 'svg',
       loop: true,
       autoplay: false,
-      path: 'json/tsundoku.json'
+      animationData: tsundokuLoading
     })
-    anim.setSpeed(0.8)
-    // anim.play()
+    anim.setSpeed(1)
+    anim.play()
   }
 
   submitSearchQuery() {

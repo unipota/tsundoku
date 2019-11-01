@@ -3,6 +3,8 @@
  *   Rounded Rectangle Extension for Bar Charts and Horizontal Bar Charts
  *   Tested with Charts.js 2.7.0
  */
+import Chart from 'chart.js'
+
 Chart.elements.Rectangle.prototype.draw = function() {
   var ctx = this._chart.ctx
   var vm = this._view
@@ -104,7 +106,7 @@ Chart.elements.Rectangle.prototype.draw = function() {
     var x = corners[1][0]
     var y = corners[1][1]
 
-    var radius = cornerRadius
+    radius = cornerRadius
     // Fix radius being too large
     if (radius > Math.abs(height) / 2) {
       radius = Math.floor(Math.abs(height) / 2)

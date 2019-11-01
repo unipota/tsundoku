@@ -442,6 +442,8 @@ $cover-transition-duration: 0.3s
 
   will-change: transform
 
+  transition: all 0.35s ease
+
 .detail-wrap
   position: absolute
   top: 0

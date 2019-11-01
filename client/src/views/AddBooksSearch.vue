@@ -1,39 +1,40 @@
 <template lang="pug">
   modal-frame.add-books-search(
     :title="$t('addBooksSearchTitle')"
-    is-content-non-scrollable
+    :is-content-non-scrollable="!isScrollable"
   )
-    text-input(
-      v-model="searchQuery"
-      :placeholder="$t('addBooksSearchPlaceholder')"
-      @keyup-enter="submitSearchQuery"
-      withClearButton
-      focus
-    )
-      icon(name="search" color="var(--text-gray)" :width="18" :height="18")
-    template(v-if="isFirstView")
-      book-cover(:hasShadow="true")
-      .anim-container(ref="anim-container")
-    template(v-else)
-      router-link.edit-yourself(
-        v-show="showEditBar"
-        :to="firstRouteName + '/add-books-edit'"
+    .content-wrap
+      text-input(
+        v-model="searchQuery"
+        :placeholder="$t('addBooksSearchPlaceholder')"
+        @keyup-enter="submitSearchQuery"
+        withClearButton
+        focus
       )
-        icon.icon(
-          name="logo"
-          color="var(--border-gray)"
-          :width="34"
-          :height="27"
+        icon(name="search" color="var(--text-gray)" :width="18" :height="18")
+      template(v-if="isFirstView")
+        book-cover(:hasShadow="true")
+        .anim-container(ref="anim-container")
+      template(v-else)
+        router-link.edit-yourself(
+          v-show="showEditBar"
+          :to="firstRouteName + '/add-books-edit'"
         )
-        span.text
-          | {{ $t('editYourself') }}
-        icon.icon(name="right-arrow")
-      add-book-card(
-        v-for="(book, index) in searchResults"
-        :key="index"
-        :book="book"
-        type="search"
-      )
+          icon.icon(
+            name="logo"
+            color="var(--border-gray)"
+            :width="34"
+            :height="27"
+          )
+          span.text
+            | {{ $t('editYourself') }}
+          icon.icon(name="right-arrow")
+        add-book-card(
+          v-for="(book, index) in searchResults"
+          :key="index"
+          :book="book"
+          type="search"
+        )
 </template>
 
 <script lang="ts">
@@ -67,6 +68,7 @@ export default class AddBooksSearch extends Vue {
   searchResults: BookSimpleRecord[] = []
   hasSubmittedSearchQuery = false
   isFirstView = true
+  isScrollable = false
 
   get goodSearchResult() {
     //  検索結果が1件以上 && クエリがタイトルに部分一致するような検索結果が存在する
@@ -103,6 +105,7 @@ export default class AddBooksSearch extends Vue {
         this.searchResults = res
         this.hasSubmittedSearchQuery = true
         this.isFirstView = false
+        this.isScrollable = res.length >= 3 // [TODO] マジックナンバーではなくす
       })
   }
 

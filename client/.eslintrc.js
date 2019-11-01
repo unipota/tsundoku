@@ -7,11 +7,7 @@ module.exports = {
   parserOptions: {
     parser: '@typescript-eslint/parser'
   },
-  extends: [
-    'plugin:vue/essential',
-    '@vue/prettier',
-    '@vue/typescript'
-  ],
+  extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript'],
   rules: {
     'vue/max-attributes-per-line': 'off',
     'prettier/prettier': [

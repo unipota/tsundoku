@@ -4,18 +4,21 @@
     :is-content-non-scrollable="!isScrollable"
   )
     .content-wrap
-      text-input(
-        v-model="searchQuery"
-        :placeholder="$t('addBooksSearchPlaceholder')"
-        @keyup-enter="submitSearchQuery"
-        withClearButton
-        focus
-      )
-        icon(name="search" color="var(--text-gray)" :width="18" :height="18")
-      template(v-if="isFirstView")
-        book-cover(:hasShadow="true")
+      .search-field
+        text-input(
+          v-model="searchQuery"
+          :placeholder="$t('addBooksSearchPlaceholder')"
+          @keyup-enter="submitSearchQuery"
+          withClearButton
+          focus
+        )
+        .search-button(@click="submitSearchQuery" :class="{'is-disabled': !searchQuery}")
+          icon(name="search" color="var(--text-black)" :width="18" :height="18")
+      div.searching-animation(v-show="isSearching")
         .anim-container(ref="anim-container")
-      template(v-else)
+      div(v-if="isFirstView")
+        book-cover(:hasShadow="true")
+      div(v-else-if="!isSearching")
         router-link.edit-yourself(
           v-show="showEditBar"
           :to="firstRouteName + '/add-books-edit'"
@@ -42,6 +45,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 import { BookSimpleRecord } from '../types/Book'
 import lottie from 'lottie-web/build/player/lottie_light'
+import { AnimationItem } from 'lottie-web'
 
 import Icon from '@/components/assets/Icon.vue'
 import EditButton from '@/components/atoms/EditButton.vue'
@@ -69,6 +73,19 @@ export default class AddBooksSearch extends Vue {
   hasSubmittedSearchQuery = false
   isFirstView = true
   isScrollable = false
+  isSearching = false
+  loadingAnimation: AnimationItem | null = null
+
+  mounted() {
+    this.loadingAnimation = lottie.loadAnimation({
+      container: this.$refs['anim-container'] as Element,
+      renderer: 'svg',
+      loop: true,
+      autoplay: false,
+      animationData: tsundokuLoading
+    })
+    this.loadingAnimation.play()
+  }
 
   get goodSearchResult() {
     //  検索結果が1件以上 && クエリがタイトルに部分一致するような検索結果が存在する
@@ -79,31 +96,23 @@ export default class AddBooksSearch extends Vue {
   }
 
   get showEditBar() {
-    return this.hasSubmittedSearchQuery && !this.goodSearchResult
+    return !this.goodSearchResult
   }
 
   get firstRouteName() {
     return this.$route.matched[0].path
   }
 
-  mounted() {
-    const anim = lottie.loadAnimation({
-      container: this.$refs['anim-container'] as Element,
-      renderer: 'svg',
-      loop: true,
-      autoplay: false,
-      animationData: tsundokuLoading
-    })
-    anim.setSpeed(1)
-    // anim.play()
-  }
-
   submitSearchQuery() {
+    if (!this.searchQuery) return
+    this.isFirstView = false
+    this.isSearching = true
     this.$store
       .dispatch('searchBooks', { search: this.searchQuery })
       .then((res: BookSimpleRecord[]) => {
+        this.searchResults = res
+        this.isSearching = false
         this.hasSubmittedSearchQuery = true
-        this.isFirstView = false
         this.isScrollable = res.length >= 3 // [TODO] マジックナンバーではなくす
       })
   }
@@ -115,6 +124,15 @@ export default class AddBooksSearch extends Vue {
       this.hasSubmittedSearchQuery = false
     }
   }
+
+  // @Watch('isSearching')
+  // onSearching(val: boolean) {
+  //   if (val) {
+  //     this.loadingAnimation.play()
+  //   } else {
+  //     this.loadingAnimation.stop()
+  //   }
+  // }
 }
 </script>
 
@@ -124,10 +142,6 @@ export default class AddBooksSearch extends Vue {
 
 .book-cover
   margin: 20vh auto 40px auto
-
-.text-input
-  width: 85%
-  margin: 0 auto 20px auto
 
 .edit-yourself
   width: 95%
@@ -155,7 +169,39 @@ export default class AddBooksSearch extends Vue {
       width: 85%
       border-bottom: 2px solid var(--bg-gray)
 
+.searching-animation
+  display: flex
+  justify-content: center
+  align-items: center
+  padding:
+    top: 48px
+
 .anim-container
   width: 100px
   height: 100px
+
+.search-field
+  display: flex
+  width: 85%
+  margin: 0 auto 20px auto
+
+.search-button
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-shrink: 0
+  width: 40px
+  height: 40px
+  background: var(--border-gray)
+  border-radius: 8px
+  margin:
+    left: 8px
+  transition: background .3s
+  cursor: pointer
+
+  &:hover:not(.is-disabled)
+    background: var(--border-gray-hovered)
+
+  &.is-disabled
+    opacity: 0.5
 </style>

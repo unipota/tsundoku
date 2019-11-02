@@ -13,6 +13,9 @@ const api = {
   whoAmI(): Promise<AxiosResponse<WhoAmIResponse>> {
     return client.get('api/users/me')
   },
+  userLogout(): Promise<AxiosResponse> {
+    return client.post('api/logout')
+  },
   getMyBooks(): Promise<AxiosResponse<BookRecord[]>> {
     return client.get('api/books')
   },

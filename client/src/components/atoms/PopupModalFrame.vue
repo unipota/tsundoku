@@ -61,6 +61,7 @@ export default class PopupModalFrame extends Vue {
   align-items: center
 
   .title
+    color: var(--text-black)
     font:
       weight: bold
       size: 18px
@@ -79,4 +80,5 @@ export default class PopupModalFrame extends Vue {
     right: 16px
   overflow:
     y: scroll
+  flex: 1
 </style>

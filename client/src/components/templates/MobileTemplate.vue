@@ -107,7 +107,9 @@ export default class MobileTemplate extends Vue {
   width: 100vw
   height: 100vh
   display: flex
-  align-items: center
+  // align-items: center
+  padding:
+    top: 10vh
   justify-content: center
   pointer-events: none
 

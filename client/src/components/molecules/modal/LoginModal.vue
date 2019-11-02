@@ -26,10 +26,6 @@
         div.text
           | {{ $t('will_not_post') }}
       div.terms-and-privacy-policy
-        router-link.terms(to="/terms")
-          | {{ $t('terms') }}
-        span.dot
-          | ･
         router-link.privacy-policy(to="/privacy-policy")
           | {{ $t('privacy_policy') }}
 </template>
@@ -124,6 +120,7 @@ export default class LoginModal extends Vue {
       margin: 0 auto
       font-weight: bold
       cursor: pointer
+      transition: background .3s
       &:not(:first-child)
         margin:
           top: 12px
@@ -132,6 +129,10 @@ export default class LoginModal extends Vue {
       .text
         color: var(--text-black)
         margin: auto 0 auto 24px
+
+      &:hover
+        background: var(--border-gray-hovered)
+
   .will-not-post
     display: flex
     background: var(--danger-red-bg)

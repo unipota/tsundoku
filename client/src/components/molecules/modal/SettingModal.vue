@@ -3,7 +3,7 @@
     .setting-modal
       .user-icon
         icon(name="user" :width="64" :height="64")
-      .login-button(@click="pushLoginModal")
+      rounded-button.login-button(@click="pushLoginModal")
         | 新規登録/ログイン
       span.register-description
         | ユーザー登録をすると、他の端末やブラウザと同期することができます。
@@ -15,8 +15,9 @@ import { ExStore } from 'vuex'
 
 import Icon from '@/components/assets/Icon.vue'
 import PopupModalFrame from '@/components/atoms/PopupModalFrame.vue'
+import RoundedButton from '@/components/atoms/RoundedButton.vue'
 
-@Component({ components: { Icon, PopupModalFrame } })
+@Component({ components: { Icon, PopupModalFrame, RoundedButton } })
 export default class SettingModal extends Vue {
   $store!: ExStore
 
@@ -39,15 +40,6 @@ export default class SettingModal extends Vue {
 .login-button
   margin:
     top: 32px
-  background: var(--border-gray)
-  color: var(--text-black)
-  border-radius: 999vw
-  min-width: 200px
-  text-align: center
-  font:
-    weight: bold
-  padding: 8px
-  cursor: pointer
 
 .register-description
   margin:

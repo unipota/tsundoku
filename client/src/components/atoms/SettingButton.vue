@@ -21,6 +21,8 @@ export default class SettingButton extends Vue {
 
 <style lang="sass">
 .setting-button
+  display: flex
+  align-items: center
   cursor: pointer
   opacity: 0.8
   transition: opacity .3s

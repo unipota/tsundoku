@@ -76,6 +76,8 @@ export default class ModalFrame extends Vue {
   readonly modalHideThreshold = 200
   readonly animationDurationMs = 300
 
+  private isGrabbingHeader = false
+
   mounted() {
     if (this.overrideModalInteractivity) {
       this.isModalInteractive = true

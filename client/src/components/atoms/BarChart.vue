@@ -9,10 +9,10 @@ const { reactiveProp } = chartMixins
 @Component({})
 export default class BarChart extends mixins(Bar, reactiveProp) {
   @Prop({ type: Object, required: true })
-  private chartData!: ChartData
+  chartData!: ChartData
 
   @Prop({ type: Object, default: {} })
-  private chartOptions!: ChartOptions
+  chartOptions!: ChartOptions
 
   mounted() {
     this.renderChart(this.chartData, this.chartOptions)

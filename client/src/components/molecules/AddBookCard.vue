@@ -89,16 +89,16 @@ export default class AddBookCard extends Vue {
   }
 
   async addTsundoku() {
-    console.log(this.book)
+    // console.log(this.book)
     try {
       const res = await this.$store.dispatch('addNewBook', {
         book: this.book
       })
-      console.log(res.data)
+      // console.log(res.data)
 
       this.bookAdded = true // → BookInfoEditButtonがチェックに変わる
 
-      await new Promise(r => window.setTimeout(r, 800))
+      await new Promise(r => window.setTimeout(r, 500))
       this.showCard = false // → カードが消える
       this.$emit('to-remove')
 
@@ -175,7 +175,7 @@ export default class AddBookCard extends Vue {
     opacity: 1
 
   &-enter-active
-    transition: transform 1s $easeInOutQuint, opacity .5s
+    transition: transform .5s $easeInOutQuint, opacity .5s
 
   &-leave-to
     opacity: 0
@@ -185,5 +185,5 @@ export default class AddBookCard extends Vue {
       transform: translateY(100%) // scanCardは下に消える
 
   &-leave-active
-    transition: transform 1s $easeInOutQuint, opacity .5s
+    transition: transform .5s $easeInOutQuint, opacity .5s
 </style>

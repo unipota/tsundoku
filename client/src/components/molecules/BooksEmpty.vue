@@ -81,7 +81,7 @@ export default class BooksEmpty extends Vue {
   }
 
   openLoginModal() {
-    this.$store.commit('modal/push', { name: 'setting' })
+    this.$store.commit('modal/push', { name: 'login' })
   }
 }
 </script>

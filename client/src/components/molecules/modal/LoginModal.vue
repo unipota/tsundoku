@@ -26,7 +26,10 @@
         div.text
           | {{ $t('will_not_post') }}
       div.terms-and-privacy-policy
-        router-link.privacy-policy(to="/privacy-policy")
+        span.link(@click="openAboutModal")
+          | ツンドクについて
+        br
+        span.link(@click="openPrivacyPolicyModal")
           | {{ $t('privacy_policy') }}
 </template>
 
@@ -76,6 +79,14 @@ export default class LoginModal extends Vue {
   }
   public moveToLink(link: string) {
     location.href = link
+  }
+
+  openAboutModal() {
+    this.$store.commit('modal/push', { name: 'about' })
+  }
+
+  openPrivacyPolicyModal() {
+    this.$store.commit('modal/push', { name: 'privacy' })
   }
 }
 </script>
@@ -150,9 +161,10 @@ export default class LoginModal extends Vue {
       opacity: 0.6
   .terms-and-privacy-policy
     margin:
-      top: 44px
+      top: 36px
     color: var(--text-black-fade60)
     font-weight: bold
-    .dot
-      margin: 0 4px
+
+  .link
+    cursor: pointer
 </style>

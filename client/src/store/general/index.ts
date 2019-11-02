@@ -182,6 +182,19 @@ export const actions: Actions<S, A, G, M> = {
       })
     })
   },
+  userLogout(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      api
+        .userLogout()
+        .then(result => {
+          resolve()
+          location.reload()
+        })
+        .catch(() => {
+          reject()
+        })
+    })
+  },
   getMyBooks({ state, commit }): Promise<void> {
     return new Promise((resolve, reject) => {
       if (state.useMockBooksMap) {
@@ -213,7 +226,6 @@ export const actions: Actions<S, A, G, M> = {
     })
   },
   searchBooksByISBN(_, { isbn }): Promise<BookRecord[]> {
-    console.log(isbn)
     return new Promise((resolve, reject) => {
       api.searchBooksByISBN(isbn).then(result => {
         if (result.data) {
@@ -225,7 +237,6 @@ export const actions: Actions<S, A, G, M> = {
     })
   },
   searchBooks(_, { search }): Promise<BookSimpleRecord[]> {
-    console.log(search)
     return new Promise((resolve, reject) => {
       api.searchBooks(search).then(result => {
         if (result.data) {
@@ -237,7 +248,6 @@ export const actions: Actions<S, A, G, M> = {
     })
   },
   addNewBook(_, { book }): Promise<BookRecord[]> {
-    console.log(book)
     return new Promise((resolve, reject) => {
       api.addNewBook(book).then(result => {
         if (result.data) {
@@ -249,7 +259,6 @@ export const actions: Actions<S, A, G, M> = {
     })
   },
   updateBook({ commit }, { book }): Promise<BookRecord> {
-    console.log(book)
     return new Promise((resolve, reject) => {
       api.updateBook(book.id, book).then(result => {
         if (result.data) {
@@ -262,7 +271,6 @@ export const actions: Actions<S, A, G, M> = {
     })
   },
   async deleteBook({ commit }, { id }): Promise<BookRecord[]> {
-    console.log(id)
     return new Promise((resolve, reject) => {
       api.deleteBook(id).then(result => {
         if (result) {

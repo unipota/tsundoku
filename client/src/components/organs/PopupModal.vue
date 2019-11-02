@@ -10,6 +10,8 @@ import { ExStore } from 'vuex'
 
 import LoginModal from '@/components/molecules/modal/LoginModal.vue'
 import SettingModal from '@/components/molecules/modal/SettingModal.vue'
+import PrivacyPolicyModal from '@/components/molecules/modal/PrivacyPolicyModal.vue'
+import AboutModal from '../molecules/modal/AboutModal.vue'
 
 interface PopupModalMap {
   [key: string]: VueConstructor<Vue>
@@ -21,7 +23,9 @@ export default class PopupModal extends Vue {
 
   components: PopupModalMap = {
     login: LoginModal,
-    setting: SettingModal
+    setting: SettingModal,
+    privacy: PrivacyPolicyModal,
+    about: AboutModal
   }
 
   get showModal(): boolean {

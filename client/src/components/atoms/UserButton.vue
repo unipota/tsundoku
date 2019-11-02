@@ -21,6 +21,8 @@ export default class UserButton extends Vue {
 
 <style lang="sass">
 .user-button
+  display: flex
+  align-items: center
   cursor: pointer
   opacity: 0.8
   transition: opacity .3s

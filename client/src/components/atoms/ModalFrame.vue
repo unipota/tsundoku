@@ -76,8 +76,6 @@ export default class ModalFrame extends Vue {
   readonly modalHideThreshold = 200
   readonly animationDurationMs = 300
 
-  private isGrabbingHeader = false
-
   mounted() {
     if (this.overrideModalInteractivity) {
       this.isModalInteractive = true
@@ -207,7 +205,6 @@ export default class ModalFrame extends Vue {
     this.previousTouchClientY = -1
     const body = this.$refs.modalFrameBody as HTMLDivElement
     this.isModalInteractive = body.scrollTop <= 0
-    this.isGrabbingHeader = false
     this.$nextTick(() => {
       this.modalDeltaY = 0
     })

@@ -15,6 +15,6 @@ export default class BookDetailsItemName extends Vue {
 
 <style lang="sass" scoped>
 .book-details-item-name
-  color: $text-gray
+  color: var(--text-gray)
   font-weight: bold
 </style>

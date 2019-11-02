@@ -85,6 +85,7 @@ export type RM = {
 // actions
 export interface A {
   whoAmI: {}
+  userLogout: {}
   getMyBooks: {}
   getBookDetail: { id: string }
   searchBooksByISBN: { isbn: string }

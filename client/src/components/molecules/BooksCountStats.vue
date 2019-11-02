@@ -68,28 +68,32 @@ export default class BooksCountStats extends Vue {
     )
   }
 
-  get booksCountChartData(): ChartData {
+  get arrayOfDayjsToToday() {
     let day = dayjs.min([...this.booksRegisteredDateArray, dayjs()])
     const arrayOfDayjsToToday = []
-    while (!day.isAfter(dayjs())) {
+    while (!day.isAfter(dayjs(), 'day')) {
       arrayOfDayjsToToday.push(day)
       day = day.add(1, 'day')
     }
-    const booksRegisteredCountsPerDay: number[] = arrayOfDayjsToToday.map(
-      day => {
-        return this.booksRegisteredDateArray.reduce(
-          (acc, regDay) => (regDay.isSame(day, 'day') ? acc + 1 : acc),
-          0
-        )
-      }
-    )
+    return arrayOfDayjsToToday
+  }
 
+  get booksRegisteredCountsPerDay(): number[] {
+    return this.arrayOfDayjsToToday.map(day => {
+      return this.booksRegisteredDateArray.reduce(
+        (acc, regDay) => (regDay.isSame(day, 'day') ? acc + 1 : acc),
+        0
+      )
+    })
+  }
+
+  get booksCountChartData(): ChartData {
     return {
-      labels: arrayOfDayjsToToday.map(day => day.format('MM/DD')),
+      labels: this.arrayOfDayjsToToday.map(day => day.format('MM/DD')),
       datasets: [
         {
           label: '',
-          data: booksRegisteredCountsPerDay,
+          data: this.booksRegisteredCountsPerDay,
           backgroundColor: '#4B4B4B'
         }
       ]
@@ -167,14 +171,16 @@ export default class BooksCountStats extends Vue {
 
   get chartWrapperStyle() {
     return {
-      height: this.hovered ? `${120 + 24}px` : `${120}px`
+      height: this.hovered ? `${120 + 24}px` : `${120}px`,
+      width: `${this.arrayOfDayjsToToday.length * 30}px`
     }
   }
 
   get dayRange(): string {
-    return `${this.booksRegisteredDateArray[0].format(
+    if (this.booksRegisteredDateArray.length === 0) return ''
+    return `${this.arrayOfDayjsToToday[0].format('MM/DD')}~${dayjs().format(
       'MM/DD'
-    )}~${dayjs().format('MM/DD')}`
+    )}`
   }
 
   onMouseOver() {
@@ -189,7 +195,7 @@ export default class BooksCountStats extends Vue {
 
 <style lang="sass" scoped>
 .books-count-stats
-  max-width: 320px
+  width: 320px
   padding: 16px
   border:
     radius: 24px
@@ -245,14 +251,15 @@ export default class BooksCountStats extends Vue {
 
 .chart-gradation-left
   left: 0
-  background: linear-gradient(to right, var(--border-gray) 0%, transparent)
+  background: linear-gradient(to right, rgba(224,224,224,1) 0%, rgba(224,224,224,0))
 
 .chart-gradation-right
   right: 0
-  background: linear-gradient(to left, var(--border-gray) 0%, transparent)
+  background: linear-gradient(to left, rgba(224,224,224,1) 0%, rgba(224,224,224,0))
 
 .chart-wrapper
-  width: 200%
+  // width: 200%
+  min-width: 100%
   // height: 120px
   padding: 0 8px 4px
 

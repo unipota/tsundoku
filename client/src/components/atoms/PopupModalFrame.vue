@@ -42,7 +42,7 @@ export default class PopupModalFrame extends Vue {
   display: flex
   flex-flow: column
   width: 360px
-  height: 80vh
+  height: 70vh
   background: var(--bg-white)
   border:
     radius: 16px

@@ -139,30 +139,37 @@ export default class KidokuStats extends Vue {
     )
   }
 
-  get booksCountChartData(): ChartData {
+  get arrayOfDayjsToToday() {
     let day = dayjs.min([...this.booksRegisteredDateArray, dayjs()])
     const arrayOfDayjsToToday = []
-    while (!day.isAfter(dayjs())) {
+    while (!day.isAfter(dayjs(), 'day')) {
       arrayOfDayjsToToday.push(day)
       day = day.add(1, 'day')
     }
+    return arrayOfDayjsToToday
+  }
 
-    const tsundokuPriceArrayPerDay = arrayOfDayjsToToday
+  get tsundokuPriceArrayPerDay() {
+    return this.arrayOfDayjsToToday
       .map((day: Dayjs): number => {
         return this.priceDiffPerDay[day.format('YYYY-MM-DD')]
           ? this.priceDiffPerDay[day.format('YYYY-MM-DD')]
           : 0
       })
       .reduce((acc: number[], priceDiff: number) => {
-        return acc[0] ? [...acc, acc.slice(-1)[0] + priceDiff] : [priceDiff]
+        return acc.length > 0
+          ? [...acc, acc.slice(-1)[0] + priceDiff]
+          : [priceDiff]
       }, [])
+  }
 
+  get booksCountChartData(): ChartData {
     return {
-      labels: arrayOfDayjsToToday.map(day => day.format('MM/DD')),
+      labels: this.arrayOfDayjsToToday.map(day => day.format('MM/DD')),
       datasets: [
         {
           label: '',
-          data: tsundokuPriceArrayPerDay,
+          data: this.tsundokuPriceArrayPerDay,
           backgroundColor: '#2488D0',
           borderWidth: 0,
           pointBorderColor: 'transparent',
@@ -249,14 +256,16 @@ export default class KidokuStats extends Vue {
 
   get chartWrapperStyle() {
     return {
-      height: this.hovered ? `${120 + 24}px` : `${120}px`
+      height: this.hovered ? `${120 + 24}px` : `${120}px`,
+      width: `${this.arrayOfDayjsToToday.length * 30}px`
     }
   }
 
   get dayRange(): string {
-    return `${this.booksRegisteredDateArray[0].format(
+    if (this.booksRegisteredDateArray.length === 0) return ''
+    return `${this.arrayOfDayjsToToday[0].format('MM/DD')}~${dayjs().format(
       'MM/DD'
-    )}~${dayjs().format('MM/DD')}`
+    )}`
   }
 
   onMouseOver() {
@@ -271,7 +280,7 @@ export default class KidokuStats extends Vue {
 
 <style lang="sass" scoped>
 .books-count-stats
-  max-width: 320px
+  width: 320px
   padding: 16px
   border:
     radius: 24px
@@ -327,15 +336,13 @@ export default class KidokuStats extends Vue {
 
 .chart-gradation-left
   left: 0
-  background: linear-gradient(to right, #c3d4f0 0%, transparent)
+  background: linear-gradient(to right, rgba(195,212,240,1) 0%, rgba(195,212,240,0) 100%)
 
 .chart-gradation-right
   right: 0
-  background: linear-gradient(to left, #c3d4f0 0%, transparent)
+  background: linear-gradient(to left, rgba(195,212,240,1) 0%, rgba(195,212,240,0) 100%)
 
 .chart-wrapper
-  width: 200%
-  // height: 120px
   padding: 0 8px 4px
 
 .chart-range-label

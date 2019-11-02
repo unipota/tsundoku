@@ -73,6 +73,9 @@ export default class Toukei extends Vue {
     left: 5%
     right: 5%
 
+  .view-mobile &
+    flex-flow: column
+
 .stats-wrapper
   margin: 12px 12px
 </style>

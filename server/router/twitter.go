@@ -15,7 +15,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/garyburd/go-oauth/oauth"
+	"github.com/gomodule/oauth1/oauth"
 )
 
 // Account アカウント

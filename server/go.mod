@@ -4,6 +4,7 @@ go 1.13.1
 
 require (
 	cloud.google.com/go v0.47.0 // indirect
+	github.com/casbin/casbin v1.8.2 // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/golang/groupcache v0.0.0-20191027212112-611e8accdfc9 // indirect
@@ -13,7 +14,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/sessions v1.2.0
 	github.com/jinzhu/gorm v1.9.11
-	github.com/labstack/echo-contrib v0.6.0
+	github.com/labstack/echo-contrib v0.7.0
 	github.com/labstack/echo/v4 v4.1.11
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.10 // indirect
@@ -21,12 +22,13 @@ require (
 	github.com/srinathgs/mysqlstore v0.0.0-20170818123135-4f803440ed5b
 	github.com/valyala/fasttemplate v1.1.0 // indirect
 	go.opencensus.io v0.22.1 // indirect
-	golang.org/x/crypto v0.0.0-20191028145041-f83a4685e152 // indirect
-	golang.org/x/net v0.0.0-20191028085509-fe3aa8a45271 // indirect
+	golang.org/x/crypto v0.0.0-20191107222254-f4817d981bb6 // indirect
+	golang.org/x/net v0.0.0-20191108063844-7e6e90b9ea88 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20191028145128-b67d8b46d239 // indirect
+	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
 	golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898
-	google.golang.org/api v0.11.0
+	google.golang.org/api v0.13.0
 	google.golang.org/appengine v1.6.5 // indirect
-	google.golang.org/grpc v1.24.0 // indirect
+	google.golang.org/genproto v0.0.0-20191028173616-919d9bdd9fe6 // indirect
+	google.golang.org/grpc v1.25.0 // indirect
 )

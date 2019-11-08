@@ -92,7 +92,7 @@ export default class BooksEmpty extends Vue {
   flex-flow: column
   align-items: center
   padding:
-    top: 24px
+    top: 48px
     bottom: 32px
 
 .tsundoku-logo

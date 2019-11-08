@@ -25,10 +25,9 @@
         rounded-button.logout-button(@click="logout")
           | ログアウト
       .link-wrap
-        span.link(@click="openAboutModal")
+        p.link(@click="openAboutModal")
           | ツンドクについて
-        br
-        span.link(@click="openPrivacyPolicyModal")
+        p.link(@click="openPrivacyPolicyModal")
           | {{ $t('privacy_policy') }}
 </template>
 
@@ -63,7 +62,7 @@ export default class SettingModal extends Vue {
   }
 
   get createdAt() {
-    return dayjs(this.$store.state.userCreatedAt).format('YYYY MM/DD')
+    return dayjs(this.$store.state.userCreatedAt).format('YYYY/MM/DD')
   }
 
   logout() {
@@ -153,4 +152,5 @@ export default class SettingModal extends Vue {
     font:
       weight: bold
     cursor: pointer
+    margin: 8px auto
 </style>

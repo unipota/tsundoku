@@ -1,7 +1,7 @@
 <template lang="pug">
   section.main-nav
     .tab-header
-      .brand
+      .brand(@click="openAboutModal")
         icon(name="logo")
       setting-button.setting
       user-button.user(v-if="!userLogined")
@@ -74,6 +74,9 @@ export default class DesktopNav extends Vue {
   get userIconUrl(): string | undefined {
     return this.$store.state.userIconUrl
   }
+  openAboutModal() {
+    this.$store.commit('modal/push', { name: 'about' })
+  }
 }
 </script>
 
@@ -94,6 +97,7 @@ export default class DesktopNav extends Vue {
 .brand
   margin:
     right: auto
+  cursor: pointer
 .setting, .user
   margin: 0 4px
 .user-icon-wrap

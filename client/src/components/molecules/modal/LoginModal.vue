@@ -1,35 +1,34 @@
 <template lang="pug">
   popup-modal-frame(name="login" title="登録/ログイン")
-    div.page-wrapper
+    .page-wrapper
       //- div.title-logo
       //-   title-logo
-      div.columns
-        div.column.icon-cloud-tsundoku
+      .columns
+        .column.icon-cloud-tsundoku
           icon(name="cloud")
           icon(name="tsundoku" color="var(--text-gray)" :width="28" :height="24")
-        div.column.descriptions-wrapper
-          div.description
+        .column.descriptions-wrapper
+          .description
             icon(name="check" color="var(--kidoku-blue)" :width="checkWidth" :height="checkHeight").icon-check
             span.text
               | {{ $t('multi_device') }}
-          div.description
+          .description
             icon(name="check" color="var(--kidoku-blue)" :width="checkWidth" :height="checkHeight").icon-check
             span.text
               | {{ $t('backup') }}
-      div.buttons
+      .buttons
         span.button(v-for="(service, key) in services" @click="moveToLink(service.link)")
           icon.icon(:name="key" :width="service.iconWidth" :height="service.iconHeight")
           span.text
             | {{ $t( 'login_with_' + key) }}
-      div.will-not-post
+      .will-not-post
         icon.icon(name="exclamation-mark")
-        div.text
+        .text
           | {{ $t('will_not_post') }}
-      div.terms-and-privacy-policy
-        span.link(@click="openAboutModal")
+      .terms-and-privacy-policy
+        p.link(@click="openAboutModal")
           | ツンドクについて
-        br
-        span.link(@click="openPrivacyPolicyModal")
+        p.link(@click="openPrivacyPolicyModal")
           | {{ $t('privacy_policy') }}
 </template>
 
@@ -57,7 +56,6 @@ export default class LoginModal extends Vue {
   private checkWidth = 18
   private checkHeight = 14.14
   private services: Services = {
-    // TODO: google, github の認証URLが違う場合は書き換える
     google: {
       name: 'Google',
       link: '/auth/google/oauth',
@@ -93,8 +91,10 @@ export default class LoginModal extends Vue {
 
 <style lang="sass" scoped>
 .page-wrapper
+  min-height: 100%
   text-align: center
-  display: block
+  display: flex
+  flex-flow: column
   padding:
     bottom: 32px
   .title-logo
@@ -161,9 +161,12 @@ export default class LoginModal extends Vue {
       opacity: 0.6
   .terms-and-privacy-policy
     margin:
-      top: 36px
+      top: auto
     color: var(--text-black-fade60)
     font-weight: bold
+
+    p
+      margin: 8px auto
 
   .link
     cursor: pointer

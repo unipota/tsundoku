@@ -84,19 +84,10 @@ export default class AddBooksSearch extends Vue {
       autoplay: false,
       animationData: tsundokuLoading
     })
-    this.loadingAnimation.play()
-  }
-
-  get goodSearchResult() {
-    //  検索結果が1件以上 && クエリがタイトルに部分一致するような検索結果が存在する
-    return (
-      this.searchResults.length > 0 &&
-      this.searchResults.find(result => result.title.includes(this.searchQuery))
-    )
   }
 
   get showEditBar() {
-    return !this.goodSearchResult
+    return !this.isSearching
   }
 
   get firstRouteName() {
@@ -107,11 +98,13 @@ export default class AddBooksSearch extends Vue {
     if (!this.searchQuery) return
     this.isFirstView = false
     this.isSearching = true
+    this.loadingAnimation && this.loadingAnimation.play()
     this.$store
       .dispatch('searchBooks', { search: this.searchQuery })
       .then((res: BookSimpleRecord[]) => {
         this.searchResults = res
         this.isSearching = false
+        this.loadingAnimation && this.loadingAnimation.stop()
         this.hasSubmittedSearchQuery = true
         this.isScrollable = res.length >= 3 // [TODO] マジックナンバーではなくす
       })
@@ -124,15 +117,6 @@ export default class AddBooksSearch extends Vue {
       this.hasSubmittedSearchQuery = false
     }
   }
-
-  // @Watch('isSearching')
-  // onSearching(val: boolean) {
-  //   if (val) {
-  //     this.loadingAnimation.play()
-  //   } else {
-  //     this.loadingAnimation.stop()
-  //   }
-  // }
 }
 </script>
 
@@ -144,7 +128,7 @@ export default class AddBooksSearch extends Vue {
   margin: 20vh auto 40px auto
 
 .edit-yourself
-  width: 95%
+  width: calc(100% - 20px)
   margin: auto
   display: flex
   padding: 15px 30px
@@ -204,4 +188,5 @@ export default class AddBooksSearch extends Vue {
 
   &.is-disabled
     opacity: 0.5
+    cursor: auto
 </style>

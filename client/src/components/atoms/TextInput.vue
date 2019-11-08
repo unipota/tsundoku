@@ -1,5 +1,5 @@
 <template lang="pug">
-.text-input
+.text-input(@click="focusInput")
   .icon-wrap
     slot
   input(
@@ -18,6 +18,7 @@
         name="close"
         color="var(--text-gray)"
         :height="12"
+        :width="12"
       )
 </template>
 
@@ -53,6 +54,10 @@ export default class TextInput extends Vue {
 
   handleClear() {
     this.$emit('input', '')
+    this.focusInput()
+  }
+
+  focusInput() {
     const el = this.$refs.input as HTMLInputElement
     el.focus()
   }
@@ -69,6 +74,7 @@ export default class TextInput extends Vue {
   border-radius: 8px
   background: var(--bg-gray)
   padding: 0.5rem 1rem
+  cursor: text
 
 .text-input input
   width: 100%
@@ -91,6 +97,8 @@ export default class TextInput extends Vue {
 
 .clear
   display: flex
+  flex-shrink: 0
+  justify-content: center
   align-items: center
   width: 26px
   height: 26px

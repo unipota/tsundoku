@@ -17,6 +17,7 @@ import (
 var (
 	RAKUTEN_APPLICATION_ID     = os.Getenv("RAKUTEN_APPLICATION_ID")
 	RAKUTEN_APPLICATION_SECRET = os.Getenv("RAKUTEN_APPLICATION_SECRET")
+	GOOGLE_API_KEY             = os.Getenv("GOOGLE_API_KEY")
 )
 
 type ISBN struct {
@@ -164,7 +165,7 @@ func volumes2searchedBooks(volumes *books.Volumes) []*SearchedBook {
 }
 
 func searchWithGoogle(values url.Values) (*books.Volumes, error) {
-	resp, err := http.Get("https://www.googleapis.com/books/v1/volumes" + "?" + values.Encode())
+	resp, err := http.Get("https://www.googleapis.com/books/v1/volumes" + "?" + values.Encode() + "&key=" + GOOGLE_API_KEY)
 	if err != nil {
 		return nil, err
 	}

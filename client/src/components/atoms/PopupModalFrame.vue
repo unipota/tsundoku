@@ -57,6 +57,7 @@ export default class PopupModalFrame extends Vue {
     top: 24px
     left: 32px
     right: 32px
+    bottom: 8px
   justify-content: center
   align-items: center
 

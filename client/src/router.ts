@@ -111,4 +111,11 @@ const router = new Router({
   routes: toRoutesObject(routes, viewNamesToComponentMap)
 })
 
+router.afterEach((to, from) => {
+  if ('ga' in window) {
+    // @ts-ignore
+    ga('send', 'pageview', to.path)
+  }
+})
+
 export default router

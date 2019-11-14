@@ -47,8 +47,8 @@ export default class StatsShare extends Vue {
         break
       case SNS.Line:
         targetURL = `https://timeline.line.me/social-plugin/share?url=${encodeURI(
-          `${this.shareText} ${encodeURI(shareURL)}`
-        )}/?${''}`
+          `${this.shareText}\n${encodeURI(shareURL)}`
+        )}`
         break
       case SNS.Facebook:
         targetURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURI(
@@ -56,7 +56,8 @@ export default class StatsShare extends Vue {
         )}`
         break
     }
-    window.open(targetURL)
+    // iOS Safari not allow window.open
+    window.open(targetURL) || (location.href = targetURL)
   }
 }
 </script>

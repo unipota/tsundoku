@@ -98,13 +98,13 @@ export default class AddBooksSearch extends Vue {
     if (!this.searchQuery) return
     this.isFirstView = false
     this.isSearching = true
-    this.loadingAnimation && this.loadingAnimation.play()
+    this.loadingAnimation?.play()
     this.$store
       .dispatch('searchBooks', { search: this.searchQuery })
       .then((res: BookSimpleRecord[]) => {
         this.searchResults = res
         this.isSearching = false
-        this.loadingAnimation && this.loadingAnimation.stop()
+        this.loadingAnimation?.stop()
         this.hasSubmittedSearchQuery = true
         this.isScrollable = res.length >= 3 // [TODO] マジックナンバーではなくす
       })

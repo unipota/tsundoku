@@ -38,7 +38,7 @@ export default class AddBooksSearch extends Vue {
     author: [],
     totalPages: 0,
     price: 0,
-    caption: null,
+    caption: '',
     publisher: '',
     coverImageUrl: '',
     readPages: 0,

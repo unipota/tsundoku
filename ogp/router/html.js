@@ -3,7 +3,7 @@ exports.buildOgpHtmlHandler = function buildOgpHtmlHandler (req, res){
   const kidoku = req.query.kidoku;
   const count = req.query.count;
 
-  res.render('/tsundoku/ogp/public/ogpimage.ejs', {
+  res.render('ogpimage.ejs', {
     h1: "ツンドク",
     tsundoku: tsundoku,
     kidoku: kidoku,

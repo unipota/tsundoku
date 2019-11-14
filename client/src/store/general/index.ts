@@ -271,7 +271,7 @@ export const actions: Actions<S, A, G, M> = {
     })
   },
   async deleteBook({ commit }, { id }): Promise<BookRecord[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       api.deleteBook(id).then(result => {
         if (result) {
           commit('deleteBook', id)
@@ -292,6 +292,20 @@ export const actions: Actions<S, A, G, M> = {
           reject()
         }
       })
+    })
+  },
+  getShareURL(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      api
+        .getShareURL()
+        .then(result => {
+          if (result.data) {
+            resolve(result.data.URL)
+          } else {
+            reject()
+          }
+        })
+        .catch(reason => reject(reason))
     })
   }
 }

@@ -3,10 +3,7 @@
     .tab-header
       .brand(@click="openAboutModal")
         icon(name="logo")
-      setting-button.setting
-      user-button.user(v-if="!userLogined")
-      .user-icon-wrap(v-else)
-        user-icon(:src="userIconUrl")
+      user-button.user
     .tab-wrap
       desktop-tab(:selected-tab="selectedPath" :price="price")
     .button-wrap
@@ -37,7 +34,6 @@ import DesktopTab from '@/components/atoms/DesktopTab.vue'
 import DesktopNavButton from '@/components/atoms/DesktopNavButton.vue'
 import Icon from '@/components/assets/Icon.vue'
 import UserIcon from '@/components/atoms/UserIcon.vue'
-import SettingButton from '@/components/atoms/SettingButton.vue'
 import UserButton from '@/components/atoms/UserButton.vue'
 
 @Component({
@@ -46,7 +42,6 @@ import UserButton from '@/components/atoms/UserButton.vue'
     UserIcon,
     DesktopTab,
     DesktopNavButton,
-    SettingButton,
     UserButton
   }
 })
@@ -67,9 +62,6 @@ export default class DesktopNav extends Vue {
       : this.selectedPath === 'kidoku'
       ? this.$store.getters.kidokuPrice
       : 0
-  }
-  get userLogined(): boolean {
-    return this.$store.state.userLogined
   }
   get userIconUrl(): string | undefined {
     return this.$store.state.userIconUrl

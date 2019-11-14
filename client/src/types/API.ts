@@ -4,3 +4,7 @@ export interface WhoAmIResponse {
   iconUrl: string
   createdAt: string
 }
+
+export interface GetShareResponse {
+  URL: string
+}

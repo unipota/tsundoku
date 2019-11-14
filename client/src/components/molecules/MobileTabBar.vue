@@ -131,17 +131,17 @@ export default class MobileTabBar extends Vue {
           right: 18px
 
       &.tsundoku
-        color: $tsundoku-red
+        color: var(--tsundoku-red)
         &.selected
-          background-color: $tsundoku-red-bg
+          background-color: var(--tsundoku-red-bg)
       &.kidoku
-        color: $kidoku-blue
+        color: var(--kidoku-blue)
         &.selected
-          background-color: $kidoku-blue-bg
+          background-color: var(--kidoku-blue-bg)
       &.toukei
-        color: $toukei-black
+        color: var(--toukei-black)
         &.selected
-          background-color: $toukei-black-bg
+          background-color: var(--toukei-black-bg)
 
       .icon
         width: 30px

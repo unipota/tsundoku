@@ -21,10 +21,32 @@
       @input="update('price', parseInt($event))"
     )
     books-info-edit-input.edit-input(
-      type="text"
+      type="number"
+      :label="$t('totalPages')"
+      :value="value.totalPages.toString()"
+      @input="update('totalPages', parseInt($event))"
+    )
+    books-info-edit-input.edit-input(
+      :label="$t('publisher')"
+      :value="value.publisher"
+      @input="update('publisher', $event)"
+    )
+    books-info-edit-input.edit-input(
+      type="textarea"
       :label="$t('memo')"
       :value="value.memo.toString()"
       @input="update('memo', $event)"
+    )
+    books-info-edit-input.edit-input(
+      type="textarea"
+      :label="$t('caption')"
+      :value="value.caption.toString()"
+      @input="update('caption', $event)"
+    )
+    books-info-edit-input.edit-input(
+      :label="$t('coverImageUrl')"
+      :value="value.coverImageUrl"
+      @input="update('coverImageUrl', $event)"
     )
 </template>
 

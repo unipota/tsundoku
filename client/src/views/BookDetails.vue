@@ -74,12 +74,13 @@
                 :value="relativeTime")
               book-details-item.item(
                 textarea
-                clickable
                 name="メモ"
                 placeholder="メモがありません"
                 :value="book.memo")
               book-details-item.item(
-                :name="$t('overview')"
+                textarea
+                :name="$t('caption')"
+                placeholder="概要がありません"
                 :value="book.caption")
               book-details-item.item(
                 :name="$t('publisher')"
@@ -217,7 +218,9 @@ export default class BookDetails extends Vue {
         book: this.editingBook
       })
       await this.$store.dispatch('getMyBooks')
-      this.$router.push('/')
+      this.$router.push(
+        this.$route.path.substring(0, this.$route.path.length - 5)
+      )
     }
   }
 
@@ -375,7 +378,7 @@ export default class BookDetails extends Vue {
   }
 
   get isButtonExpanded() {
-    return this.scrollAmount > slimHeaderScrollThreshold
+    return this.scrollAmount < slimHeaderScrollThreshold
   }
 
   get book(): BookRecord {

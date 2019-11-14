@@ -27,11 +27,11 @@ export default class DesktopNavBarButton extends Vue {
   user-select: none
   cursor: pointer
   transition: box-shadow .5s, background .3s
-  box-shadow: 0px 0px 5px -1px #e3402a6e
+  // box-shadow: 0px 0px 5px -1px #e3402a6e
 
   &:hover
     background: var(--tsundoku-red-hovered)
-    box-shadow: 0px 3px 5px -1px #e3402a6e
+    // box-shadow: 0px 3px 5px -1px #e3402a6e
 .icon
   display: flex
   align-items: center

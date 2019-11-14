@@ -344,6 +344,7 @@ export default class KidokuStats extends Vue {
 
 .chart-wrapper
   padding: 0 8px 4px
+  min-width: 100%
 
 .chart-range-label
   font:

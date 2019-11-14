@@ -94,6 +94,7 @@ export interface A {
   updateBook: { book: BookRecord }
   deleteBook: { id: string }
   getAllBookStats: {}
+  getShareURL: {}
 }
 export type RA = {
   [K in keyof A]: A[K]

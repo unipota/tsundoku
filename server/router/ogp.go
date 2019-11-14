@@ -57,7 +57,7 @@ func GetShareURLHandler(c echo.Context) error {
 func GetSharePageHandler(c echo.Context) error {
 	shareID := c.Param("shareID")
 	siteURL := c.Scheme() + "://" + c.Request().Host
-	html, err := buildHtml(shareID, siteURL)
+	html, err := buildHTML(shareID, siteURL)
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)
 	}
@@ -139,20 +139,22 @@ func calcTsundoku(books []*model.Book) *TsundokuData {
 	}
 
 	for _, book := range books {
-		thisTsundoku := 0
-		if book.ReadHistories[0].ReadPage < book.TotalPages {
-			thisTsundoku = int(math.Floor((1.0-float64(book.ReadHistories[0].ReadPage)/float64(book.TotalPages))*float64(book.Price)) + 0.5)
+		if book.TotalPages == 0 || book.ReadHistories[0].ReadPage < book.TotalPages {
+			if book.TotalPages == 0 {
+				tsundokuData.Tsundoku += book.Price
+			} else {
+				tsundokuData.Tsundoku += int(math.Floor((1.0-float64(book.ReadHistories[0].ReadPage)/float64(book.TotalPages))*float64(book.Price)) + 0.5)
+			}
+		} else {
+			tsundokuData.Kidoku += book.Price
 		}
-
-		tsundokuData.Tsundoku += thisTsundoku
-		tsundokuData.Kidoku += book.Price - thisTsundoku
-		tsundokuData.Count += 1
+		tsundokuData.Count++
 	}
 
 	return tsundokuData
 }
 
-func buildHtml(shareID string, siteURL string) (string, error) {
+func buildHTML(shareID string, siteURL string) (string, error) {
 	tmpl := template.Must(template.ParseFiles("/tsundoku/server/static/share.html"))
 	buff := new(bytes.Buffer)
 	fw := io.Writer(buff)
@@ -160,10 +162,9 @@ func buildHtml(shareID string, siteURL string) (string, error) {
 		SiteURL  string
 		ImageURL string
 	}{
-		SiteURL:  siteURL,
+		SiteURL: siteURL,
 
 		ImageURL: siteURL + "/ogp/" + shareID,
-
 	}
 	if err := tmpl.ExecuteTemplate(fw, "base", dat); err != nil {
 		return "", err

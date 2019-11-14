@@ -2,10 +2,7 @@
   .mobile-top-bar
     .price-display
       portal-target(name="priceDisplay")
-    setting-button.setting
-    user-button.user(v-if="!userLogined")
-    .user-icon-wrap(v-else)
-      user-icon(:src="userIconUrl")
+    user-button.user
 </template>
 
 <script lang="ts">
@@ -13,21 +10,13 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
 import UserIcon from '@/components/atoms/UserIcon.vue'
-import SettingButton from '@/components/atoms/SettingButton.vue'
 import UserButton from '@/components/atoms/UserButton.vue'
 
 @Component({
-  components: { UserIcon, SettingButton, UserButton }
+  components: { UserIcon, UserButton }
 })
 export default class MobileTopBar extends Vue {
   public $store!: ExStore
-
-  get userLogined(): boolean {
-    return this.$store.state.userLogined
-  }
-  get userIconUrl(): string | undefined {
-    return this.$store.state.userIconUrl
-  }
 }
 </script>
 

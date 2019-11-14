@@ -1,10 +1,10 @@
 <template lang="pug">
-  .book-details-item-value(:style="style")
-    | {{ value }}
+  .book-details-item-value(:style="style" v-html="sanitizedValue")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import sanitizeHTML from 'sanitize-html'
 
 @Component
 export default class BookDetailsItemTextarea extends Vue {
@@ -19,6 +19,14 @@ export default class BookDetailsItemTextarea extends Vue {
       color: this.color
     }
   }
+
+  get sanitizedValue(): string {
+    return this.insertBrTag(sanitizeHTML(this.value))
+  }
+
+  insertBrTag(value: string): string {
+    return value.replace(/\r?\n/g, '<br>')
+  }
 }
 </script>
 
@@ -29,8 +37,8 @@ export default class BookDetailsItemTextarea extends Vue {
   padding: 8px
   border:
     radius: 8px
-  color: $text-black
+  color: var(--text-gray)
   background:
-    color: $bg-gray
+    color: var(--bg-gray)
   font-weight: normal
 </style>

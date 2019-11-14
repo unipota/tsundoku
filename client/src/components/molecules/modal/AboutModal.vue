@@ -26,6 +26,8 @@
           .dev-name
             | うにぽた
             .links
+              a(href="https://github.com/unipota" target="_blank")
+                icon(name="github" :width="20" :height="20")
               a(href="https://twitter.com/unipota" target="_blank")
                 icon(name="twitter" :width="22" :height="22")
           .dev-contributions
@@ -55,7 +57,7 @@
             | oribe
             .links
               a(href="https://github.com/oribe1115" target="_blank")
-                icon(name="github" :width="22" :height="22")
+                icon(name="github" :width="20" :height="20")
           .dev-contributions
             | Server / Infrastructure
 </template>
@@ -186,6 +188,15 @@ export default class AboutModal extends Vue {}
     font:
       size: 18px
       weight: bold
+
+    .links
+      display: inline-flex
+      align-items: center
+
+      a
+        display: inline-flex
+        margin:
+          right: 8px
 
   .dev-contributions
     margin:

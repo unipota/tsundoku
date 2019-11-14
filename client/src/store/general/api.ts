@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { BookSimpleRecord, BookRecord, BookStats } from '@/types/Book'
-import { WhoAmIResponse } from '@/types/User'
+import { WhoAmIResponse, GetShareResponse } from '@/types/API'
 
 const isDev = process.env['NODE_ENV'] === 'development'
 
@@ -39,6 +39,9 @@ const api = {
   },
   getAllBookStats(): Promise<AxiosResponse<BookStats[]>> {
     return client.get('api/books/statistics')
+  },
+  getShareURL(): Promise<AxiosResponse<GetShareResponse>> {
+    return client.get('api/share')
   }
 }
 

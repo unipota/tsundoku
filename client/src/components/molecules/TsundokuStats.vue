@@ -340,6 +340,7 @@ export default class TsundokuStats extends Vue {
   background: linear-gradient(to left, rgba(255, 219, 214, 1.00) 0%, rgba(255, 219, 214, 0))
 
 .chart-wrapper
+  min-width: 100%
   padding: 0 8px 4px
 
 .chart-range-label

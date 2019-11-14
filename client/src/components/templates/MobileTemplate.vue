@@ -6,7 +6,7 @@
     .modal-overlay(@click="closeModal")
     .top-bar-wrap
       mobile-top-bar(v-if="$store.state.showMobileTopBar")
-    .content-wrap(ref="scrollContainer")
+    .content-wrap(v-if="booksLoaded" ref="scrollContainer")
       // keep-alive (see: DesktopTemplate)
       router-view
     .bottom-bar-wrap
@@ -64,6 +64,10 @@ export default class MobileTemplate extends Vue {
     return (
       this.$route.meta.isModal || this.$store.getters['modal/currentModalName']
     )
+  }
+
+  get booksLoaded() {
+    return this.$store.state.booksLoaded
   }
 
   mounted() {

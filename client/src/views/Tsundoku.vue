@@ -134,7 +134,9 @@ export default class Tsundoku extends Vue {
   }
   get filteredBooks() {
     return this.books
-      .filter(book => this.filteredIds.includes(book.id))
+      .filter(book =>
+        this.filterText === '' ? true : this.filteredIds.includes(book.id)
+      )
       .sort(this.compareFunction)
   }
   get booksNumber() {

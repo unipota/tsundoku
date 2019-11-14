@@ -29,7 +29,9 @@ function screenshot(filename, tsundoku, kidoku, count) {
       ]
     });
     const page = await browser.newPage();
+    page.setViewport({width: 1200, height: 630})
     await page.goto(url);
+    await page.evaluateHandle('document.fonts.ready');
     const path = 'screenshots/' + filename;
     await page.screenshot({ path: path, fullPage: true });
 

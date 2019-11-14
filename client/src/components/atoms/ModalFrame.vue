@@ -1,8 +1,7 @@
 <template lang="pug">
-  .modal-frame-overlay(
-      :class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`"
-      v-click-outside="handleClickOutside"
-    )
+  .modal-frame-container(
+      :class="`${$store.getters.viewTypeClass} ${$store.getters.modalTransitionClass}`")
+    .modal-frame-overlay(@click="handleClickOutside")
     .modal-frame-wrapper(
       :class="modalClass"
       :style="{ transform: `translateY(${modalDeltaY}px)` }"
@@ -216,16 +215,18 @@ export default class ModalFrame extends Vue {
 </script>
 
 <style lang="sass" scoped>
-.modal-frame-overlay
+.modal-frame-container
   position: absolute
-  bottom: 0
-  height: 100%
+  width: 100vw
+  height: 100vh
   z-index: 10
   pointer-events: auto
-  &.is-mobile
-    width: 100%
-  &.is-desktop
-    width: 600px
+
+.modal-frame-overlay
+  position: absolute
+  width: 100vw
+  height: 100vh
+  z-index: 10 - 1
 
 .modal-frame-wrapper
   position: absolute
@@ -239,10 +240,12 @@ export default class ModalFrame extends Vue {
   overflow: hidden
   &.is-mobile
     height: calc(100% - 24px)
+    width: 100%
     border:
       radius: 24px 24px 0 0
   &.is-desktop
     height: 100%
+    width: 600px
     border:
       radius: 0 24px 24px 0
   &.css-animating
@@ -252,15 +255,17 @@ export default class ModalFrame extends Vue {
   padding:
     left: 24px
     right: 24px
-  height: calc(100% - 30px - 24px)  // .modal-frame-close の高さとborder-radiusの分を引いた
   overflow:
     x: hidden
     y: auto
 
   .is-desktop &
     padding-top: 48px
+    height: calc(100% - 24px)
+
   .is-mobile &
     padding-top: 24px
+    height: calc(100% - 30px - 24px)
 
   .no-padding &
     height: calc(100% + 32px)  // .modal-frame-wrapperのpadding分を戻す

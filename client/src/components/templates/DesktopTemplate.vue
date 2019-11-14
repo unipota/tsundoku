@@ -6,7 +6,7 @@
     .modal-overlay(@click="closeModal")
     .nav-wrap
       desktop-nav(v-if="$store.state.showDesktopNav")
-    .content-wrap
+    .content-wrap(v-if="booksLoaded")
       // keep-alive だと複数存在する同名のポータルでハマるのでとりあえず無効化
       router-view
 </template>
@@ -39,6 +39,10 @@ export default class DesktopTemplate extends Vue {
     return (
       this.$route.meta.isModal || this.$store.getters['modal/currentModalName']
     )
+  }
+
+  get booksLoaded() {
+    return this.$store.state.booksLoaded
   }
 
   mounted() {

@@ -2,8 +2,7 @@
   transition-group.floating-add-tsundoku-button(
     :class="{'is-active': active}"
     name="transition-button"
-    tag="div"
-    v-click-outside="handleClickOutside")
+    tag="div")
     .button-search(@click="openSearchModal" key="search" v-show="active")
       icon(name="search" :width="24" :height="24")
       span.under-button-label 検索
@@ -23,15 +22,11 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import vClickOutside from 'v-click-outside'
 
 import Icon from '@/components/assets/Icon.vue'
 
 @Component({
-  components: { Icon },
-  directives: {
-    clickOutside: vClickOutside.directive
-  }
+  components: { Icon }
 })
 export default class FloatingAddTsundokuButton extends Vue {
   active = false

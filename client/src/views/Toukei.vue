@@ -10,6 +10,8 @@
         tsundoku-stats(v-if="loaded" :allBookStats="allBookStats")
       .stats-wrapper
         kidoku-stats(v-if="loaded" :allBookStats="allBookStats")
+      .stats-wrapper
+        stats-share(v-if="loaded")
     portal(to="modalView")
       transition(name="modal-show")  
         router-view
@@ -23,9 +25,10 @@ import { BookStats } from '@/types/Book'
 import BooksCountStats from '@/components/molecules/BooksCountStats.vue'
 import TsundokuStats from '@/components/molecules/TsundokuStats.vue'
 import KidokuStats from '@/components/molecules/KidokuStats.vue'
+import StatsShare from '@/components/molecules/StatsShare.vue'
 
 @Component({
-  components: { BooksCountStats, TsundokuStats, KidokuStats }
+  components: { BooksCountStats, TsundokuStats, KidokuStats, StatsShare }
 })
 export default class Toukei extends Vue {
   public $store!: ExStore
@@ -67,14 +70,15 @@ export default class Toukei extends Vue {
 .stats-container
   display: flex
   flex-wrap: wrap
-  align-items: center
   padding:
     top: 12px
     left: 5%
     right: 5%
+    bottom: 32px
 
   .view-mobile &
     flex-flow: column
+    align-items: center
 
 .stats-wrapper
   margin: 12px 12px

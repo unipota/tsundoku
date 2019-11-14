@@ -38,10 +38,11 @@
   "author": "著者",
   "totalPages": "総ページ数",
   "price": "購入価格",
-  "caption": "キャプション",
+  "caption": "概要",
   "publisher": "出版社",
   "readPages": "読了ページ数",
   "memo": "メモ",
+  "coverImageUrl": "書影画像URL",
 
   "overview": "概要",
 

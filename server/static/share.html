@@ -1,16 +1,28 @@
 {{define "base"}}
 <!doctype html>
 <html lang="ja">
-<head>
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 	<meta charset="UTF-8">
-  <title>share</title>
-  
+  <title>ツンドク</title>
+
+  <meta name="description" content="">
+  <meta name="keywords" content="積読,積ん読,積み本,読書,書籍,ツンドク">
+  <meta name="author" content="ツンドク開発チーム">
+
+  <meta property="og:title" content="ツンドク" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{.SiteURL}}" />
+  <meta property="og:image" content="{{.ImageURL}}" />
+  <meta property="og:site_name" content="ツンドク" />
+  <meta property="og:description" content="" />
+  <meta property="og:locale" content="ja_JP" />
+
+  <meta property="fb:app_id" content="440596230208321" />
+
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@unipota" />
-  <meta property="og:url" content='{{.SiteURL}}' />
-  <meta property="og:title" content="ツンドク" /> 
-  <meta property="og:description" content="ツンドクしよう" /> 
-  <meta property="og:image" content='{{.ImageURL}}' />
+  <meta name="twitter:site" content="@tsundokuApp" />
+  <meta name="twitter:creator" content="@tsundokuApp" />
+
 </head>
 <body>
   <script>

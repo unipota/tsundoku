@@ -5,7 +5,7 @@ import { WhoAmIResponse, GetShareResponse } from '@/types/API'
 const isDev = process.env['NODE_ENV'] === 'development'
 
 const client = axios.create({
-  baseURL: isDev ? '/' : 'https://test.tsun-doku.app/',
+  baseURL: isDev ? '/' : 'https://tsun-doku.app/',
   headers: { 'Access-Control-Allow-Origin': '*' }
 })
 

@@ -33,6 +33,7 @@ export interface S {
   booksMap: Record<string, BookRecord>
   readHistoriesMap: Record<string, ReadHistory[]>
   bookStatsArray: BookStats[]
+  scrollLock: boolean
   useMockBooksMap: boolean
 }
 // ______________________________________________________
@@ -75,6 +76,7 @@ export interface M {
   setReadHistoriesMap: BookDetail
   setBookStats: BookStats[]
   updateBook: { book: BookRecord }
+  setScrollLock: boolean
   deleteBook: string
 }
 export type RM = {

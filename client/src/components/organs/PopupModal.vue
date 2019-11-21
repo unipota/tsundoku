@@ -41,7 +41,7 @@ export default class PopupModal extends Vue {
 <style lang="sass" scoped>
 .popup-modal-shown
   &-enter, &-leave-to
-    transform: translateY(24px)
+    transform: translateY(4px)
     opacity: 0
   &-enter-active, &-leave-active
     transition: all .3s $easeInOutQuint

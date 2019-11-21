@@ -167,19 +167,22 @@ export const mutations: Mutations<S, M> = {
 export const actions: Actions<S, A, G, M> = {
   whoAmI({ commit }): Promise<void> {
     return new Promise((resolve, reject) => {
-      api.whoAmI().then(result => {
-        if (result.data) {
-          const { logined, screenName, iconUrl, createdAt } = result.data
-          commit('setUserLogined', logined)
-          commit('setUserScreenName', screenName)
-          commit('setUserIconUrl', iconUrl)
-          commit('setUserCreatedAt', createdAt)
-          commit('setUserConfirmed', true)
+      api
+        .whoAmI()
+        .then(result => {
+          if (result.data) {
+            const { logined, screenName, iconUrl, createdAt } = result.data
+            commit('setUserLogined', logined)
+            commit('setUserScreenName', screenName)
+            commit('setUserIconUrl', iconUrl)
+            commit('setUserCreatedAt', createdAt)
+            commit('setUserConfirmed', true)
+            resolve()
+          }
+        })
+        .catch(err => {
           resolve()
-        } else {
-          reject()
-        }
-      })
+        })
     })
   },
   userLogout(): Promise<void> {
@@ -201,15 +204,20 @@ export const actions: Actions<S, A, G, M> = {
         // 開発用
         resolve()
       } else {
-        api.getMyBooks().then(result => {
-          if (result.data) {
-            commit('setBooksMap', result.data)
-            commit('setBooksLoaded', true)
+        api
+          .getMyBooks()
+          .then(result => {
+            if (result.data) {
+              commit('setBooksMap', result.data)
+              resolve()
+            }
+          })
+          .catch(err => {
             resolve()
-          } else {
-            reject()
-          }
-        })
+          })
+          .finally(() => {
+            commit('setBooksLoaded', true)
+          })
       }
     })
   },
@@ -219,8 +227,6 @@ export const actions: Actions<S, A, G, M> = {
         if (result.data) {
           commit('setReadHistoriesMap', result.data)
           resolve(result.data)
-        } else {
-          reject()
         }
       })
     })
@@ -230,8 +236,6 @@ export const actions: Actions<S, A, G, M> = {
       api.searchBooksByISBN(isbn).then(result => {
         if (result.data) {
           resolve(result.data)
-        } else {
-          reject()
         }
       })
     })
@@ -241,8 +245,6 @@ export const actions: Actions<S, A, G, M> = {
       api.searchBooks(search).then(result => {
         if (result.data) {
           resolve(result.data)
-        } else {
-          reject()
         }
       })
     })
@@ -252,8 +254,6 @@ export const actions: Actions<S, A, G, M> = {
       api.addNewBook(book).then(result => {
         if (result.data) {
           resolve(result.data)
-        } else {
-          reject()
         }
       })
     })
@@ -264,8 +264,6 @@ export const actions: Actions<S, A, G, M> = {
         if (result.data) {
           commit('updateBook', { book: result.data })
           resolve(result.data)
-        } else {
-          reject()
         }
       })
     })
@@ -276,8 +274,6 @@ export const actions: Actions<S, A, G, M> = {
         if (result) {
           commit('deleteBook', id)
           resolve()
-        } else {
-          reject()
         }
       })
     })
@@ -288,8 +284,6 @@ export const actions: Actions<S, A, G, M> = {
         if (result.data) {
           commit('setBookStats', result.data)
           resolve(result.data)
-        } else {
-          reject()
         }
       })
     })
@@ -301,8 +295,6 @@ export const actions: Actions<S, A, G, M> = {
         .then(result => {
           if (result.data) {
             resolve(result.data.URL)
-          } else {
-            reject()
           }
         })
         .catch(reason => reject(reason))

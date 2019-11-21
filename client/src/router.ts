@@ -111,4 +111,12 @@ const router = new Router({
   routes: toRoutesObject(routes, viewNamesToComponentMap)
 })
 
+router.afterEach((to, from) => {
+  // @ts-ignore
+  if (typeof gtag !== 'undefined') {
+    // @ts-ignore
+    gtag('config', 'UA-152571593-1', { page_path: to.path })
+  }
+})
+
 export default router

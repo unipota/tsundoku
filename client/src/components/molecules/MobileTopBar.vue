@@ -2,21 +2,29 @@
   .mobile-top-bar
     .price-display
       portal-target(name="priceDisplay")
-    user-button.user
+    .right-side-wrapper
+      .logo-icon(@click="openAboutModal")
+        icon(name="logo" :width="28" :height="28")
+      user-button.user
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
 
+import Icon from '@/components/assets/Icon.vue'
 import UserIcon from '@/components/atoms/UserIcon.vue'
 import UserButton from '@/components/atoms/UserButton.vue'
 
 @Component({
-  components: { UserIcon, UserButton }
+  components: { Icon, UserIcon, UserButton }
 })
 export default class MobileTopBar extends Vue {
   public $store!: ExStore
+
+  openAboutModal() {
+    this.$store.commit('modal/push', { name: 'about' })
+  }
 }
 </script>
 
@@ -38,15 +46,18 @@ export default class MobileTopBar extends Vue {
   margin:
     right: auto
 
-.setting, .user
+.right-side-wrapper
   display: flex
   align-items: center
-  margin: 0 4px
 
-.user-icon-wrap
+.logo-icon
   width: 28px
   height: 28px
+
+.user
+  display: flex
+  align-items: center
   margin:
-    left: 6px
-    right: 2px
+    left: 16px
+    right: 4px
 </style>

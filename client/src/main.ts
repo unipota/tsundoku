@@ -7,15 +7,11 @@ import i18n from './i18n'
 import PortalVue from 'portal-vue'
 import VueMeta from 'vue-meta'
 import VTooltip from 'v-tooltip'
-import VueAnalytics from 'vue-analytics'
 
 Vue.use(PortalVue)
 Vue.use(VueMeta)
 Vue.use(VTooltip, {
   defaultDelay: 500
-})
-Vue.use(VueAnalytics, {
-  id: 'UA-152571593-1'
 })
 
 Vue.config.productionTip = false

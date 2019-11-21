@@ -12,7 +12,7 @@
     .bottom-bar-wrap
       mobile-tab-bar(v-if="$store.state.showMobileTabBar")
     transition(name="transition-floating-button")
-      floating-add-tsundoku-button.tsundoku-button(v-show="selectedPath === 'tsundoku'")
+      floating-add-tsundoku-button.tsundoku-button(v-if="selectedPath === 'tsundoku'")
 </template>
 
 <script lang="ts">

@@ -1,7 +1,7 @@
 <template lang="pug">
   .floating-add-tsundoku-button
     transition(name="transition-overlay")
-      .overlay(v-if="active" @click="handleClick")
+      .overlay(v-if="active" @click="handleClose")
     transition-group.button-container(
       :class="{'is-active': active}"
       name="transition-button"
@@ -25,6 +25,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { ExStore } from 'vuex'
 
 import Icon from '@/components/assets/Icon.vue'
 
@@ -32,13 +33,14 @@ import Icon from '@/components/assets/Icon.vue'
   components: { Icon }
 })
 export default class FloatingAddTsundokuButton extends Vue {
+  $store!: ExStore
   active = false
 
   handleClick() {
     this.active = !this.active
   }
 
-  handleClickOutside() {
+  handleClose() {
     this.active = false
   }
 

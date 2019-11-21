@@ -50,6 +50,7 @@
         .detail-wrap(
           v-else
           ref="bodyWrap"
+          :style="detailWrapStyle"
           @scroll="updateHeader"
           @touchend="updateIsBodyScrollTop"
           key="detail"
@@ -367,6 +368,12 @@ export default class BookDetails extends Vue {
     this.$router.push({ path: `${this.$route.path}/edit` })
   }
 
+  get detailWrapStyle() {
+    return {
+      'z-index': this.scrollAmount < 10 ? 6 : 0
+    }
+  }
+
   get firstRouteName() {
     return this.$route.matched[0].path
   }
@@ -510,7 +517,7 @@ $cover-transition-duration: 0.3s
   position: absolute
   top: 72px
   right: 0
-  z-index: 5
+  z-index: 10
   padding:
     top: 0
     right: 16px

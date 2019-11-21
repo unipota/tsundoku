@@ -29,6 +29,7 @@ export const state = (): S => ({
   booksMap: {},
   readHistoriesMap: {},
   bookStatsArray: [],
+  scrollLock: false,
   useMockBooksMap: false // 開発用
 })
 // ______________________________________________________
@@ -157,6 +158,9 @@ export const mutations: Mutations<S, M> = {
   updateBook(state, { book }) {
     state.booksMap[book.id] = book
     state.booksMap = { ...state.booksMap }
+  },
+  setScrollLock(state, scrollLock) {
+    state.scrollLock = scrollLock
   },
   deleteBook(state, bookId) {
     Vue.delete(state.booksMap, bookId)

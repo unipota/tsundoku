@@ -154,6 +154,7 @@ export default class MobileTabBar extends Vue {
 
       .label
         height: 20px
+        line-height: 20px
         white-space: nowrap
         margin:
           top: auto

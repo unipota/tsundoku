@@ -88,10 +88,11 @@ export default class FloatingAddTsundokuButton extends Vue {
 .button-container
   position: absolute
   z-index: 10
-  right: 12px
-  bottom: calc(63px + 12px)
-  @supports (bottom: env(safe-area-inset-bottom))
-    bottom: calc(env(safe-area-inset-bottom) + 63px + 12px)
+  margin:
+    right: 12px
+    bottom: calc(63px + 12px)
+  @supports (margin-bottom: env(safe-area-inset-bottom))
+    margin-bottom: calc(env(safe-area-inset-bottom) + 63px + 12px)
   display: flex
   flex:
     flow: column

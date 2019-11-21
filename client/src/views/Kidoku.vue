@@ -128,9 +128,10 @@ export default class Tsundoku extends Vue {
     return new Fuse(this.processedBooks, options)
   }
   get filteredIds(): string[] {
-    return this.fuseInstance
-      .search(kanaToHira(this.filterText))
-      .map(book => book.id)
+    let searched = this.fuseInstance.search(
+      kanaToHira(this.filterText)
+    ) as FilterTargetBookRecord[]
+    return searched.map(book => book.id)
   }
   get filteredBooks() {
     return this.books

@@ -1,49 +1,70 @@
 <!DOCTYPE html>
 <html lang="ja">
+  <head
+    prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
+  >
+    <% if (process.env.NODE_ENV === 'production') { %>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-152571593-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-152571593-1");
+    </script>
+    <% } %>
 
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,viewport-fit=cover"
+    />
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#ffffff">
-  <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="theme-color" content="#ffffff" />
 
-  <meta name="description" content="">
-  <meta name="keywords" content="積読,積ん読,積み本,読書,書籍,ツンドク">
-  <meta name="author" content="ツンドク開発チーム">
+    <meta name="description" content="" />
+    <meta name="keywords" content="積読,積ん読,積み本,読書,書籍,ツンドク" />
+    <meta name="author" content="ツンドク開発チーム" />
 
-  <meta property="og:title" content="ツンドク" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://test.tsun-doku.app" />
-  <meta property="og:image" content="" />
-  <meta property="og:site_name" content="ツンドク" />
-  <meta property="og:description" content="" />
-  <meta property="og:locale" content="ja_JP" />
+    <meta property="og:title" content="ツンドク" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://test.tsun-doku.app" />
+    <meta property="og:image" content="" />
+    <meta property="og:site_name" content="ツンドク" />
+    <meta property="og:description" content="" />
+    <meta property="og:locale" content="ja_JP" />
 
-  <meta property="fb:app_id" content="440596230208321" />
+    <meta property="fb:app_id" content="440596230208321" />
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@tsundokuApp" />
-  <meta name="twitter:creator" content="@tsundokuApp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@tsundokuApp" />
+    <meta name="twitter:creator" content="@tsundokuApp" />
 
-  <title>ツンドク</title>
-</head>
+    <title>ツンドク</title>
+  </head>
 
-<body>
-  <noscript>
-    <strong>We're sorry but Tsundoku doesn't work properly without JavaScript enabled. Please enable it to
-      continue.</strong>
-  </noscript>
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
-</body>
-
+  <body>
+    <noscript>
+      <strong
+        >We're sorry but Tsundoku doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      >
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
 </html>

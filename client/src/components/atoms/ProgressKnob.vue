@@ -2,15 +2,15 @@
   .progress-knob(
     :style="bodyStyle"
     @mouseleave="handleMouseleave"
-    @mousemove.prevent="throttledMousemove"
-    @touchmove.prevent="throttledTouchmove"
+    @mousemove="throttledMousemove"
+    @touchmove="throttledTouchmove"
     @mouseup="handleMouseup"
     @touchend="handleMouseup"
     )
     .progress-knob__body(
       :style="positionByRatio"
-      @mousedown.prevent="handleMousedown"
-      @touchstart.prevent="handleTouchstart"
+      @mousedown="handleMousedown"
+      @touchstart="handleTouchstart"
       )
       icon(name="bookmark" :width="24" :height="24")
       transition(name="slide-in" appear)

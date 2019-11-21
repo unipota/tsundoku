@@ -218,7 +218,8 @@ export default class ModalFrame extends Vue {
 .modal-frame-container
   position: absolute
   width: 100vw
-  height: 100vh
+  // height: 100vh
+  height: 100%
   z-index: 10
   pointer-events: auto
 
@@ -265,7 +266,7 @@ export default class ModalFrame extends Vue {
 
   .is-mobile &
     padding-top: 24px
-    height: calc(100% - 30px - 24px)
+    height: calc(100% - 24px)
 
   .no-padding &
     height: calc(100% + 32px)  // .modal-frame-wrapperのpadding分を戻す

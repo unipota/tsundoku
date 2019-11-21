@@ -7,8 +7,7 @@
   },
   "[typescript]": {
       "editor.formatOnSave": false
-  },
-  "prettier.eslintIntegration": true,
+},
   "eslint.autoFixOnSave": true,
   "eslint.alwaysShowStatus": true,
   "eslint.options": {

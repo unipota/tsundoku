@@ -80,6 +80,8 @@ export default class MobileTabBar extends Vue {
   onChangeTab(toTab: TabNames, fromTab: TabNames) {
     this.tabs[toTab].width = ''
     this.tabs[fromTab].width = ''
+
+    // DOMの更新を待つ必要がある
     this.$nextTick(() => {
       const elements = this.$refs[toTab] as Element[]
       const el = elements[0]
@@ -151,6 +153,7 @@ export default class MobileTabBar extends Vue {
         align-items: center
 
       .label
+        height: 20px
         white-space: nowrap
         margin:
           top: auto
@@ -167,11 +170,13 @@ export default class MobileTabBar extends Vue {
 
   &-enter-active, &-leave-active
     transition: opacity .5s
-    transform: translateX(10px)
+    transform: translateX(20px)
 
   &-leave-active
+    display: none
+    opacity: 0
     position: absolute
 
   &-move
-    transition: transform .6s $easeInOutQuint
+    transition: transform .8s $easeInOutQuint
 </style>

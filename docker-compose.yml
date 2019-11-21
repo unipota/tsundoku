@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      VIRTUAL_HOST: test.tsun-doku.app
-      LETSENCRYPT_HOST: test.tsun-doku.app
+      VIRTUAL_HOST: tsun-doku.app
+      LETSENCRYPT_HOST: tsun-doku.app
       LETSENCRYPT_EMAIL: tohu.soy@gmail.com
     volumes:
       - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw

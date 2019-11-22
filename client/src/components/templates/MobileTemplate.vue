@@ -1,5 +1,7 @@
 <template lang="pug">
   .view-mobile(:class="{ 'modal-shown': modalShown }")
+    .dialog-wrap
+      portal-target(name="dialogView")
     .popup-modal-wrap
       popup-modal
     portal-target.modal-wrap(name="modalView")
@@ -77,6 +79,21 @@ export default class MobileTemplate extends Vue {
 .view-mobile
   width: 100vw
   min-height: 100vh
+
+.dialog-wrap
+  position: fixed
+  z-index: 6000
+  left: 0
+  top: 0
+  width: 100vw
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+  pointer-events: none
+
+  & > *
+    pointer-events: auto
 
 .top-bar-wrap
   position: fixed

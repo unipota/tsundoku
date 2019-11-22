@@ -17,6 +17,7 @@ html
   
   --succeed-blue: #{$succeed-blue}
   --danger-red: #{$danger-red}
+  --danger-red-hovered: #{$danger-red-hovered}
   --danger-red-fade60: #{$danger-red-fade60}
   --danger-red-bg: #{$danger-red-bg}
 
@@ -56,3 +57,9 @@ body
   &-enter-active, &-leave-active
     transition: transform .3s $easeInOutQuint
   
+.transition-dialog
+  &-enter, &-leave-to
+    transform: translateY(4px)
+    opacity: 0
+  &-enter-active, &-leave-active
+    transition: all .3s $easeInOutQuint

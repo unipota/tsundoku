@@ -7,6 +7,12 @@
     override-modal-interactivity
     :overrided-is-modal-interactive="isBodyScrollTop"
     )
+    portal(to="dialogView")
+      transition(name="transition-dialog")
+        warning-dialog(v-if="showWarningDialog" 
+          @close="showWarningDialog = false"
+          @delete="deleteBook"
+          @cancel="showWarningDialog = false")
     .book-details(
       v-if="book"
       :class="{ editing: isEditing, 'on-transition': isOnTransitionToEdit || isOnTransitionToDetails }"
@@ -109,6 +115,7 @@ import BookCover from '@/components/atoms/BookCover.vue'
 import BookMajorInfo from '@/components/atoms/BookMajorInfo.vue'
 import BookInfoEdit from '@/components/organs/BookInfoEdit.vue'
 import BookListItemProgressController from '@/components/molecules/BookListItemProgressController.vue'
+import WarningDialog from '@/components/molecules/dialog/WarningDialog.vue'
 
 dayjs.extend(relativeTime)
 
@@ -132,7 +139,8 @@ const slimHeaderScrollThreshold = 25
     BookCover,
     BookInfoEdit,
     BookMajorInfo,
-    BookListItemProgressController
+    BookListItemProgressController,
+    WarningDialog
   }
 })
 export default class BookDetails extends Vue {
@@ -150,6 +158,8 @@ export default class BookDetails extends Vue {
   private scrollTimeoutId = 0
 
   private editingBook?: BookRecord
+
+  private showWarningDialog = false
 
   // router
   @Prop({ type: Boolean, default: false })
@@ -289,6 +299,10 @@ export default class BookDetails extends Vue {
   }
 
   public async onDeleteClick() {
+    this.showWarningDialog = true
+  }
+
+  public async deleteBook() {
     await this.$store.dispatch('deleteBook', { id: this.book.id })
     this.$router.push({ name: this.selectedPath })
   }

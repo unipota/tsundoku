@@ -37,6 +37,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
+import { Route } from 'vue-router'
 import Fuse from 'fuse.js'
 import { kanaToHira } from '@/utils/string'
 import {

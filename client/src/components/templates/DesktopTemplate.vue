@@ -30,8 +30,8 @@ export default class DesktopTemplate extends Vue {
   hideNavList: ViewNames[] = []
 
   @Watch('$route')
-  private handleShowDesktopNav() {
-    document.documentElement.scrollTo({ top: 0, behavior: 'instant' })
+  private handleRouteChange() {
+    document.documentElement.scrollTop = 0
   }
 
   get modalShown() {

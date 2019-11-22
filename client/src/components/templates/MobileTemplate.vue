@@ -49,15 +49,8 @@ export default class MobileTemplate extends Vue {
   hideTabBarList: ViewNames[] = []
 
   @Watch('$route')
-  private handleShowMobileBars() {
-    this.$store.commit(
-      'setShowMobileTopBar',
-      !this.hideTopBarList.includes(this.$route.name as ViewNames)
-    )
-    this.$store.commit(
-      'setShowMobileTabBar',
-      !this.hideTabBarList.includes(this.$route.name as ViewNames)
-    )
+  private handleRouteChange() {
+    document.documentElement.scrollTop = 0
   }
 
   get modalShown() {
@@ -68,10 +61,6 @@ export default class MobileTemplate extends Vue {
 
   get booksLoaded() {
     return this.$store.state.booksLoaded
-  }
-
-  mounted() {
-    this.handleShowMobileBars()
   }
 
   closeModal() {

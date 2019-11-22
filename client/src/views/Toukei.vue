@@ -59,7 +59,7 @@ export default class Toukei extends Vue {
   }
 
   get booksCount(): number {
-    return this.allBookStats.length
+    return this.$store.getters.tsundokuBooks.length
   }
 
   async shareVia(snsName: SNS) {

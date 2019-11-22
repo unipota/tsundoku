@@ -1,5 +1,11 @@
 <template lang="pug">
   popup-modal-frame(name="setting" title="設定")
+    portal(to="dialogView")
+      transition(name="transition-dialog")
+        logout-dialog(v-if="showLogoutDialog"
+          @close="showLogoutDialog = false"
+          @logout="handleLogout"
+          @cancel="showLogoutDialog = false")
     .setting-modal
       template(v-if="!userLogined")
         .user-icon-wrap
@@ -40,10 +46,15 @@ import Icon from '@/components/assets/Icon.vue'
 import PopupModalFrame from '@/components/atoms/PopupModalFrame.vue'
 import RoundedButton from '@/components/atoms/RoundedButton.vue'
 import UserIcon from '@/components/atoms/UserIcon.vue'
+import LogoutDialog from '../dialog/LogoutDialog.vue'
 
-@Component({ components: { Icon, PopupModalFrame, RoundedButton, UserIcon } })
+@Component({
+  components: { Icon, PopupModalFrame, RoundedButton, UserIcon, LogoutDialog }
+})
 export default class SettingModal extends Vue {
   $store!: ExStore
+
+  showLogoutDialog = false
 
   pushLoginModal() {
     this.$store.commit('modal/push', { name: 'login' })
@@ -66,6 +77,10 @@ export default class SettingModal extends Vue {
   }
 
   logout() {
+    this.showLogoutDialog = true
+  }
+
+  handleLogout() {
     this.$store.dispatch('userLogout')
   }
 

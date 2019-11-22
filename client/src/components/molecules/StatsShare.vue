@@ -2,60 +2,38 @@
   .stats-share
     p.stats-share-title シェア
     .share-button-wrapper
-      .sns-icon(@click="shareVia(0)")
+      .sns-icon(@click="shareVia('twitter')")
         icon(name="twitter" :width="32" :height="32")
-      .sns-icon(@click="shareVia(1)")
+      .sns-icon(@click="shareVia('line')")
         img(src="@/img/line_logo.png")
-      .sns-icon(@click="shareVia(2)")
+      .sns-icon(@click="shareVia('facebook')")
         img(src="@/img/fb_logo.svg")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
+import { SNS, getShareText, getTargetURL } from '@/utils/share'
 
 import Icon from '@/components/assets/Icon.vue'
-
-enum SNS {
-  Twitter,
-  Line,
-  Facebook
-}
-
-const hashTag = '#ツンドク'
-const twitterId = 'tsundokuApp'
 
 @Component({ components: { Icon } })
 export default class StatsShare extends Vue {
   $store!: ExStore
 
-  get shareText(): string {
-    return ``
-  }
+  @Prop({ type: Number, required: true })
+  tsundokuPrice!: number
+
+  @Prop({ type: Number, required: true })
+  booksCount!: number
 
   async shareVia(snsName: SNS) {
     const shareURL = await this.$store.dispatch('getShareURL')
-    let targetURL = ''
-
-    switch (snsName) {
-      case SNS.Twitter:
-        targetURL = `https://twitter.com/intent/tweet?url=${encodeURI(
-          shareURL
-        )}&text=${encodeURI(
-          this.shareText
-        )}&via=${twitterId}&hashtags=${encodeURI(hashTag)}`
-        break
-      case SNS.Line:
-        targetURL = `https://timeline.line.me/social-plugin/share?url=${encodeURI(
-          `${this.shareText}\n${encodeURI(shareURL)}`
-        )}`
-        break
-      case SNS.Facebook:
-        targetURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURI(
-          shareURL
-        )}`
-        break
-    }
+    let targetURL = getTargetURL(
+      snsName,
+      getShareText(this.tsundokuPrice, this.booksCount),
+      shareURL
+    )
     // iOS Safari not allow window.open
     window.open(targetURL) || (location.href = targetURL)
   }

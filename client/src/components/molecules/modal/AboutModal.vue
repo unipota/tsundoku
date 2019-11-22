@@ -26,9 +26,9 @@
           .dev-name
             | うにぽた
             .links
-              a(href="https://github.com/unipota" target="_blank")
+              a(href="https://github.com/unipota" target="_blank" rel="noopener noreferrer")
                 icon(name="github" :width="20" :height="20")
-              a(href="https://twitter.com/unipota" target="_blank")
+              a(href="https://twitter.com/unipota" target="_blank" rel="noopener noreferrer")
                 icon(name="twitter" :width="22" :height="22")
           .dev-contributions
             | Direction / Design / Frontend
@@ -36,7 +36,7 @@
           .dev-name
             | すぱ
             .links
-              a(href="https://twitter.com/__spaspa__" target="_blank")
+              a(href="https://twitter.com/__spaspa__" target="_blank" rel="noopener noreferrer")
                 icon(name="twitter" :width="22" :height="22")
           .dev-contributions
             | Design / Frontend
@@ -56,10 +56,16 @@
           .dev-name
             | oribe
             .links
-              a(href="https://github.com/oribe1115" target="_blank")
+              a(href="https://github.com/oribe1115" target="_blank" rel="noopener noreferrer")
                 icon(name="github" :width="20" :height="20")
           .dev-contributions
             | Server / Infrastructure
+      .contact
+        | ご意見などは下記メールアドレスか、運営Twitterアカウントへお願いします。
+        .mail-address
+          | tsundoku.dev@gmail.com
+        a.twitter-id(href="https://twitter.com/tsundokuApp" target="_blank" rel="noopener noreferrer")
+          | https://twitter.com/tsundokuApp
 </template>
 
 <script lang="ts">
@@ -203,5 +209,21 @@ export default class AboutModal extends Vue {}
       top: 4px
     font:
       size: 14px
+      weight: bold
+
+.contact
+  border:
+    top: solid var(--border-gray) 2px
+  padding:
+    top: 24px
+    bottom: 24px
+
+  .mail-address
+    margin:
+      top: 8px
+
+  a.twitter-id
+    color: var(--kidoku-blue)
+    font:
       weight: bold
 </style>

@@ -119,7 +119,7 @@ export default class FloatingAddTsundokuButton extends Vue {
   font:
     size: 18px
     weight: bold
-  transition: border-radius .3s, width .3s $easeInOutQuint, height .3s $easeInOutQuint, margin .3s
+  transition: border-radius .3s, width .3s $easeInOutQuint, height .3s $easeInOutQuint, margin .3s, transform .3s
 
   .is-active &
     width: 42px
@@ -137,16 +137,18 @@ export default class FloatingAddTsundokuButton extends Vue {
     justify-content: center
 
 .icon-plus
-  transform: rotate(0)
   height: 14px
   display: flex
   align-items: center
   justify-content: center
-  will-change: transform
-  transition: transform .5s $easeOutBack
 
-  .is-active &
-    transform: rotate(135deg)
+  & svg
+    transform: rotate(0)
+    will-change: transform
+    transition: transform .5s
+
+    .is-active &
+      transform: rotate(135deg)
 
 .under-button-label
   position: absolute
@@ -209,7 +211,7 @@ export default class FloatingAddTsundokuButton extends Vue {
 
 .transition-label
   &-enter, &-leave-to
-    transform: translateY(10px)
+    transform: translateX(10px)
     opacity: 0
 
   &-enter-active

@@ -1,5 +1,7 @@
 <template lang="pug">
   .view-desktop(:class="{ 'modal-shown': modalShown }")
+    .dialog-wrap
+      portal-target(name="dialogView")
     .popup-modal-wrap
       popup-modal
     portal-target.modal-wrap(name="modalView")
@@ -14,8 +16,9 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { ExStore } from 'vuex'
-
 import { ViewNames } from '../../router'
+import { Route } from 'vue-router'
+
 import DesktopNav from '@/components/molecules/DesktopNav.vue'
 import PopupModal from '@/components/organs/PopupModal.vue'
 
@@ -28,11 +31,7 @@ export default class DesktopTemplate extends Vue {
 
   @Watch('$route')
   private handleShowDesktopNav() {
-    if (this.hideNavList.includes(this.$route.name as ViewNames)) {
-      this.$store.commit('setShowDesktopNav', false)
-    } else {
-      this.$store.commit('setShowDesktopNav', true)
-    }
+    document.documentElement.scrollTo({ top: 0, behavior: 'instant' })
   }
 
   get modalShown() {
@@ -43,10 +42,6 @@ export default class DesktopTemplate extends Vue {
 
   get booksLoaded() {
     return this.$store.state.booksLoaded
-  }
-
-  mounted() {
-    this.handleShowDesktopNav()
   }
 
   closeModal() {
@@ -62,6 +57,21 @@ export default class DesktopTemplate extends Vue {
 <style lang="sass" scoped>
 .view-desktop
   display: flex
+
+.dialog-wrap
+  position: fixed
+  z-index: 6000
+  left: 0
+  top: 0
+  width: 100vw
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+  pointer-events: none
+
+  & > *
+    pointer-events: auto
 
 .nav-wrap
   position: fixed

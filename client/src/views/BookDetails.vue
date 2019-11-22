@@ -525,6 +525,7 @@ $cover-transition-duration: 0.3s
     left: 0
   display: flex
   transform: translateY(72px)
+  transition: transform .3s
 
 .action
   margin: 0 4px

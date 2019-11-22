@@ -53,6 +53,7 @@ $width-sm: 40px
   justify-content: space-between
   color: white
   transition: all 0.3s ease
+  overflow: hidden
 
   &:hover
     background: $text-black-fade60
@@ -88,6 +89,8 @@ $width-sm: 40px
     opacity: 0
 
   .book-details-action-button:not(.expanded) &
+    position: absolute
     width: 0
     opacity: 0
+    transform: translateX(10px)
 </style>

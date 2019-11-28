@@ -10,6 +10,7 @@ services:
       LETSENCRYPT_HOST: tsun-doku.app
       LETSENCRYPT_EMAIL: tohu.soy@gmail.com
     volumes:
+      - ./server/ogp_canvas/screenshots:/tsundoku/server/ogp_canvas/screenshots:rw
       # - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
     env_file:
       - .env

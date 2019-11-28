@@ -28,7 +28,7 @@ RUN apt-get update -q \
 RUN curl -SL https://deb.nodesource.com/setup_13.x | bash
 RUN apt-get install -y nodejs
 RUN npm install --build-from-source
-COPY server/ogp_canvas/font ./
+COPY server/ogp_canvas/font ./font
 COPY server/ogp_canvas/main.js ./
 
 WORKDIR /tsundoku

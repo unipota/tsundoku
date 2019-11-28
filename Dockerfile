@@ -1,4 +1,4 @@
-FROM node:13.1-alpine as client
+FROM node:11-alpine as client
 WORKDIR /app
 COPY client/package*.json ./
 RUN npm install
@@ -28,7 +28,7 @@ RUN apt-get update -q \
 RUN curl -SL https://deb.nodesource.com/setup_13.x | bash
 RUN apt-get install -y nodejs
 RUN npm install --build-from-source
-COPY server/ogp_canvas/font ./
+COPY server/ogp_canvas/font ./font
 COPY server/ogp_canvas/main.js ./
 
 WORKDIR /tsundoku

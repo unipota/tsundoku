@@ -10,7 +10,8 @@ services:
       LETSENCRYPT_HOST: tsun-doku.app
       LETSENCRYPT_EMAIL: tohu.soy@gmail.com
     volumes:
-      - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
+      - ./server/ogp_canvas/screenshots:/tsundoku/server/ogp_canvas/screenshots:rw
+      # - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
     env_file:
       - .env
     expose:
@@ -19,8 +20,6 @@ services:
       - nginx-proxy
       - db
     restart: always
-    links:
-      - "ogp:ogp"
   nginx-proxy:
     image: jwilder/nginx-proxy
     labels:
@@ -57,14 +56,14 @@ services:
     volumes:
       - ./db/mysql_data:/var/lib/mysql
   
-  ogp:
-    build:
-      context: .
-      dockerfile: ogp.Dockerfile
-    volumes:
-      - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
-    ports:
-      - "4000:4000"
+  # ogp:
+  #   build:
+  #     context: .
+  #     dockerfile: ogp.Dockerfile
+  #   volumes:
+  #     - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
+  #   ports:
+  #     - "4000:4000"
 
 volumes:
   proxy: 

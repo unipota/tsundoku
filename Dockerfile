@@ -1,4 +1,4 @@
-FROM node:11-alpine as client
+FROM node:13.1-alpine as client
 WORKDIR /app
 COPY client/package*.json ./
 RUN npm install
@@ -8,12 +8,14 @@ RUN npm run build
 
 FROM golang:1.13.1-alpine as server
 WORKDIR /tsundoku/server
-
 RUN apk add --update --no-cache git
 COPY server/go.mod .
 COPY server/go.sum .
 RUN go mod download
-COPY server .
+COPY model ./
+COPY router ./
+COPY static ./
+COPY main.go ./
 RUN CGO_ENABLED=0 go build -o app
 
 

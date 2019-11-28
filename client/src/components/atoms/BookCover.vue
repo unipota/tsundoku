@@ -2,6 +2,7 @@
   .book-cover(:class="{'has-shadow': hasShadow}")
     img.cover-image(
       v-if="url.length > 0"
+      :key="url"
       :src="url"
       loading="lazy"
       alt="cover image"

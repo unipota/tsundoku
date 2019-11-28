@@ -2,15 +2,13 @@ package router
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 	"io"
 	"math"
 	"net/http"
-	"net/url"
 	"os"
+	"os/exec"
 	"strconv"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -83,52 +81,37 @@ func GetOGPImageHandler(c echo.Context) error {
 		return c.NoContent(http.StatusInternalServerError)
 	}
 
-	filename := "shareimage.png"
-	dirPath := "/tsundoku/ogp/screenshots"
+	filename := shareID.String() + ".png"
+	dirPath := "ogp_canvas/screenshots"
 	fullpath := dirPath + "/" + filename
 
-	values := url.Values{}
-	values.Add("tsundoku", strconv.Itoa(share.Tsundoku))
-	values.Add("kidoku", strconv.Itoa(share.Kidoku))
-	values.Add("count", strconv.Itoa(share.Count))
-	values.Add("filename", filename)
-
-	_, err = os.Stat(dirPath)
-	if os.IsNotExist(err) {
-		err = os.Mkdir(dirPath, 0777)
-		if err != nil {
-			fmt.Println(err)
-			return c.NoContent(http.StatusInternalServerError)
-		}
+	// ファイルが既に存在する場合
+	if _, err := os.Stat(fullpath); err == nil {
+		return c.File(fullpath)
 	}
 
-	_, err = os.Stat(fullpath)
-	if !os.IsNotExist(err) {
-		err = os.Remove(fullpath)
-		if err != nil {
-			fmt.Println(err)
-			return c.NoContent(http.StatusInternalServerError)
-		}
-	}
+	// if isNodeAvailable, err := isCommandAvailable("node"); !isNodeAvailable || err != nil {
+	// 	c.Logger().Error(err)
+	// 	return c.NoContent(http.StatusBadRequest)
+	// }
 
-	resp, err := http.Get("http://ogp:4000/ss" + "?" + values.Encode())
+	cmd := exec.Command("node", "ogp_canvas/main.js", filename, strconv.Itoa(share.Count), strconv.Itoa(share.Tsundoku), strconv.Itoa(share.Kidoku))
+	out, err := cmd.CombinedOutput()
+	c.Logger().Printf("%s", out)
 	if err != nil {
-		fmt.Println(err)
-		return c.NoContent(http.StatusInternalServerError)
-	}
-	defer resp.Body.Close()
-
-	// 新規に画像が生成されたのを確認できるまで待つ
-	wait := 2000
-	for i := 0; i < wait; i++ {
-		_, err := os.Stat(fullpath)
-		if !os.IsNotExist(err) {
-			break
-		}
-		time.Sleep(50 * time.Millisecond)
+		c.Logger().Error(err)
+		return c.NoContent(http.StatusBadRequest)
 	}
 
 	return c.File(fullpath)
+}
+
+func isCommandAvailable(name string) (bool, error) {
+	cmd := exec.Command(name, "-v")
+	if err := cmd.Run(); err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 func calcTsundoku(books []*model.Book) *TsundokuData {

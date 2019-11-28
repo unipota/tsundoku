@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "chart.js": "^2.9.3",
-    "core-js": "^3.4.1",
+    "core-js": "^3.4.2",
     "dayjs": "^1.8.17",
     "fuse.js": "^3.4.6",
     "lodash": "^4.17.15",

@@ -9,13 +9,13 @@ services:
       - .env
     volumes:
       - ../server:/tsundoku/server
-      - ../ogp/screenshots:/tsundoku/ogp/screenshots
+      # For exclude node_modules
+      - node_modules:/tsundoku/server/ogp_canvas/node_modules
+      # - ../ogp_canvas/screenshots:/tsundoku/ogp/screenshots
     ports:
       - "3000:3000"
     depends_on:
       - db
-    links:
-      - "ogp:ogp"
   db:
     image: mysql:5.7
     environment:
@@ -23,11 +23,12 @@ services:
       MYSQL_DATABASE: tsundoku
     ports:
       - "3306:3306"
-  ogp:
-    build:
-      context: ../ogp/
-      dockerfile: ../development/ogp.Dockerfile
-    volumes:
-      - ../ogp/screenshots:/tsundoku/ogp/screenshots
-    ports:
-      - "4000:4000"
+volumes:
+  node_modules:
+    driver: "local"
+  # ogp:
+  #   build:
+  #     context: ../ogp/
+  #     dockerfile: ../development/ogp.Dockerfile
+  #   volumes:
+  #     - ../ogp/screenshots:/tsundoku/ogp/screenshots

@@ -31,7 +31,7 @@
               a(href="https://twitter.com/unipota" target="_blank" rel="noopener noreferrer")
                 icon(name="twitter" :width="22" :height="22")
           .dev-contributions
-            | Direction / Design / Frontend
+            | Direction / Design / Frontend / Server
         .dev-item
           .dev-name
             | すぱ
@@ -51,7 +51,7 @@
             | とーふとふ
             .links
           .dev-contributions
-            | Server / Infrastructure
+            | Server
         .dev-item
           .dev-name
             | oribe
@@ -59,7 +59,7 @@
               a(href="https://github.com/oribe1115" target="_blank" rel="noopener noreferrer")
                 icon(name="github" :width="20" :height="20")
           .dev-contributions
-            | Server / Infrastructure
+            | Server
       .contact
         | ご意見などは下記メールアドレスか、運営Twitterアカウントへお願いします。
         .mail-address

@@ -45,23 +45,31 @@ const draw = async () => {
   ctx.font = '58px "MplusRounded"';
   ctx.fillStyle = textBlack;
   const booksTextMetrics = ctx.measureText(booksCount);
-  ctx.fillText(booksCount, 124, 91 + 60);
+  ctx.fillText(booksCount, 124, 96 + 60);
   ctx.font = '24px "MplusRounded"';
-  ctx.fillText("冊", 124 + booksTextMetrics.width + 12, 125 + 24);
+  ctx.fillText("冊", 124 + booksTextMetrics.width + 12, 131 + 24);
 
   ctx.font = '28px "MplusRounded"';
   ctx.fillStyle = tsundokuRed;
   const tsundokuTextMetrics = ctx.measureText("¥");
-  ctx.fillText("¥", 667, 125 + 24);
+  ctx.fillText("¥", 667, 131 + 24);
   ctx.font = '58px "MplusRounded"';
-  ctx.fillText(tsundokuPrice, 667 + tsundokuTextMetrics.width + 12, 91 + 60);
+  ctx.fillText(
+    Number(tsundokuPrice).toLocaleString("ja-JP"),
+    667 + tsundokuTextMetrics.width + 12,
+    96 + 60
+  );
 
   ctx.font = '28px "MplusRounded"';
   ctx.fillStyle = kidokuBlue;
   const kidokuTextMetrics = ctx.measureText("¥");
-  ctx.fillText("¥", 124, 392 + 24);
+  ctx.fillText("¥", 124, 402 + 24);
   ctx.font = '58px "MplusRounded"';
-  ctx.fillText(kidokuPrice, 124 + kidokuTextMetrics.width + 12,358 + 60);
+  ctx.fillText(
+    Number(kidokuPrice).toLocaleString("ja-JP"),
+    124 + kidokuTextMetrics.width + 12,
+    368 + 60
+  );
 
   return canvas;
 };

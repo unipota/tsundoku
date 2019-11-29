@@ -490,6 +490,7 @@ $carousel-margin-pc: 48px
   justify-content: center
 
   height: $card-height
+  width: 100%
 
   &.is-desktop
     padding: 0 $card-margin-pc

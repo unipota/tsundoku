@@ -93,11 +93,13 @@ export default class MobileTabBar extends Vue {
 
 <style lang="sass" scoped>
 .wrapper
-  width: 100%
+  width: calc(100% - 24px)
   background: rgba(255,255,255,0.8)
   backdrop-filter: blur(4px)
+  margin: 0 auto 12px
   border:
-    radius: 32px 32px 0 0
+    radius: 100vw
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)
   @supports (padding-bottom: env(safe-area-inset-bottom))
     padding-bottom: calc(env(safe-area-inset-bottom))
 

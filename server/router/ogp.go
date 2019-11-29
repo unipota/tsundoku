@@ -145,7 +145,7 @@ func buildHTML(shareID string, siteURL string) (string, error) {
 		SiteURL  string
 		ImageURL string
 	}{
-		SiteURL: siteURL,
+		SiteURL: siteURL + "/share/" + shareID,
 
 		ImageURL: siteURL + "/ogp/" + shareID,
 	}

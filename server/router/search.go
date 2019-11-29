@@ -348,16 +348,16 @@ func withOpenBD(isIsbn bool, searchWord string, searchedBookChan chan *SearchedB
 func searchBooks(isIsbn bool, searchWord string) []*SearchedBook {
 	googleChan := make(chan []*SearchedBook)
 	rakutenChan := make(chan []*SearchedBook)
-	openBDChan := make(chan *SearchedBook)
+	// openBDChan := make(chan *SearchedBook)
 
 	go withGoogle(isIsbn, searchWord, googleChan)
 	go withRakuten(isIsbn, searchWord, rakutenChan)
-	go withOpenBD(isIsbn, searchWord, openBDChan)
+	// go withOpenBD(isIsbn, searchWord, openBDChan)
 	googleBooks := <-googleChan
 	rakutenBooks := <-rakutenChan
-	openBDBook := <-openBDChan
+	// openBDBook := <-openBDChan
 
-	return mergeSearchedBooks(rakutenBooks, googleBooks, openBDBook)
+	return mergeSearchedBooks(rakutenBooks, googleBooks, nil)
 }
 
 func mergeBookRecord(mainBook *SearchedBook, subBook *SearchedBook) *SearchedBook {

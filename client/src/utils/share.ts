@@ -4,7 +4,7 @@ export enum SNS {
   Facebook = 'facebook'
 }
 
-const hashTag = '#ツンドク'
+const hashTag = 'ツンドク'
 const twitterId = 'tsundokuApp'
 
 export const getShareText = (

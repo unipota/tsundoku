@@ -337,6 +337,13 @@ func withOpenBD(isIsbn bool, searchWord string, searchedBookChan chan *SearchedB
 		searchedBookChan <- nil
 	}
 
+	defer func() {
+		if r := recover(); r!= nil {
+			fmt.Println("recovered")
+			searchedBookChan <- nil
+		}
+	}()
+
 	openBDBook, err := searchWithOpenBD(searchWord)
 	if err != nil {
 		searchedBookChan <- nil

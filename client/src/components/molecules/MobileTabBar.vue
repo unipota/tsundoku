@@ -100,8 +100,8 @@ export default class MobileTabBar extends Vue {
   border:
     radius: 100vw
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)
-  @supports (padding-bottom: env(safe-area-inset-bottom))
-    padding-bottom: calc(env(safe-area-inset-bottom))
+  @supports (margin-bottom: env(safe-area-inset-bottom))
+    margin-bottom: calc(env(safe-area-inset-bottom) + 12px)
 
   .tab-bar
     padding: 8px 36px

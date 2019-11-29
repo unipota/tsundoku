@@ -12,7 +12,7 @@
       .button-scan(@click="openScanModal" key="scan" v-if="active")
         icon(name="scanner" :width="30" :height="30")
         span.under-button-label スキャン
-      .button-scan(@click="openEditModal" key="edit" v-if="active")
+      .button-edit(@click="openEditModal" key="edit" v-if="active")
         icon(name="pen" :width="30" :height="30" color="white")
         span.under-button-label 入力
       .button-open(key="open" @click="handleClick")
@@ -192,6 +192,11 @@ export default class FloatingAddTsundokuButton extends Vue {
   margin:
     bottom: 12px
 
+.button-edit
+  @extend %button
+  margin:
+    bottom: 12px
+
 .button-label
   padding:
     left: 4px
@@ -206,8 +211,26 @@ export default class FloatingAddTsundokuButton extends Vue {
     transition: transform .5s $easeOutBack, opacity .5s
     pointer-events: none
 
+    &.button-search
+      transition-delay: .2s
+
+    &.button-scan
+      transition-delay: .1s
+
+    &.button-edit
+      transition-delay: 0s
+
   &-leave-active
     transition: transform .5s, opacity .5s
+
+    &.button-search
+      transition-delay: .2s
+
+    &.button-scan
+      transition-delay: .1s
+
+    &.button-edit
+      transition-delay: 0s
 
 .transition-label
   &-enter, &-leave-to

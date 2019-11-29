@@ -95,7 +95,7 @@ func GetOGPImageHandler(c echo.Context) error {
 	// 	return c.NoContent(http.StatusBadRequest)
 	// }
 
-	cmd := exec.Command("node", "ogp_canvas/main.js", filename, strconv.Itoa(share.Count), strconv.Itoa(share.Tsundoku), strconv.Itoa(share.Kidoku))
+	cmd := exec.Command("node", "ogp_canvas/main.js", shareID.String(), strconv.Itoa(share.Count), strconv.Itoa(share.Tsundoku), strconv.Itoa(share.Kidoku))
 	out, err := cmd.CombinedOutput()
 	c.Logger().Printf("%s", out)
 	if err != nil {

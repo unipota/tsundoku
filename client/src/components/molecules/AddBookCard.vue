@@ -140,7 +140,11 @@ export default class AddBookCard extends Vue {
     right: 0
     bottom: 5px
     left: 20px
-  display: grid
+  display: flex
+  flex-flow: column nowrap
+  justify-content: space-between
+  min-width: 0
+  flex: 0px 1 1
 
 .price-buttons-wrapper
   margin: auto 0 0 0

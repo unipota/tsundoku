@@ -13,16 +13,14 @@ jobs:
     name: Build Docker Image
     runs-on: ubuntu-latest
     steps:
-      - name: Set IMAGE_TAG env
-        run: echo ::set-env name =IMAGE_TAG::$(echo ${GITHUB_REF:11})
       - uses: actions/checkout@v2
       - name: Login GitHub Registry
         run: docker login docker.pkg.github.com -u unipota -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
-        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:${IMAGE_TAG} .
+        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME} .
       - name: Push image to GitHub Registry
-        run: docker push docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:${IMAGE_TAG}
+        run: docker push docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}
       - name: Push image to GitHub Registry (latest)
         run: |
-          docker tag docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:$IMAGE_TAG docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:latest
+          docker tag docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME} docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:latest
           docker push docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:latest

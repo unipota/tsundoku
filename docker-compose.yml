@@ -4,11 +4,11 @@ services:
   tsundoku:
     build:
       context: .
-      dockerfile: Dockerfile
+      image: unipota/tsudoku/tsundoku-app:latest
     environment:
       VIRTUAL_HOST: tsun-doku.app
       LETSENCRYPT_HOST: tsun-doku.app
-      LETSENCRYPT_EMAIL: tohu.soy@gmail.com
+      LETSENCRYPT_EMAIL: woz.eon@gmail.com
     volumes:
       - ./server/ogp_canvas/screenshots:/tsundoku/server/ogp_canvas/screenshots:rw
       # - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw

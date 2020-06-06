@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   tsundoku:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     environment:
@@ -35,7 +35,7 @@ services:
       - proxy:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
-  
+
   letsencrypt-nginx:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt-nginx
@@ -55,15 +55,6 @@ services:
       MYSQL_DATABASE: tsundoku
     volumes:
       - ./db/mysql_data:/var/lib/mysql
-  
-  # ogp:
-  #   build:
-  #     context: .
-  #     dockerfile: ogp.Dockerfile
-  #   volumes:
-  #     - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
-  #   ports:
-  #     - "4000:4000"
 
 volumes:
-  proxy: 
+  proxy:

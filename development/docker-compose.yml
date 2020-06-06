@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   tsundoku:
@@ -26,9 +26,3 @@ services:
 volumes:
   node_modules:
     driver: "local"
-  # ogp:
-  #   build:
-  #     context: ../ogp/
-  #     dockerfile: ../development/ogp.Dockerfile
-  #   volumes:
-  #     - ../ogp/screenshots:/tsundoku/ogp/screenshots

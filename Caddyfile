@@ -1,0 +1,19 @@
+{
+    admin off
+}
+
+:80
+
+log
+root * /usr/share/caddy
+
+handle /api/* {
+    reverse_proxy backend:3000
+}
+
+handle {
+    file_server
+    try_files {path} /index.html
+
+    header /sw.js Cache-Control "max-age=0"
+}

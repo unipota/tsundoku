@@ -1,58 +1,42 @@
 version: "3"
 
 services:
-  tsundoku:
-    image: docker.pkg.github.com/unipota/tsudoku/tsundoku-app:latest
-    environment:
-      VIRTUAL_HOST: tsun-doku.app
-      LETSENCRYPT_HOST: tsun-doku.app
-      LETSENCRYPT_EMAIL: woz.eon@gmail.com
-    volumes:
-      - ./server/ogp_canvas/screenshots:/tsundoku/server/ogp_canvas/screenshots:rw
-      # - ./ogp/screenshots:/tsundoku/ogp/screenshots:rw
+  backend:
+    image: docker.pkg.github.com/unipota/tsudoku/tsundoku-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: always
     env_file:
       - .env
+    # entrypoint: dockerize -timeout 60s -wait tcp://mysql:3306
+    # command: ./app
     expose:
-      - 3000
+      - "3000"
     depends_on:
-      - nginx-proxy
       - db
-    restart: always
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    labels:
-      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=jwilder/nginx-proxy
-    privileged: true
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./docker-compose.d/certs:/etc/nginx/certs:ro
-      - ./docker-compose.d/htpasswd:/etc/nginx/htpasswd
-      - proxy:/etc/nginx/vhost.d
-      - proxy:/usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    restart: always
 
-  letsencrypt-nginx:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt-nginx
-    privileged: true
-    volumes:
-      - proxy:/etc/nginx/vhost.d
-      - proxy:/usr/share/nginx/html
-      - ./docker-compose.d/certs:/etc/nginx/certs:rw
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+  frontend:
+    image: docker.pkg.github.com/unipota/tsudoku/tsundoku-frontend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     restart: always
+    expose:
+      - "80"
+    ports:
+      - "80:80"
     depends_on:
-      - nginx-proxy
+      - backend
+
   db:
     image: mysql:5.7
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: tsundoku
     volumes:
       - ./db/mysql_data:/var/lib/mysql
-
-volumes:
-  proxy:
+    # command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    expose:
+      - "3306"

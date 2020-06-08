@@ -1,14 +1,5 @@
-# Build Frontend Static Files
-FROM node:11-alpine as client
-WORKDIR /app
-COPY client/package*.json ./
-RUN npm install
-COPY client .
-RUN npm run build
-# ----------------------------------------------------------------------------------- //
-
 # Build Backend App
-FROM golang:1.13.4-alpine as server
+FROM golang:1.13.4-alpine as build
 WORKDIR /tsundoku/server
 RUN apk add --update --no-cache git
 COPY server/go.mod .
@@ -35,7 +26,7 @@ RUN apt-get update -q \
     libgif-dev \
     librsvg2-dev \
     fontconfig
-RUN curl -SL https://deb.nodesource.com/setup_13.x | bash
+RUN curl -SL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get install -y nodejs
 RUN npm install --build-from-source
 COPY server/ogp_canvas/assets ./assets
@@ -51,9 +42,8 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 EXPOSE 3000
-COPY --from=client /app/dist ./static
-COPY --from=server /tsundoku/server/app ./
-COPY --from=server /tsundoku/server/static ./server/static
+COPY --from=build /tsundoku/server/app ./
+COPY --from=build /tsundoku/server/static ./server/static
 # ----------------------------------------------------------------------------------- //
 
 ENTRYPOINT ./app

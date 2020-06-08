@@ -20,7 +20,7 @@ jobs:
       - name: Login GitHub Registry
         run: docker login docker.pkg.github.com -u unipota -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
-        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME} -f ${{BACKEND_DOCKERFILE}}
+        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME} -f ${BACKEND_DOCKERFILE}
       - name: Push image to GitHub Registry
         run: docker push docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME}
       - name: Push image to GitHub Registry (latest)
@@ -36,7 +36,7 @@ jobs:
       - name: Login GitHub Registry
         run: docker login docker.pkg.github.com -u unipota -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
-        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME} -f ${{FRONTEND_DOCKERFILE}}
+        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME} -f ${FRONTEND_DOCKERFILE}
       - name: Push image to GitHub Registry
         run: docker push docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME}
       - name: Push image to GitHub Registry (latest)

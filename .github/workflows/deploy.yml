@@ -6,21 +6,38 @@ on:
       - master
 
 env:
-  IMAGE_NAME: tsundoku-app
+  BACKEND_IMAGE_NAME: tsundoku-backend
+  FRONTEND_IMAGE_NAME: tsundoku-frontend
 
 jobs:
-  image:
-    name: Build Docker Image
+  backend-image:
+    name: Build Backend Docker Image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Login GitHub Registry
         run: docker login docker.pkg.github.com -u unipota -p ${{ secrets.GITHUB_TOKEN }}
       - name: Build Image
-        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME} .
+        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME} .
       - name: Push image to GitHub Registry
-        run: docker push docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}
+        run: docker push docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME}
       - name: Push image to GitHub Registry (latest)
         run: |
-          docker tag docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME} docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:latest
-          docker push docker.pkg.github.com/unipota/tsundoku/${IMAGE_NAME}:latest
+          docker tag docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME} docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME}:latest
+          docker push docker.pkg.github.com/unipota/tsundoku/${BACKEND_IMAGE_NAME}:latest
+
+  frontend-image:
+    name: Build Frontend Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login GitHub Registry
+        run: docker login docker.pkg.github.com -u unipota -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Image
+        run: docker build -t docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME} .
+      - name: Push image to GitHub Registry
+        run: docker push docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME}
+      - name: Push image to GitHub Registry (latest)
+        run: |
+          docker tag docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME} docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME}:latest
+          docker push docker.pkg.github.com/unipota/tsundoku/${FRONTEND_IMAGE_NAME}:latest

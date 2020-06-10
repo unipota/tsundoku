@@ -2,10 +2,7 @@ version: "3"
 
 services:
   backend:
-    image: docker.pkg.github.com/unipota/tsudoku/tsundoku-backend:latest
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+    image: docker.pkg.github.com/unipota/tsundoku/tsundoku-backend:latest
     restart: always
     env_file:
       - .env
@@ -17,10 +14,7 @@ services:
       - db
 
   frontend:
-    image: docker.pkg.github.com/unipota/tsudoku/tsundoku-frontend:latest
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
+    image: docker.pkg.github.com/unipota/tsundoku/tsundoku-frontend:latest
     restart: always
     expose:
       - "80"

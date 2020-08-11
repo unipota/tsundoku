@@ -7,5 +7,5 @@ setup:
 	go mod download
 
 .PHONY: build
-build: 
+build:
 	go build . -o app

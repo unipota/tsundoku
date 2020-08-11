@@ -1,5 +1,6 @@
 # Build Backend App
 FROM golang:1.13.4-alpine as build
+
 WORKDIR /tsundoku/server
 RUN apk add --update --no-cache git
 COPY server/go.mod .
@@ -13,6 +14,7 @@ RUN CGO_ENABLED=0 go build -o app
 # ----------------------------------------------------------------------------------- //
 
 FROM debian:stretch-slim
+
 # Setup OGP App
 WORKDIR /tsundoku/ogp_canvas
 COPY server/ogp_canvas/package*.json ./

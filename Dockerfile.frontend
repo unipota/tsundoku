@@ -1,5 +1,5 @@
 # Build Frontend Static Files
-FROM node:14-alpine as build
+FROM node:14.4.0 as build
 WORKDIR /app
 COPY client/package*.json ./
 RUN npm install
@@ -7,8 +7,8 @@ COPY client .
 RUN NODE_ENV=production npm run build
 # ----------------------------------------------------------------------------------- //
 
-FROM caddy:2.0.0-alpine
-EXPOSE 80
+FROM caddy:2.1.1-alpine
+EXPOSE 80 443
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist /usr/share/caddy
 # ----------------------------------------------------------------------------------- //

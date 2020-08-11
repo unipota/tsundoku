@@ -9,12 +9,15 @@ services:
     restart: always
     env_file:
       - .env
-    entrypoint: dockerize -timeout 60s -wait tcp://mysql:3306
     command: ./app
     expose:
       - "3000"
     depends_on:
       - db
+    deploy:
+      resources:
+        limits:
+          memory: 50M
 
   frontend:
     image: docker.pkg.github.com/unipota/tsundoku/tsundoku-frontend:latest
@@ -30,6 +33,10 @@ services:
       - "443:443"
     depends_on:
       - backend
+    deploy:
+      resources:
+        limits:
+          memory: 50M
 
   db:
     image: mysql:5.7
@@ -42,3 +49,7 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
     expose:
       - "3306"
+    deploy:
+      resources:
+        limits:
+          memory: 300M

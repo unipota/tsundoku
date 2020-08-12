@@ -4,8 +4,9 @@
 
 :80
 
-# log
-file_server
+log {
+    output stdout
+}
 root * /usr/share/caddy
 
 encode zstd gzip
@@ -25,7 +26,12 @@ handle /api/* {
     reverse_proxy backend:3000
 }
 
-try_files {path} /index.html
+handle {
+    file_server
+    try_files {path} /index.html
+
+    header /sw.js Cache-Control "max-age=0"
+}
 
 @svg {
     file

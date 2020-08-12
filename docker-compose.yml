@@ -13,10 +13,6 @@ services:
       - "3000"
     depends_on:
       - db
-    deploy:
-      resources:
-        limits:
-          memory: 50M
 
   frontend:
     build:
@@ -31,10 +27,6 @@ services:
       - "443:443"
     depends_on:
       - backend
-    deploy:
-      resources:
-        limits:
-          memory: 50M
 
   db:
     image: mysql:5.7
@@ -47,7 +39,3 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
     expose:
       - "3306"
-    deploy:
-      resources:
-        limits:
-          memory: 300M

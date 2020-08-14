@@ -1,10 +1,10 @@
 
 {
     admin off
+    email unipota@outlook.jp
 }
 
 tsundoku.unipota.dev
-email unipota@outlook.jp
 # :80
 
 log {

@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
   backend:
@@ -19,8 +19,12 @@ services:
       - "80"
       - "443"
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /data:/data
+      - ./certs:/root/certs
     depends_on:
       - backend
 

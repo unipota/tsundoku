@@ -3,7 +3,8 @@
     admin off
 }
 
-tsun-doku.app
+tsundoku.unipota.dev
+email unipota@outlook.jp
 # :80
 
 log {
@@ -11,7 +12,6 @@ log {
 }
 
 root * /usr/share/caddy
-encode zstd gzip
 
 handle /api/* {
     reverse_proxy backend:3000

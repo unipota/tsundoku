@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import api from '@/store/general/api'
 
 import PopupModalFrame from '@/components/atoms/PopupModalFrame.vue'
 import Icon from '@/components/assets/Icon.vue'
@@ -58,25 +59,26 @@ export default class LoginModal extends Vue {
   private services: Services = {
     google: {
       name: 'Google',
-      link: '/auth/google/oauth',
+      link: 'google/oauth',
       iconWidth: 21,
       iconHeight: 21
     },
     twitter: {
       name: 'Twitter',
-      link: '/auth/twitter/oauth',
+      link: 'twitter/oauth',
       iconHeight: 17.44,
       iconWidth: 21.53
     },
     github: {
       name: 'GitHub',
-      link: '/auth/github/oauth',
+      link: 'github/oauth',
       iconHeight: 19.56,
       iconWidth: 20
     }
   }
   public moveToLink(link: string) {
-    location.href = link
+    // location.href = link
+    api.auth(link)
   }
 
   openAboutModal() {

@@ -42,6 +42,9 @@ const api = {
   },
   getShareURL(): Promise<AxiosResponse<GetShareResponse>> {
     return client.get('api/share')
+  },
+  auth(path: string) {
+    return client.get(`auth/${path}`)
   }
 }
 

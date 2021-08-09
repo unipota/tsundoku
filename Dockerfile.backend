@@ -1,45 +1,26 @@
 # Build Backend App
-FROM golang:1.13.4-alpine as build
+FROM golang:1.16.6-alpine as build
 
 WORKDIR /tsundoku/server
-RUN apk add --update --no-cache git
-COPY server/go.mod .
-COPY server/go.sum .
+
+COPY server/go.mod server/go.sum ./
 RUN go mod download
+
 COPY server/model ./model
 COPY server/router ./router
 COPY server/static ./static
 COPY server/main.go ./
-RUN CGO_ENABLED=0 go build -o app
+
+ARG CGO_ENABLED=0
+ARG GOOS=linux
+ARG GOARCH=amd64
+RUN go build -o app
 # ----------------------------------------------------------------------------------- //
 
-FROM debian:stretch-slim
+FROM scratch as runner
 
-# Setup OGP App
-WORKDIR /tsundoku/ogp_canvas
-COPY server/ogp_canvas/package*.json ./
-RUN apt-get update -q \
-    && apt-get install -qq \
-    build-essential \
-    libcairo2-dev \
-    libpango1.0-dev \
-    libjpeg-dev \
-    libgif-dev \
-    librsvg2-dev \
-    fontconfig
-RUN curl -SL https://deb.nodesource.com/setup_14.x | bash
-RUN apt-get install -y nodejs
-RUN npm install --build-from-source
-COPY server/ogp_canvas/assets ./assets
-COPY server/ogp_canvas/font ./font
-COPY server/ogp_canvas/main.js ./
-# ----------------------------------------------------------------------------------- //
-
-# Dockrize
-WORKDIR /tsundoku
 EXPOSE 3000
-COPY --from=build /tsundoku/server/app ./
-COPY --from=build /tsundoku/server/static ./server/static
+COPY --from=build /tsundoku/server/app /tsundoku/app
 # ----------------------------------------------------------------------------------- //
 
-ENTRYPOINT ./app
+ENTRYPOINT ["/tsundoku/app"]

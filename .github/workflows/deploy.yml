@@ -36,5 +36,5 @@ jobs:
           with:
             push: true
             context: .
-            file: {context}/${BACKEND_DOCKERFILE}
+            file: ${context}/${BACKEND_DOCKERFILE}
             tags: docker.pkg.github.com/${{ github.repository }}/latest

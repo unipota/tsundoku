@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   backend:
-    image: ghcr.io/unipota/tsundoku/tsundoku:latest
+    image: ghcr.io/unipota/tsundoku:latest
     restart: always
     env_file:
       - .env

@@ -5,10 +5,6 @@ on:
     branches:
       - master
 
-env:
-  BACKEND_IMAGE_NAME: tsundoku-backend
-  BACKEND_DOCKERFILE: Dockerfile.backend
-
 jobs:
 # build
 # test
@@ -36,5 +32,5 @@ jobs:
           with:
             push: true
             context: .
-            file: ./${BACKEND_DOCKERFILE}
+            file: ./Dockerfile.backend
             tags: docker.pkg.github.com/${{ github.repository }}/latest

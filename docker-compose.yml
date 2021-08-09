@@ -16,7 +16,7 @@ services:
       - default
       - caddy
     labels:
-      caddy: api.unipota.dev
+      caddy: api.tsun-doku.dev
       caddy.reverse_proxy: "{{upstreams 3000}}"
 
   caddy:

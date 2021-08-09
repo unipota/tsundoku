@@ -1,32 +1,35 @@
-version: "3.8"
+version: "3.7"
 
 services:
   backend:
-    image: docker.pkg.github.com/unipota/tsundoku/tsundoku-backend:latest
+    image: ghcr.io/unipota/tsundoku/tsundoku:latest
     restart: always
     env_file:
       - .env
-    command: ./app
     expose:
       - "3000"
     depends_on:
       - db
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: api.unipota.dev
+      caddy.reverse_proxy: "{{upstreams 3000}}"
 
-  frontend:
-    image: docker.pkg.github.com/unipota/tsundoku/tsundoku-frontend:latest
-    restart: always
-    expose:
-      - "80"
-      - "443"
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
     ports:
       - 80:80
       - 443:443
+    environment:
+      - CADDY_INGRESS_NETWORKS=caddy
+    networks:
+      - caddy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /data:/data
-      - ./certs:/root/certs
-    depends_on:
-      - backend
+      - caddy_data:/data
+    restart: unless-stopped
 
   db:
     image: mysql:5.7
@@ -39,3 +42,12 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
     expose:
       - "3306"
+    networks:
+      - default
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  caddy_data: {}

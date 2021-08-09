@@ -16,7 +16,7 @@ services:
       - default
       - caddy
     labels:
-      caddy: api.tsun-doku.dev
+      caddy: api.tsun-doku.app
       caddy.reverse_proxy: "{{upstreams 3000}}"
 
   caddy:

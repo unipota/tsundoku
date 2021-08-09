@@ -48,6 +48,10 @@ func main() {
 	e := echo.New()
 	e.Debug = true
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://tsun-doku.app"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	auth := e.Group("/auth", session.Middleware(store), router.IdentifyMiddleware, router.LoginedUserRedirect)
 	auth.GET("/twitter/oauth", router.GetTwitterAuthHandler)
